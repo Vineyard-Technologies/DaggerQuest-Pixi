@@ -1,0 +1,21 @@
+{"frames": {
+
+"leatherjacket_item-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":43,"h":62},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":8,"y":0,"w":43,"h":62},
+	"sourceSize": {"w":43,"h":62},
+	"anchor": {"x":0.534884,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "leatherjacket_item-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":43,"h":62},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:dd837034551d49e5cbcbe4de475e4dfd:a830b6f590af0e3837ce9ba5804589b9:a036744543fad3952b1d219b4b80e1c5$"
+}
+}

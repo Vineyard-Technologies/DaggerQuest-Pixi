@@ -1,0 +1,21 @@
+{"frames": {
+
+"settingsmenustatue-default-000":
+{
+	"frame": {"x":0,"y":0,"w":310,"h":272},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":310,"h":272},
+	"sourceSize": {"w":310,"h":272},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "settingsmenustatue-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":310,"h":272},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:197fb11a3640277007c0441d790a2198:6f336d3fe95fe600d338d3185c6f8357:a7906d81581d7a706c8792373377e451$"
+}
+}

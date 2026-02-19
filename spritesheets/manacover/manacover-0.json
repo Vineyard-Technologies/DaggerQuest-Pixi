@@ -1,0 +1,21 @@
+{"frames": {
+
+"manacover-default-000":
+{
+	"frame": {"x":0,"y":0,"w":248,"h":248},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":248,"h":248},
+	"sourceSize": {"w":248,"h":248},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "manacover-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":248,"h":248},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:ea7a5d0a74fea35e31a2d2a82f3f8c7a:b8ddf2449d5e763899422744c98e2446:c595fd50a38920879809515b54af9995$"
+}
+}

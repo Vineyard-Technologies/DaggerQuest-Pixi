@@ -1,0 +1,21 @@
+{"frames": {
+
+"farmhousetree_shadow-default-000":
+{
+	"frame": {"x":0,"y":0,"w":1377,"h":817},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1377,"h":817},
+	"sourceSize": {"w":1377,"h":817},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "farmhousetree_shadow-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":1377,"h":817},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:1a41ae3a6a6cf32bb9b4a6d9120ce414:643e0c9138adddbdeb8a66a1fe3a4661:2f82589980096c844271ed1456e9e591$"
+}
+}

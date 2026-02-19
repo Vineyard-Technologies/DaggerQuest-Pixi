@@ -1,0 +1,21 @@
+{"frames": {
+
+"simplemace_item-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":60,"h":60},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":1,"y":1,"w":60,"h":60},
+	"sourceSize": {"w":60,"h":60},
+	"anchor": {"x":0.5,"y":0.5775}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "simplemace_item-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":60,"h":60},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:97081c62803643e8681f94c70e7eebe5:8d6dca4e3121eb87a901409ad69e2baa:a15c20f65be07159bbf4f03e49446194$"
+}
+}

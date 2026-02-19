@@ -1,0 +1,21 @@
+{"frames": {
+
+"simplesword_item-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":62,"h":62},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":62,"h":62},
+	"sourceSize": {"w":62,"h":62},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "simplesword_item-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":62,"h":62},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d139520459551881eba644201520efff:9acd36e7aaddcbf75b32aa97d036ce9e:ff283be95d46cf244210934172953351$"
+}
+}

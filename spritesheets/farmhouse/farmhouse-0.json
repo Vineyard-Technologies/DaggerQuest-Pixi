@@ -1,0 +1,21 @@
+{"frames": {
+
+"farmhouse-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":2710,"h":1975},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2710,"h":1975},
+	"sourceSize": {"w":2710,"h":1975},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "farmhouse-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":2710,"h":1975},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:68a2b0a19a1f054c518373dd1059a109:4b6a2c2aca70002ebd83ca13166866cd:0f7d516d3d03b3caea38c88e69455d10$"
+}
+}

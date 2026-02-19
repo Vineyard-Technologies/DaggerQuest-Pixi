@@ -1,0 +1,21 @@
+{"frames": {
+
+"npc-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":2,"h":2},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2,"h":2},
+	"sourceSize": {"w":2,"h":2},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "npc-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":2,"h":2},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:f833be2e944aaca6f5d32837e204bb9c:7b635a50f22cddb45c6fe53c868da9b5:f2c3ee4c72a9d20a5473d16330deeb2d$"
+}
+}

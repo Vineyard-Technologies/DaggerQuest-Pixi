@@ -1,0 +1,21 @@
+{"frames": {
+
+"table_shadow-default-000":
+{
+	"frame": {"x":0,"y":0,"w":297,"h":160},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":297,"h":160},
+	"sourceSize": {"w":297,"h":160},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "table_shadow-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":297,"h":160},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:7a2d0bc272b0316792648148ba04e9f9:e18d03ad643408a65ba8f0fc29b967ce:1f7238af904f734885cf882e259c1407$"
+}
+}

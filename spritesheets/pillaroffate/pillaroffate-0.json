@@ -1,0 +1,285 @@
+{"frames": {
+
+"pillaroffate-animation 1-000":
+{
+	"frame": {"x":0,"y":6434,"w":56,"h":207},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":207},
+	"sourceSize": {"w":56,"h":207},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-001":
+{
+	"frame": {"x":0,"y":6017,"w":56,"h":209},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":209},
+	"sourceSize": {"w":56,"h":209},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-002":
+{
+	"frame": {"x":0,"y":5596,"w":56,"h":211},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":211},
+	"sourceSize": {"w":56,"h":211},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-003":
+{
+	"frame": {"x":0,"y":5171,"w":56,"h":213},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":213},
+	"sourceSize": {"w":56,"h":213},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-004":
+{
+	"frame": {"x":0,"y":4742,"w":56,"h":215},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":215},
+	"sourceSize": {"w":56,"h":215},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-005":
+{
+	"frame": {"x":0,"y":4309,"w":56,"h":217},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":217},
+	"sourceSize": {"w":56,"h":217},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-006":
+{
+	"frame": {"x":0,"y":3652,"w":56,"h":219},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":219},
+	"sourceSize": {"w":56,"h":219},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-007":
+{
+	"frame": {"x":0,"y":3210,"w":56,"h":221},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":221},
+	"sourceSize": {"w":56,"h":221},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-008":
+{
+	"frame": {"x":0,"y":2764,"w":56,"h":223},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":223},
+	"sourceSize": {"w":56,"h":223},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-009":
+{
+	"frame": {"x":0,"y":2314,"w":56,"h":225},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":225},
+	"sourceSize": {"w":56,"h":225},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-010":
+{
+	"frame": {"x":0,"y":1859,"w":56,"h":228},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":228},
+	"sourceSize": {"w":56,"h":228},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-011":
+{
+	"frame": {"x":0,"y":1170,"w":56,"h":230},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":230},
+	"sourceSize": {"w":56,"h":230},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-012":
+{
+	"frame": {"x":0,"y":706,"w":56,"h":232},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":232},
+	"sourceSize": {"w":56,"h":232},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-013":
+{
+	"frame": {"x":0,"y":236,"w":56,"h":235},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":235},
+	"sourceSize": {"w":56,"h":235},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-014":
+{
+	"frame": {"x":0,"y":0,"w":56,"h":236},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":236},
+	"sourceSize": {"w":56,"h":236},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-015":
+{
+	"frame": {"x":0,"y":471,"w":56,"h":235},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":235},
+	"sourceSize": {"w":56,"h":235},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-016":
+{
+	"frame": {"x":0,"y":938,"w":56,"h":232},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":232},
+	"sourceSize": {"w":56,"h":232},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-017":
+{
+	"frame": {"x":0,"y":1400,"w":56,"h":230},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":230},
+	"sourceSize": {"w":56,"h":230},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-018":
+{
+	"frame": {"x":0,"y":1630,"w":56,"h":229},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":229},
+	"sourceSize": {"w":56,"h":229},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-019":
+{
+	"frame": {"x":0,"y":2087,"w":56,"h":227},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":227},
+	"sourceSize": {"w":56,"h":227},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-020":
+{
+	"frame": {"x":0,"y":2539,"w":56,"h":225},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":225},
+	"sourceSize": {"w":56,"h":225},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-021":
+{
+	"frame": {"x":0,"y":2987,"w":56,"h":223},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":223},
+	"sourceSize": {"w":56,"h":223},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-022":
+{
+	"frame": {"x":0,"y":3431,"w":56,"h":221},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":221},
+	"sourceSize": {"w":56,"h":221},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-023":
+{
+	"frame": {"x":0,"y":3871,"w":56,"h":219},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":219},
+	"sourceSize": {"w":56,"h":219},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-024":
+{
+	"frame": {"x":0,"y":4090,"w":56,"h":219},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":219},
+	"sourceSize": {"w":56,"h":219},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-025":
+{
+	"frame": {"x":0,"y":4526,"w":56,"h":216},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":216},
+	"sourceSize": {"w":56,"h":216},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-026":
+{
+	"frame": {"x":0,"y":4957,"w":56,"h":214},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":214},
+	"sourceSize": {"w":56,"h":214},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-027":
+{
+	"frame": {"x":0,"y":5384,"w":56,"h":212},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":212},
+	"sourceSize": {"w":56,"h":212},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-028":
+{
+	"frame": {"x":0,"y":5807,"w":56,"h":210},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":210},
+	"sourceSize": {"w":56,"h":210},
+	"anchor": {"x":0.5,"y":0.575}
+},
+"pillaroffate-animation 1-029":
+{
+	"frame": {"x":0,"y":6226,"w":56,"h":208},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":208},
+	"sourceSize": {"w":56,"h":208},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"animations": {
+	"pillaroffate-animation 1": ["pillaroffate-animation 1-000","pillaroffate-animation 1-001","pillaroffate-animation 1-002","pillaroffate-animation 1-003","pillaroffate-animation 1-004","pillaroffate-animation 1-005","pillaroffate-animation 1-006","pillaroffate-animation 1-007","pillaroffate-animation 1-008","pillaroffate-animation 1-009","pillaroffate-animation 1-010","pillaroffate-animation 1-011","pillaroffate-animation 1-012","pillaroffate-animation 1-013","pillaroffate-animation 1-014","pillaroffate-animation 1-015","pillaroffate-animation 1-016","pillaroffate-animation 1-017","pillaroffate-animation 1-018","pillaroffate-animation 1-019","pillaroffate-animation 1-020","pillaroffate-animation 1-021","pillaroffate-animation 1-022","pillaroffate-animation 1-023","pillaroffate-animation 1-024","pillaroffate-animation 1-025","pillaroffate-animation 1-026","pillaroffate-animation 1-027","pillaroffate-animation 1-028","pillaroffate-animation 1-029"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "pillaroffate-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":56,"h":6641},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:64505c77d69cc377192c5d3a24a9d4b9:c26bb4bafb95aee9355d8872ea9cd66c:a4b1ee1d968271b5cf7ac8c1af3f8904$"
+}
+}

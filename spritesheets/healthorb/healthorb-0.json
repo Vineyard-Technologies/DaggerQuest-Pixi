@@ -1,0 +1,21 @@
+{"frames": {
+
+"healthorb":
+{
+	"frame": {"x":0,"y":0,"w":210,"h":210},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":210,"h":210},
+	"sourceSize": {"w":210,"h":210},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "healthorb-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":210,"h":210},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d37658747dc8f262e73477128b967d1c:04b7a0dc6e8b2907d37e49c6085033e5:c247670a5ddd3b6bc53b881df4a793d2$"
+}
+}

@@ -1,0 +1,21 @@
+{"frames": {
+
+"inventorymenustatue-default-000":
+{
+	"frame": {"x":0,"y":0,"w":141,"h":453},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":1,"y":0,"w":141,"h":453},
+	"sourceSize": {"w":141,"h":453},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "inventorymenustatue-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":141,"h":453},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:03ff269f733ba6a34e8e02d850147ddf:ca13c62bc661b7a3fed1e2a947f12e11:7fdffef8c5f00ab4d4661f5f290e8e2f$"
+}
+}

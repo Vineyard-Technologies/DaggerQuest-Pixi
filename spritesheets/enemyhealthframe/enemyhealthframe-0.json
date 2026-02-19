@@ -1,0 +1,21 @@
+{"frames": {
+
+"enemyhealthframe":
+{
+	"frame": {"x":0,"y":0,"w":126,"h":126},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":126,"h":126},
+	"sourceSize": {"w":126,"h":126},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "enemyhealthframe-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":126,"h":126},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:6a5d502cd40b82bace90743d1082457d:358203aa3b5ebd4134e909b989961fac:11503a728609d9d37b2cbf02b0a7ccf6$"
+}
+}

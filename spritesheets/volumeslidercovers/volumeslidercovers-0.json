@@ -1,0 +1,21 @@
+{"frames": {
+
+"volumeslidercovers":
+{
+	"frame": {"x":0,"y":0,"w":126,"h":126},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":126,"h":126},
+	"sourceSize": {"w":126,"h":126},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "volumeslidercovers-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":126,"h":126},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:469f8b202ed5ba71a18bf65da8c8180c:358203aa3b5ebd4134e909b989961fac:35508a19b9040519c6607dfd014c727a$"
+}
+}

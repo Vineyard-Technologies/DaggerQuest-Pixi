@@ -1,0 +1,21 @@
+{"frames": {
+
+"longhouse-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":1724,"h":1208},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1724,"h":1208},
+	"sourceSize": {"w":1724,"h":1208},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "longhouse-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":1724,"h":1208},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:13619482d611369d448c3fc4cb1e10f6:8f002d7c9e009f05a64db4b11607322c:36149161a84f101d7bfa565e89e3745c$"
+}
+}

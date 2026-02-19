@@ -1,0 +1,21 @@
+{"frames": {
+
+"simplepants_item-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":44,"h":62},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":8,"y":0,"w":44,"h":62},
+	"sourceSize": {"w":44,"h":62},
+	"anchor": {"x":0.522727,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "simplepants_item-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":44,"h":62},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:64b8e08e9ee3d0815d97296fe24dab90:52fec0e1f9593e5b49d657ae97a3d6c1:63910d9fd53128802c3d0ed48cc68751$"
+}
+}

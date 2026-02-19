@@ -1,0 +1,21 @@
+{"frames": {
+
+"windmilllowerstairs-default-000":
+{
+	"frame": {"x":0,"y":0,"w":457,"h":551},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":457,"h":551},
+	"sourceSize": {"w":457,"h":551},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "windmilllowerstairs-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":457,"h":551},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:073e6416328a63ba1b29e0c19677a5da:9c7bd547ef3a8ff491fca67ba8043efe:55c6d9313ec8eaaeae314606cc1df4c1$"
+}
+}

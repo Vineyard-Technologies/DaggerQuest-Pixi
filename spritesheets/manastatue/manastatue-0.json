@@ -1,0 +1,21 @@
+{"frames": {
+
+"manastatue-default-000":
+{
+	"frame": {"x":0,"y":0,"w":163,"h":248},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":163,"h":248},
+	"sourceSize": {"w":163,"h":248},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "manastatue-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":163,"h":248},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d03ce520b9bc0a571b4e18b2e8e86292:886b956b73313c433e703c79955176ec:d63c9355cd1425646064c73f84889ce2$"
+}
+}

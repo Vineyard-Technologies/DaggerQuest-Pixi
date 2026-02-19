@@ -1,0 +1,21 @@
+{"frames": {
+
+"cottageexterior-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":956,"h":802},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":956,"h":802},
+	"sourceSize": {"w":956,"h":802},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "cottageexterior-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":956,"h":802},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d7a6df176dfad17726b9483786677ec9:a31d03746d7cd94d322b499ebfadfed0:1073b3d6b5ddc5b410ea4186b961c7b7$"
+}
+}

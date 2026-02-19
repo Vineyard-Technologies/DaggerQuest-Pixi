@@ -1,0 +1,21 @@
+{"frames": {
+
+"dirt":
+{
+	"frame": {"x":0,"y":0,"w":256,"h":256},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":256},
+	"sourceSize": {"w":256,"h":256},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "dirt-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":256,"h":256},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:1686e10ccce7d35855a4a9620e5645c8:181bd4a50315479d2e764d8b027ad171:8d84cb127921e12c91fa6ea7d1e2364a$"
+}
+}

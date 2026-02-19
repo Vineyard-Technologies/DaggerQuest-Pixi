@@ -1,0 +1,21 @@
+{"frames": {
+
+"pillaroffatestatue-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":219,"h":495},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":219,"h":495},
+	"sourceSize": {"w":219,"h":495},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "pillaroffatestatue-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":219,"h":495},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:66b0f41c27a7766196fab3735fde0558:273f6dbc284eeb4fd3504e571968f6e8:8c043dd1242ab708329c7373716d3415$"
+}
+}

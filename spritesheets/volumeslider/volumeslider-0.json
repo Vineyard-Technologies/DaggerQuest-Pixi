@@ -1,0 +1,21 @@
+{"frames": {
+
+"volumeslider":
+{
+	"frame": {"x":0,"y":0,"w":329,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":329,"h":30},
+	"sourceSize": {"w":329,"h":30},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "volumeslider-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":329,"h":30},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:e7a033e3bfbce1785de9f25ed6475e76:74a02010cc33f43cc5552b36cd00f366:5de3e75a86e61c1e6a84ee1af29aad22$"
+}
+}

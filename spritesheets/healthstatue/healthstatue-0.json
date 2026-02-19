@@ -1,0 +1,21 @@
+{"frames": {
+
+"healthstatue-default-000":
+{
+	"frame": {"x":0,"y":0,"w":155,"h":248},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":155,"h":248},
+	"sourceSize": {"w":155,"h":248},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "healthstatue-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":155,"h":248},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:a3b1979083d8a5dc6ac9e4ca0f887246:86406bd7b1e0d51b95d0140dfcc29bd0:81905cdc3d77f86b544ae74c447ed895$"
+}
+}

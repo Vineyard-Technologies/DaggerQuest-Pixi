@@ -1,0 +1,21 @@
+{"frames": {
+
+"selectwoman-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":285,"h":783},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":285,"h":783},
+	"sourceSize": {"w":285,"h":783},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "selectwoman-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":285,"h":783},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:c5c1abec486b2df7e817273fd1692d0a:ff735a3fa6a288bbeee4732b238eb361:87cdff79ad7d6df75fbe9860eeff0d74$"
+}
+}

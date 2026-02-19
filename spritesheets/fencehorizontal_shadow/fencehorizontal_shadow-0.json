@@ -1,0 +1,21 @@
+{"frames": {
+
+"fencehorizontal_shadow-default-000":
+{
+	"frame": {"x":0,"y":0,"w":589,"h":74},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":1,"y":1,"w":589,"h":74},
+	"sourceSize": {"w":589,"h":74},
+	"anchor": {"x":0.5,"y":0.577027}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "fencehorizontal_shadow-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":589,"h":74},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:993f9a332c65215ffbafb9f5d5c371a8:032a2852682eed052af683f8e464c93f:666a25e3cb08fcb12d95a2912833f911$"
+}
+}

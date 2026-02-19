@@ -1,0 +1,21 @@
+{"frames": {
+
+"windmillinterior-default-000":
+{
+	"frame": {"x":0,"y":0,"w":671,"h":663},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":671,"h":663},
+	"sourceSize": {"w":671,"h":663},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "windmillinterior-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":671,"h":663},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:6fd8d3f727ebabf4215bda6c1fcd72e3:a714755661cbb97242327d40222f2e81:873199afdae4782243d23dd86d6a36dc$"
+}
+}

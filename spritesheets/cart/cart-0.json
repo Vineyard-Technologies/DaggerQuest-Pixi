@@ -1,0 +1,21 @@
+{"frames": {
+
+"cart-default-000":
+{
+	"frame": {"x":0,"y":0,"w":364,"h":246},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":364,"h":246},
+	"sourceSize": {"w":364,"h":246},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "cart-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":364,"h":246},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:df67b18ea854feb61850b6160823748b:06580da2495705171357e33c081bfd33:52845b4a5d05ffdf46a30014ba206525$"
+}
+}

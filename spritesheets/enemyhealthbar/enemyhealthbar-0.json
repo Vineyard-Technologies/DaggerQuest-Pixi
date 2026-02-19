@@ -1,0 +1,21 @@
+{"frames": {
+
+"enemyhealthbar":
+{
+	"frame": {"x":0,"y":0,"w":585,"h":45},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":585,"h":45},
+	"sourceSize": {"w":585,"h":45},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "enemyhealthbar-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":585,"h":45},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d07ca84386b2fced692346e7b6420f89:6458d95fa7d1ecf0033e9c22bd031c5e:38fdb29d20187c0b35a1df910998918f$"
+}
+}

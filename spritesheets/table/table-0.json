@@ -1,0 +1,21 @@
+{"frames": {
+
+"table-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":230,"h":213},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":230,"h":213},
+	"sourceSize": {"w":230,"h":213},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "table-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":230,"h":213},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:f3759e9e647de89c162c406a27d028ee:daf3af98e5209a0dd7d08d7f42268314:7c13035f3c867c4e4b782b7ba566a26a$"
+}
+}

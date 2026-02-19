@@ -1,0 +1,21 @@
+{"frames": {
+
+"vineyardtechnologieslogo-default-000":
+{
+	"frame": {"x":0,"y":0,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "vineyardtechnologieslogo-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":64,"h":64},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:7f5056e6d6eb9efeccacef2f3ff6e90c:c817e10e53f0332006895aa553de7262:81b7f261d02cf7709b6869e58dbf699e$"
+}
+}

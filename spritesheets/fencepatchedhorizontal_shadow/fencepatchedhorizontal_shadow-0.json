@@ -1,0 +1,21 @@
+{"frames": {
+
+"fencepatchedhorizontal_shadow-default-000":
+{
+	"frame": {"x":0,"y":0,"w":589,"h":73},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":589,"h":73},
+	"sourceSize": {"w":589,"h":73},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "fencepatchedhorizontal_shadow-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":589,"h":73},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:ba1a74589002b0e6b83ff958208d3f02:962f67f41828b7bae443c13f7b429721:e1a2eca51bf9b16669532ed5b59dc841$"
+}
+}

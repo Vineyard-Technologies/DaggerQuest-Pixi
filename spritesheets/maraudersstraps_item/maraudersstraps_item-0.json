@@ -1,0 +1,21 @@
+{"frames": {
+
+"maraudersstraps_item-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":51,"h":62},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":5,"y":0,"w":51,"h":62},
+	"sourceSize": {"w":51,"h":62},
+	"anchor": {"x":0.509804,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "maraudersstraps_item-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":51,"h":62},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:6881b5f21bcbf18e02c756321f6eb8e8:5b20394b4991672e19ffea8e7b86b28e:9ffa0f238e6a26f226d66a9c0d5c46cc$"
+}
+}

@@ -1,0 +1,21 @@
+{"frames": {
+
+"ornateshield_item-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":56,"h":56},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":3,"y":3,"w":56,"h":56},
+	"sourceSize": {"w":56,"h":56},
+	"anchor": {"x":0.5,"y":0.583036}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "ornateshield_item-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":56,"h":56},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:057b0940ed25e04f9177c903ff414b73:9f46d6dc2c2e8b5c9f12aceaf41c50e6:df7b28a734e35b3ddcc3be672c556c71$"
+}
+}

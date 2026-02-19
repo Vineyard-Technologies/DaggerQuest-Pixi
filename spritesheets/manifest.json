@@ -1,0 +1,599 @@
+{
+  "abilitybarstatue": [
+    "./abilitybarstatue/abilitybarstatue-0.json"
+  ],
+  "abilityselectorstatue": [
+    "./abilityselectorstatue/abilityselectorstatue-0.json"
+  ],
+  "abilityslot": [
+    "./abilityslot/abilityslot-0.json"
+  ],
+  "arrow": [
+    "./arrow/arrow-0.json"
+  ],
+  "arrow_shadow": [
+    "./arrow_shadow/arrow_shadow-0.json"
+  ],
+  "autoequip": [
+    "./autoequip/autoequip-0.json"
+  ],
+  "boundary": [
+    "./boundary/boundary-0.json"
+  ],
+  "cart": [
+    "./cart/cart-0.json"
+  ],
+  "cart_shadow": [
+    "./cart_shadow/cart_shadow-0.json"
+  ],
+  "charactermenu": [
+    "./charactermenu/charactermenu-0.json"
+  ],
+  "charactermenustatue": [
+    "./charactermenustatue/charactermenustatue-0.json"
+  ],
+  "chestplaceholder": [
+    "./chestplaceholder/chestplaceholder-0.json"
+  ],
+  "coinsicon": [
+    "./coinsicon/coinsicon-0.json"
+  ],
+  "comparisontooltip": [
+    "./comparisontooltip/comparisontooltip-0.json"
+  ],
+  "cottagedoor": [
+    "./cottagedoor/cottagedoor-0.json"
+  ],
+  "cottageexterior": [
+    "./cottageexterior/cottageexterior-0.json"
+  ],
+  "cottageexterior_shadow": [
+    "./cottageexterior_shadow/cottageexterior_shadow-0.json"
+  ],
+  "cottageinterior": [
+    "./cottageinterior/cottageinterior-0.json"
+  ],
+  "cottageprops": [
+    "./cottageprops/cottageprops-0.json"
+  ],
+  "crudehelmet_item": [
+    "./crudehelmet_item/crudehelmet_item-0.json"
+  ],
+  "crudehelmet_loot": [
+    "./crudehelmet_loot/crudehelmet_loot-0.json"
+  ],
+  "cursor": [
+    "./cursor/cursor-0.json"
+  ],
+  "decorative": [
+    "./decorative/decorative-0.json"
+  ],
+  "dialog": [
+    "./dialog/dialog-0.json"
+  ],
+  "dialogstatue": [
+    "./dialogstatue/dialogstatue-0.json"
+  ],
+  "dirt": [
+    "./dirt/dirt-0.json"
+  ],
+  "enemy": [
+    "./enemy/enemy-0.json"
+  ],
+  "enemyhealthbar": [
+    "./enemyhealthbar/enemyhealthbar-0.json"
+  ],
+  "enemyhealthframe": [
+    "./enemyhealthframe/enemyhealthframe-0.json"
+  ],
+  "equippedmenustatue": [
+    "./equippedmenustatue/equippedmenustatue-0.json"
+  ],
+  "fader": [
+    "./fader/fader-0.json"
+  ],
+  "farmhouse": [
+    "./farmhouse/farmhouse-0.json"
+  ],
+  "farmhousetree": [
+    "./farmhousetree/farmhousetree-0.json"
+  ],
+  "farmhousetree_shadow": [
+    "./farmhousetree_shadow/farmhousetree_shadow-0.json"
+  ],
+  "farmhouse_shadow": [
+    "./farmhouse_shadow/farmhouse_shadow-0.json"
+  ],
+  "feetplaceholder": [
+    "./feetplaceholder/feetplaceholder-0.json"
+  ],
+  "fencehorizontal": [
+    "./fencehorizontal/fencehorizontal-0.json"
+  ],
+  "fencehorizontal_shadow": [
+    "./fencehorizontal_shadow/fencehorizontal_shadow-0.json"
+  ],
+  "fenceleft": [
+    "./fenceleft/fenceleft-0.json"
+  ],
+  "fenceleft_shadow": [
+    "./fenceleft_shadow/fenceleft_shadow-0.json"
+  ],
+  "fencepatchedhorizontal": [
+    "./fencepatchedhorizontal/fencepatchedhorizontal-0.json"
+  ],
+  "fencepatchedhorizontal_shadow": [
+    "./fencepatchedhorizontal_shadow/fencepatchedhorizontal_shadow-0.json"
+  ],
+  "fencepatchedleft": [
+    "./fencepatchedleft/fencepatchedleft-0.json"
+  ],
+  "fencepatchedleft_shadow": [
+    "./fencepatchedleft_shadow/fencepatchedleft_shadow-0.json"
+  ],
+  "fencepatchedright": [
+    "./fencepatchedright/fencepatchedright-0.json"
+  ],
+  "fencepatchedright_shadow": [
+    "./fencepatchedright_shadow/fencepatchedright_shadow-0.json"
+  ],
+  "fenceright": [
+    "./fenceright/fenceright-0.json"
+  ],
+  "fenceright_shadow": [
+    "./fenceright_shadow/fenceright_shadow-0.json"
+  ],
+  "fencevertical": [
+    "./fencevertical/fencevertical-0.json"
+  ],
+  "fencevertical_shadow": [
+    "./fencevertical_shadow/fencevertical_shadow-0.json"
+  ],
+  "goblinarcher": [
+    "./goblinarcher/goblinarcher-0.json",
+    "./goblinarcher/goblinarcher-1.json"
+  ],
+  "goblinarcher_shadow": [
+    "./goblinarcher_shadow/goblinarcher_shadow-0.json"
+  ],
+  "goblinunderling": [
+    "./goblinunderling/goblinunderling-0.json"
+  ],
+  "goblinunderling_shadow": [
+    "./goblinunderling_shadow/goblinunderling_shadow-0.json"
+  ],
+  "goblinwarlock": [
+    "./goblinwarlock/goblinwarlock-0.json"
+  ],
+  "goblinwarlock_shadow": [
+    "./goblinwarlock_shadow/goblinwarlock_shadow-0.json"
+  ],
+  "grass": [
+    "./grass/grass-0.json"
+  ],
+  "guide": [
+    "./guide/guide-0.json"
+  ],
+  "guide_portrait": [
+    "./guide_portrait/guide_portrait-0.json"
+  ],
+  "guide_shadow": [
+    "./guide_shadow/guide_shadow-0.json"
+  ],
+  "handsplaceholder": [
+    "./handsplaceholder/handsplaceholder-0.json"
+  ],
+  "headplaceholder": [
+    "./headplaceholder/headplaceholder-0.json"
+  ],
+  "healthcover": [
+    "./healthcover/healthcover-0.json"
+  ],
+  "healthorb": [
+    "./healthorb/healthorb-0.json"
+  ],
+  "healthstatue": [
+    "./healthstatue/healthstatue-0.json"
+  ],
+  "inventorymenustatue": [
+    "./inventorymenustatue/inventorymenustatue-0.json"
+  ],
+  "leatherjacket_item": [
+    "./leatherjacket_item/leatherjacket_item-0.json"
+  ],
+  "leatherjacket_loot": [
+    "./leatherjacket_loot/leatherjacket_loot-0.json"
+  ],
+  "leggings_item": [
+    "./leggings_item/leggings_item-0.json"
+  ],
+  "leggings_loot": [
+    "./leggings_loot/leggings_loot-0.json"
+  ],
+  "legsplaceholder": [
+    "./legsplaceholder/legsplaceholder-0.json"
+  ],
+  "lightningorb": [
+    "./lightningorb/lightningorb-0.json"
+  ],
+  "lightningorb_shadow": [
+    "./lightningorb_shadow/lightningorb_shadow-0.json"
+  ],
+  "loadingbar": [
+    "./loadingbar/loadingbar-0.json"
+  ],
+  "loadingbarframe": [
+    "./loadingbarframe/loadingbarframe-0.json"
+  ],
+  "loadingscreen": [
+    "./loadingscreen/loadingscreen-0.json"
+  ],
+  "logo": [
+    "./logo/logo-0.json"
+  ],
+  "longhouse": [
+    "./longhouse/longhouse-0.json"
+  ],
+  "longhouse_shadow": [
+    "./longhouse_shadow/longhouse_shadow-0.json"
+  ],
+  "lootnamebackground": [
+    "./lootnamebackground/lootnamebackground-0.json"
+  ],
+  "mainhandplaceholder": [
+    "./mainhandplaceholder/mainhandplaceholder-0.json"
+  ],
+  "man": [
+    "./man/man-0.json",
+    "./man/man-1.json"
+  ],
+  "manacover": [
+    "./manacover/manacover-0.json"
+  ],
+  "manaorb": [
+    "./manaorb/manaorb-0.json"
+  ],
+  "manastatue": [
+    "./manastatue/manastatue-0.json"
+  ],
+  "man_ability": [
+    "./man_ability/man_ability-0.json"
+  ],
+  "man_crudehelmet_gear": [
+    "./man_crudehelmet_gear/man_crudehelmet_gear-0.json"
+  ],
+  "man_crudehelmet_gear_shadow": [
+    "./man_crudehelmet_gear_shadow/man_crudehelmet_gear_shadow-0.json"
+  ],
+  "man_headdefault_gear": [
+    "./man_headdefault_gear/man_headdefault_gear-0.json"
+  ],
+  "man_headdefault_gear_shadow": [
+    "./man_headdefault_gear_shadow/man_headdefault_gear_shadow-0.json"
+  ],
+  "man_leatherjacket_gear": [
+    "./man_leatherjacket_gear/man_leatherjacket_gear-0.json"
+  ],
+  "man_leatherjacket_gear_shadow": [
+    "./man_leatherjacket_gear_shadow/man_leatherjacket_gear_shadow-0.json"
+  ],
+  "man_leggings_gear": [
+    "./man_leggings_gear/man_leggings_gear-0.json"
+  ],
+  "man_leggings_gear_shadow": [
+    "./man_leggings_gear_shadow/man_leggings_gear_shadow-0.json"
+  ],
+  "man_legsdefault_gear": [
+    "./man_legsdefault_gear/man_legsdefault_gear-0.json"
+  ],
+  "man_legsdefault_gear_shadow": [
+    "./man_legsdefault_gear_shadow/man_legsdefault_gear_shadow-0.json"
+  ],
+  "man_maraudersbracers_gear": [
+    "./man_maraudersbracers_gear/man_maraudersbracers_gear-0.json"
+  ],
+  "man_maraudersbracers_gear_shadow": [
+    "./man_maraudersbracers_gear_shadow/man_maraudersbracers_gear_shadow-0.json"
+  ],
+  "man_maraudersstraps_gear": [
+    "./man_maraudersstraps_gear/man_maraudersstraps_gear-0.json"
+  ],
+  "man_maraudersstraps_gear_shadow": [
+    "./man_maraudersstraps_gear_shadow/man_maraudersstraps_gear_shadow-0.json"
+  ],
+  "man_ornateshield_gear": [
+    "./man_ornateshield_gear/man_ornateshield_gear-0.json"
+  ],
+  "man_ornateshield_gear_shadow": [
+    "./man_ornateshield_gear_shadow/man_ornateshield_gear_shadow-0.json"
+  ],
+  "man_shadow": [
+    "./man_shadow/man_shadow-0.json",
+    "./man_shadow/man_shadow-1.json"
+  ],
+  "man_simplegloves_gear": [
+    "./man_simplegloves_gear/man_simplegloves_gear-0.json"
+  ],
+  "man_simplegloves_gear_shadow": [
+    "./man_simplegloves_gear_shadow/man_simplegloves_gear_shadow-0.json"
+  ],
+  "man_simplehelmet_gear": [
+    "./man_simplehelmet_gear/man_simplehelmet_gear-0.json"
+  ],
+  "man_simplehelmet_gear_shadow": [
+    "./man_simplehelmet_gear_shadow/man_simplehelmet_gear_shadow-0.json"
+  ],
+  "man_simplemace_gear": [
+    "./man_simplemace_gear/man_simplemace_gear-0.json"
+  ],
+  "man_simplemace_gear_shadow": [
+    "./man_simplemace_gear_shadow/man_simplemace_gear_shadow-0.json"
+  ],
+  "man_simplepants_gear": [
+    "./man_simplepants_gear/man_simplepants_gear-0.json"
+  ],
+  "man_simplepants_gear_shadow": [
+    "./man_simplepants_gear_shadow/man_simplepants_gear_shadow-0.json"
+  ],
+  "man_simpleshield_gear": [
+    "./man_simpleshield_gear/man_simpleshield_gear-0.json"
+  ],
+  "man_simpleshield_gear_shadow": [
+    "./man_simpleshield_gear_shadow/man_simpleshield_gear_shadow-0.json"
+  ],
+  "man_simpleshirt_gear": [
+    "./man_simpleshirt_gear/man_simpleshirt_gear-0.json"
+  ],
+  "man_simpleshirt_gear_shadow": [
+    "./man_simpleshirt_gear_shadow/man_simpleshirt_gear_shadow-0.json"
+  ],
+  "man_simplesword_gear": [
+    "./man_simplesword_gear/man_simplesword_gear-0.json"
+  ],
+  "man_simplesword_gear_shadow": [
+    "./man_simplesword_gear_shadow/man_simplesword_gear_shadow-0.json"
+  ],
+  "man_strappedboots_gear": [
+    "./man_strappedboots_gear/man_strappedboots_gear-0.json"
+  ],
+  "man_strappedboots_gear_shadow": [
+    "./man_strappedboots_gear_shadow/man_strappedboots_gear_shadow-0.json"
+  ],
+  "maraudersbracers_item": [
+    "./maraudersbracers_item/maraudersbracers_item-0.json"
+  ],
+  "maraudersbracers_loot": [
+    "./maraudersbracers_loot/maraudersbracers_loot-0.json"
+  ],
+  "maraudersstraps_item": [
+    "./maraudersstraps_item/maraudersstraps_item-0.json"
+  ],
+  "maraudersstraps_loot": [
+    "./maraudersstraps_loot/maraudersstraps_loot-0.json"
+  ],
+  "merchant": [
+    "./merchant/merchant-0.json"
+  ],
+  "merchantmenustatue": [
+    "./merchantmenustatue/merchantmenustatue-0.json"
+  ],
+  "merchant_portrait": [
+    "./merchant_portrait/merchant_portrait-0.json"
+  ],
+  "merchant_shadow": [
+    "./merchant_shadow/merchant_shadow-0.json"
+  ],
+  "neckplaceholder": [
+    "./neckplaceholder/neckplaceholder-0.json"
+  ],
+  "npc": [
+    "./npc/npc-0.json"
+  ],
+  "offhandplaceholder": [
+    "./offhandplaceholder/offhandplaceholder-0.json"
+  ],
+  "orbcoverback": [
+    "./orbcoverback/orbcoverback-0.json"
+  ],
+  "orbcoverfront": [
+    "./orbcoverfront/orbcoverfront-0.json"
+  ],
+  "ornateshield_item": [
+    "./ornateshield_item/ornateshield_item-0.json"
+  ],
+  "ornateshield_loot": [
+    "./ornateshield_loot/ornateshield_loot-0.json"
+  ],
+  "passives": [
+    "./passives/passives-0.json"
+  ],
+  "pillaroffate": [
+    "./pillaroffate/pillaroffate-0.json"
+  ],
+  "pillaroffateclose": [
+    "./pillaroffateclose/pillaroffateclose-0.json"
+  ],
+  "pillaroffatemenu": [
+    "./pillaroffatemenu/pillaroffatemenu-0.json"
+  ],
+  "pillaroffatestatue": [
+    "./pillaroffatestatue/pillaroffatestatue-0.json"
+  ],
+  "pillaroffate_shadow": [
+    "./pillaroffate_shadow/pillaroffate_shadow-0.json"
+  ],
+  "player": [
+    "./player/player-0.json"
+  ],
+  "projectile": [
+    "./projectile/projectile-0.json"
+  ],
+  "ringplaceholder": [
+    "./ringplaceholder/ringplaceholder-0.json"
+  ],
+  "selectman": [
+    "./selectman/selectman-0.json"
+  ],
+  "selectwoman": [
+    "./selectwoman/selectwoman-0.json"
+  ],
+  "settingsmenu": [
+    "./settingsmenu/settingsmenu-0.json"
+  ],
+  "settingsmenustatue": [
+    "./settingsmenustatue/settingsmenustatue-0.json"
+  ],
+  "simplegloves_item": [
+    "./simplegloves_item/simplegloves_item-0.json"
+  ],
+  "simplegloves_loot": [
+    "./simplegloves_loot/simplegloves_loot-0.json"
+  ],
+  "simplehelmet_item": [
+    "./simplehelmet_item/simplehelmet_item-0.json"
+  ],
+  "simplehelmet_loot": [
+    "./simplehelmet_loot/simplehelmet_loot-0.json"
+  ],
+  "simplemace_item": [
+    "./simplemace_item/simplemace_item-0.json"
+  ],
+  "simplemace_loot": [
+    "./simplemace_loot/simplemace_loot-0.json"
+  ],
+  "simplepants_item": [
+    "./simplepants_item/simplepants_item-0.json"
+  ],
+  "simplepants_loot": [
+    "./simplepants_loot/simplepants_loot-0.json"
+  ],
+  "simpleshield_item": [
+    "./simpleshield_item/simpleshield_item-0.json"
+  ],
+  "simpleshield_loot": [
+    "./simpleshield_loot/simpleshield_loot-0.json"
+  ],
+  "simpleshirt_item": [
+    "./simpleshirt_item/simpleshirt_item-0.json"
+  ],
+  "simpleshirt_loot": [
+    "./simpleshirt_loot/simpleshirt_loot-0.json"
+  ],
+  "simplesword_item": [
+    "./simplesword_item/simplesword_item-0.json"
+  ],
+  "simplesword_loot": [
+    "./simplesword_loot/simplesword_loot-0.json"
+  ],
+  "slot": [
+    "./slot/slot-0.json"
+  ],
+  "splashscreen": [
+    "./splashscreen/splashscreen-0.json"
+  ],
+  "strappedboots_item": [
+    "./strappedboots_item/strappedboots_item-0.json"
+  ],
+  "strappedboots_loot": [
+    "./strappedboots_loot/strappedboots_loot-0.json"
+  ],
+  "table": [
+    "./table/table-0.json"
+  ],
+  "table_shadow": [
+    "./table_shadow/table_shadow-0.json"
+  ],
+  "tooltip": [
+    "./tooltip/tooltip-0.json"
+  ],
+  "tutorial": [
+    "./tutorial/tutorial-0.json"
+  ],
+  "vineyardtechnologieslogo": [
+    "./vineyardtechnologieslogo/vineyardtechnologieslogo-0.json"
+  ],
+  "volumeslider": [
+    "./volumeslider/volumeslider-0.json"
+  ],
+  "volumeslidercovers": [
+    "./volumeslidercovers/volumeslidercovers-0.json"
+  ],
+  "windmilldoor": [
+    "./windmilldoor/windmilldoor-0.json"
+  ],
+  "windmillexterior": [
+    "./windmillexterior/windmillexterior-0.json"
+  ],
+  "windmillexterior_shadow": [
+    "./windmillexterior_shadow/windmillexterior_shadow-0.json"
+  ],
+  "windmillfan": [
+    "./windmillfan/windmillfan-0.json"
+  ],
+  "windmillfan_shadow": [
+    "./windmillfan_shadow/windmillfan_shadow-0.json"
+  ],
+  "windmillfloorlevel": [
+    "./windmillfloorlevel/windmillfloorlevel-0.json"
+  ],
+  "windmillinterior": [
+    "./windmillinterior/windmillinterior-0.json"
+  ],
+  "windmilllowerstairs": [
+    "./windmilllowerstairs/windmilllowerstairs-0.json"
+  ],
+  "windmillupperstairs": [
+    "./windmillupperstairs/windmillupperstairs-0.json"
+  ],
+  "woman": [
+    "./woman/woman-0.json"
+  ],
+  "woman_chestdefault_gear": [
+    "./woman_chestdefault_gear/woman_chestdefault_gear-0.json"
+  ],
+  "woman_chestdefault_gear_shadow": [
+    "./woman_chestdefault_gear_shadow/woman_chestdefault_gear_shadow-0.json"
+  ],
+  "woman_headdefault_gear": [
+    "./woman_headdefault_gear/woman_headdefault_gear-0.json"
+  ],
+  "woman_headdefault_gear_shadow": [
+    "./woman_headdefault_gear_shadow/woman_headdefault_gear_shadow-0.json"
+  ],
+  "woman_leatherjacket_gear": [
+    "./woman_leatherjacket_gear/woman_leatherjacket_gear-0.json"
+  ],
+  "woman_leatherjacket_gear_shadow": [
+    "./woman_leatherjacket_gear_shadow/woman_leatherjacket_gear_shadow-0.json"
+  ],
+  "woman_leggings_gear": [
+    "./woman_leggings_gear/woman_leggings_gear-0.json"
+  ],
+  "woman_legsdefault_gear": [
+    "./woman_legsdefault_gear/woman_legsdefault_gear-0.json"
+  ],
+  "woman_legsdefault_gear_shadow": [
+    "./woman_legsdefault_gear_shadow/woman_legsdefault_gear_shadow-0.json"
+  ],
+  "woman_shadow": [
+    "./woman_shadow/woman_shadow-0.json"
+  ],
+  "woman_simplepants_gear": [
+    "./woman_simplepants_gear/woman_simplepants_gear-0.json"
+  ],
+  "woman_simplepants_gear_shadow": [
+    "./woman_simplepants_gear_shadow/woman_simplepants_gear_shadow-0.json"
+  ],
+  "woman_simpleshirt_gear": [
+    "./woman_simpleshirt_gear/woman_simpleshirt_gear-0.json"
+  ],
+  "woman_simpleshirt_gear_shadow": [
+    "./woman_simpleshirt_gear_shadow/woman_simpleshirt_gear_shadow-0.json"
+  ],
+  "woodenchest": [
+    "./woodenchest/woodenchest-0.json"
+  ],
+  "woodenchest_shadow": [
+    "./woodenchest_shadow/woodenchest_shadow-0.json"
+  ]
+}

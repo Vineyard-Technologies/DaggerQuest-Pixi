@@ -1,0 +1,21 @@
+{"frames": {
+
+"selectman-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":435,"h":732},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":435,"h":732},
+	"sourceSize": {"w":435,"h":732},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "selectman-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":435,"h":732},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:de6fc69d080dc61fc40f4bb76a1c6b6c:f1c7818ee632747da9b7068f941794b2:a0f0cb3862ba487741b162cbbf43b2ea$"
+}
+}

@@ -1,0 +1,21 @@
+{"frames": {
+
+"fencepatchedright-default-000":
+{
+	"frame": {"x":0,"y":0,"w":352,"h":320},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":352,"h":320},
+	"sourceSize": {"w":352,"h":320},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "fencepatchedright-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":352,"h":320},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d3c793e1ecaca6fcebf14be11c76ab7e:51f2607ff7338488a384000e2a1356af:65310611afc552bafd4c84510512ee3c$"
+}
+}

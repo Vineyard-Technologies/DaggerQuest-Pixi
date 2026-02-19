@@ -1,0 +1,21 @@
+{"frames": {
+
+"manaorb":
+{
+	"frame": {"x":0,"y":0,"w":210,"h":210},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":210,"h":210},
+	"sourceSize": {"w":210,"h":210},
+	"anchor": {"x":0.5,"y":0.575}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "manaorb-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":210,"h":210},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:ff52df9dbb0e0f6e5671dc8774ff62bc:04b7a0dc6e8b2907d37e49c6085033e5:7aa3446a7db4e4e9b4470473e6eaa64f$"
+}
+}

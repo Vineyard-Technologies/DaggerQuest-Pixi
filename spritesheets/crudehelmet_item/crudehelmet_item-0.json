@@ -1,0 +1,21 @@
+{"frames": {
+
+"crudehelmet_item-animation 1-000":
+{
+	"frame": {"x":0,"y":0,"w":49,"h":60},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":4,"y":0,"w":49,"h":60},
+	"sourceSize": {"w":49,"h":60},
+	"anchor": {"x":0.55102,"y":0.594167}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "crudehelmet_item-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":49,"h":60},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:bd37a98bec3b83d85647311e2ece2629:550c033e2ef65136e452d9c0f54ade33:5218c89662592add7b8a572d57658b0f$"
+}
+}

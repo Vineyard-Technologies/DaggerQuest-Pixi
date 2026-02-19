@@ -1,0 +1,21 @@
+{"frames": {
+
+"handsplaceholder-default-000":
+{
+	"frame": {"x":0,"y":0,"w":62,"h":39},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":13,"w":62,"h":39},
+	"sourceSize": {"w":62,"h":39},
+	"anchor": {"x":0.5,"y":0.580769}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "handsplaceholder-0.webp",
+	"format": "RGBA8888",
+	"size": {"w":62,"h":39},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:cc586179e66077f28488c8f910a737f3:7ef7a89e15cf2005c067d7c2b432f49b:98b7bab77fa043f063aabe87eb4592d3$"
+}
+}
