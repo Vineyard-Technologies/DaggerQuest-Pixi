@@ -7,10 +7,11 @@ const execAsync = promisify(exec);
 
 // __dirname is available directly in CommonJS
 const scriptDir = __dirname;
+const rootDir = join(scriptDir, '..');
 
 // Parameters
-const sourceDirectory = process.argv[2] || join(scriptDir, 'images');
-const outputDirectory = process.argv[3] || join(scriptDir, 'spritesheets');
+const sourceDirectory = process.argv[2] || join(rootDir, 'images');
+const outputDirectory = process.argv[3] || join(rootDir, 'spritesheets');
 const manifestFileName = process.argv[4] || 'manifest.json';
 
 // Check if directory exists and has files

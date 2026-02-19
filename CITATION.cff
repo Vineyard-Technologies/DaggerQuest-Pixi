@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
 title: "DaggerQuest"
-abstract: "An HTML5 Action RPG (ARPG) game built with Construct 3, featuring dungeon exploration, combat mechanics, and character progression."
+abstract: "An HTML5 Action RPG (ARPG) game built with Pixi.js, featuring dungeon exploration, combat mechanics, and character progression."
 authors:
   - family-names: "Vineyard Technologies"
     email: "Contact@VineyardTechnologies.org"
@@ -12,7 +12,7 @@ license: AGPL-3.0
 keywords:
   - "game"
   - "html5"
-  - "construct3"
+  - "pixijs"
   - "arpg"
   - "action-rpg"
   - "dungeon-crawler"

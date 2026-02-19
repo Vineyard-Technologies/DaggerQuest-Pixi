@@ -13,16 +13,16 @@ Thank you for your interest in contributing to DaggerQuest! This document provid
 
 ## Development Environment
 
-DaggerQuest is built using Construct 3. To contribute:
+DaggerQuest is built using [Pixi.js](https://pixijs.com/). To contribute:
 
-- Ensure you have access to Construct 3
-- Familiarize yourself with the Construct 3 event system
-- No addons or plugins are used in this project
+- Ensure you have Node.js installed
+- Familiarize yourself with the Pixi.js rendering API
+- No external addons or plugins are used in this project
 
 ## Code Style and Standards
 
 - Follow existing code patterns and naming conventions
-- Keep event sheets organized and well-commented
+- Keep code organized and well-commented
 - Test your changes across different browsers and devices
 - Ensure performance is not negatively impacted
 
