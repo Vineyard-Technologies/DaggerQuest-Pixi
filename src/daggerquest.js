@@ -1,13 +1,18 @@
 // Game constants
-const GAME_WIDTH = 1280;
-const GAME_HEIGHT = 720;
-const PLAYER_SPEED = 150; // pixels per second
-const ANIMATION_FPS = 12;
+const DEBUG = true;
+const WORLD_WIDTH = 4096;
+const WORLD_HEIGHT = 4096;
+const WALK_FPS = 30;
+const IDLE_FPS = 10;
 
 // Game state
 let app;
+let worldContainer;
+let playerContainer;
+let playerBase;
 let player;
 let playerSprite;
+let backgroundTile;
 let targetPosition = null;
 let isWalking = false;
 let currentDirection = 135; // Default direction
@@ -29,8 +34,7 @@ async function init() {
     // Create Pixi Application (v8 API)
     app = new PIXI.Application();
     await app.init({
-        width: GAME_WIDTH,
-        height: GAME_HEIGHT,
+        resizeTo: window,
         background: 0x3d5a4c,
         antialias: true,
         preference: 'webgpu',
@@ -44,8 +48,15 @@ async function init() {
     document.body.appendChild(app.canvas);
     app.canvas.id = 'gameCanvas';
 
+    // Create world container (holds background + all game objects)
+    worldContainer = new PIXI.Container();
+    app.stage.addChild(worldContainer);
+
     // Load textures - for now we'll use a placeholder
     await loadTextures();
+
+    // Create tiled dirt background
+    await createBackground();
 
     // Create player
     createPlayer();
@@ -55,10 +66,32 @@ async function init() {
     app.stage.hitArea = app.screen;
     app.stage.on('pointerdown', onStageClick);
 
-    console.log('Game ready! Click anywhere to move the man.');
-
     // Start game loop
     app.ticker.add(gameLoop);
+}
+
+// Create the tiled dirt background
+async function createBackground() {
+    const dirtTexture = await PIXI.Assets.load('./spritesheets/dirt/dirt-0.webp');
+
+    // Height is doubled so that after 0.5 y-scale it covers the full WORLD_HEIGHT in world coords
+    backgroundTile = new PIXI.TilingSprite({
+        texture: dirtTexture,
+        width: WORLD_WIDTH,
+        height: WORLD_HEIGHT * 2
+    });
+
+    // Rotate the tile pattern ~22.5° to break up grid uniformity
+    backgroundTile.tileRotation = Math.PI / 8;
+
+    // Squish vertically by 50% to simulate isometric ground-plane perspective.
+    // Height*2 * scale.y=0.5 means the sprite visually fills WORLD_HEIGHT in world coords.
+    backgroundTile.scale.y = 0.5;
+
+    backgroundTile.x = 0;
+    backgroundTile.y = 0;
+
+    worldContainer.addChildAt(backgroundTile, 0);
 }
 
 // Load animation textures
@@ -79,7 +112,6 @@ async function loadTextures() {
         const fullPath = `./spritesheets/${sheetPath.replace('./', '')}`;
         const spritesheet = await PIXI.Assets.load(fullPath);
         spritesheets.push(spritesheet);
-        console.log(`Loaded spritesheet ${fullPath}`);
     }
     
     // Parse all frames from all spritesheets
@@ -114,12 +146,10 @@ async function loadTextures() {
         if (dirFrames.walk && dirFrames.walk.length > 0) {
             // Filter out any undefined entries (in case frames aren't sequential)
             animationTextures.walk[direction] = dirFrames.walk.filter(f => f !== undefined);
-            console.log(`Loaded ${animationTextures.walk[direction].length} walk frames for direction ${direction}`);
         }
         
         if (dirFrames.idle && dirFrames.idle.length > 0) {
             animationTextures.idle[direction] = dirFrames.idle.filter(f => f !== undefined);
-            console.log(`Loaded ${animationTextures.idle[direction].length} idle frames for direction ${direction}`);
         } else if (animationTextures.walk[direction]) {
             // Fall back to first walk frame if no idle animation exists
             animationTextures.idle[direction] = [animationTextures.walk[direction][0]];
@@ -137,8 +167,6 @@ async function loadTextures() {
         animationTextures.walk[135] = [placeholder];
         animationTextures.idle[135] = [placeholder];
     }
-    
-    console.log(`Loaded animations for ${Object.keys(animationTextures.walk).length} directions`);
 }
 
 // Create the player character
@@ -151,23 +179,43 @@ function createPlayer() {
         console.error('No idle frames available!');
         return;
     }
-    
+
+    // Container that holds the base diamond + man sprite, positioned in world space
+    playerContainer = new PIXI.Container();
+    playerContainer.x = WORLD_WIDTH - 250;
+    playerContainer.y = WORLD_HEIGHT - 250;
+
+    // Man sprite pinned on top — anchor (0.5, 0.7) places feet at the container origin
     playerSprite = new PIXI.AnimatedSprite(idleFrames);
-    playerSprite.anchor.set(0.5, 0.7); // Anchor at bottom-center
-    playerSprite.x = GAME_WIDTH / 2;
-    playerSprite.y = GAME_HEIGHT / 2;
-    playerSprite.animationSpeed = ANIMATION_FPS / 60;
+    playerSprite.anchor.set(0.5, 0.7);
+    playerSprite.x = 0;
+    playerSprite.y = -50;
+    playerSprite.animationSpeed = IDLE_FPS / 60;
+
+    // Red square base — always matches the man sprite's width
+    const halfSize = playerSprite.width / 2;
+    playerBase = new PIXI.Graphics();
+    playerBase.rect(-halfSize, -halfSize, halfSize * 2, halfSize * 2);
+    playerBase.fill({ color: 0xff2222, alpha: 0.85 });
+    playerBase.stroke({ color: 0xaa0000, width: 1.5 });
+    playerContainer.addChild(playerBase);
+    playerContainer.addChild(playerSprite);
+    playerBase.visible = DEBUG;
+
     startIdlePingPong();
-    
-    app.stage.addChild(playerSprite);
+    worldContainer.addChild(playerContainer);
     
     player = {
-        x: playerSprite.x,
-        y: playerSprite.y,
-        sprite: playerSprite
+        x: playerContainer.x,
+        y: playerContainer.y,
+        speed: 250,           // pixels per second (vertical is always half)
+        dynamicResizing: false // if true, base resizes to match sprite each frame
     };
     
     currentDirection = parseFloat(firstDirection);
+
+    // Position camera on the player immediately
+    updateCamera();
 }
 
 // Start idle ping pong animation on the player sprite
@@ -183,29 +231,46 @@ function startIdlePingPong() {
     
     idlePingPongForward = true;
     playerSprite.loop = false;
-    playerSprite.animationSpeed = ANIMATION_FPS / 60;
+    playerSprite.animationSpeed = IDLE_FPS / 60;
     playerSprite.gotoAndPlay(0);
     
     playerSprite.onComplete = () => {
         if (!isWalking) {
             idlePingPongForward = !idlePingPongForward;
             if (idlePingPongForward) {
-                playerSprite.animationSpeed = ANIMATION_FPS / 60;
+                playerSprite.animationSpeed = IDLE_FPS / 60;
                 playerSprite.gotoAndPlay(0);
             } else {
-                playerSprite.animationSpeed = -(ANIMATION_FPS / 60);
+                playerSprite.animationSpeed = -(IDLE_FPS / 60);
                 playerSprite.gotoAndPlay(playerSprite.totalFrames - 1);
             }
         }
     };
 }
 
+// Update camera to follow the player, clamped to world bounds
+function updateCamera() {
+    // Center the camera on the player
+    let camX = app.screen.width / 2 - player.x;
+    let camY = app.screen.height / 2 - player.y;
+
+    // Clamp so we never show outside the world
+    camX = Math.min(0, Math.max(camX, app.screen.width - WORLD_WIDTH));
+    camY = Math.min(0, Math.max(camY, app.screen.height - WORLD_HEIGHT));
+
+    worldContainer.x = camX;
+    worldContainer.y = camY;
+}
+
 // Handle stage clicks
 function onStageClick(event) {
     const clickPos = event.data.global;
+    // Convert screen coordinates to world coordinates
+    const worldX = clickPos.x - worldContainer.x;
+    const worldY = clickPos.y - worldContainer.y;
     targetPosition = {
-        x: clickPos.x,
-        y: clickPos.y
+        x: worldX,
+        y: worldY
     };
     
     // Calculate direction to target
@@ -215,8 +280,6 @@ function onStageClick(event) {
     
     // Find closest direction
     currentDirection = findClosestDirection(angle);
-    
-    console.log(`Moving to (${clickPos.x.toFixed(0)}, ${clickPos.y.toFixed(0)}) at angle ${angle.toFixed(1)}° using direction ${currentDirection}`);
     
     // Start walking animation
     startWalkAnimation();
@@ -264,31 +327,12 @@ function startWalkAnimation() {
     }
     
     if (walkFrames && walkFrames.length > 0) {
-        // Save position, anchor, and current frame
-        const savedX = playerSprite.x;
-        const savedY = playerSprite.y;
-        const savedAnchorX = playerSprite.anchor.x;
-        const savedAnchorY = playerSprite.anchor.y;
         const savedFrame = isWalking ? playerSprite.currentFrame : 0;
-        
-        // Change textures
         playerSprite.textures = walkFrames;
         playerSprite.loop = true;
-        
-        // Restore position and anchor immediately
-        playerSprite.anchor.set(savedAnchorX, savedAnchorY);
-        playerSprite.x = savedX;
-        playerSprite.y = savedY;
-        
-        // Update player object
-        player.x = savedX;
-        player.y = savedY;
-        
-        // Resume from the same frame (clamped to new animation length), clear ping pong callback
         playerSprite.onComplete = null;
-        playerSprite.animationSpeed = ANIMATION_FPS / 60;
-        const resumeFrame = savedFrame % walkFrames.length;
-        playerSprite.gotoAndPlay(resumeFrame);
+        playerSprite.animationSpeed = WALK_FPS / 60;
+        playerSprite.gotoAndPlay(savedFrame % walkFrames.length);
         isWalking = true;
     } else {
         console.warn('No walk frames available');
@@ -311,30 +355,23 @@ function stopWalkAnimation() {
         }
         
         if (idleFrames && idleFrames.length > 0) {
-            // Save position and anchor
-            const savedX = playerSprite.x;
-            const savedY = playerSprite.y;
-            const savedAnchorX = playerSprite.anchor.x;
-            const savedAnchorY = playerSprite.anchor.y;
-            
             playerSprite.textures = idleFrames;
-            
-            // Restore position and anchor immediately
-            playerSprite.anchor.set(savedAnchorX, savedAnchorY);
-            playerSprite.x = savedX;
-            playerSprite.y = savedY;
-            
             startIdlePingPong();
-            
-            // Update player object
-            player.x = savedX;
-            player.y = savedY;
         }
     }
 }
 
 // Main game loop
 function gameLoop(ticker) {
+    // Optionally sync the base size/position to the sprite each frame
+    if (player && player.dynamicResizing && playerBase && playerSprite) {
+        playerBase.width = playerSprite.width;
+        playerBase.height = playerSprite.height / 2;
+        // Bottom of sprite = playerSprite.y + playerSprite.height * (1 - anchor.y)
+        const spriteBottom = playerSprite.y + playerSprite.height * (1 - playerSprite.anchor.y);
+        playerBase.y = spriteBottom - playerBase.height / 2;
+    }
+
     if (!targetPosition) return;
     
     // In PixiJS v8, ticker is an object with deltaTime property
@@ -342,11 +379,11 @@ function gameLoop(ticker) {
     
     // Safety check for NaN
     if (isNaN(player.x) || isNaN(player.y)) {
-        console.error('Player position is NaN! Resetting to center.');
-        player.x = GAME_WIDTH / 2;
-        player.y = GAME_HEIGHT / 2;
-        playerSprite.x = player.x;
-        playerSprite.y = player.y;
+        console.error('Player position is NaN! Resetting to start.');
+        player.x = WORLD_WIDTH - 250;
+        player.y = WORLD_HEIGHT - 250;
+        playerContainer.x = player.x;
+        playerContainer.y = player.y;
         targetPosition = null;
         stopWalkAnimation();
         return;
@@ -363,16 +400,29 @@ function gameLoop(ticker) {
         return;
     }
     
-    // Move towards target
-    const speed = PLAYER_SPEED * (delta / 60);
+    // Elliptical speed: full speed horizontal, half speed vertical, smooth blend for all angles
+    const angle = Math.atan2(dy, dx);
+    const effectiveSpeed = Math.sqrt(
+        Math.pow(player.speed * Math.cos(angle), 2) +
+        Math.pow((player.speed / 2) * Math.sin(angle), 2)
+    );
+    const speed = effectiveSpeed * (delta / 60);
     const ratio = Math.min(speed / distance, 1);
     
     player.x += dx * ratio;
     player.y += dy * ratio;
+
+    // Sync walk animation speed proportionally: full player.speed = WALK_FPS
+    if (isWalking && playerSprite.totalFrames > 0) {
+        console.log(`movement speed: ${effectiveSpeed.toFixed(1)} px/s | anim speed: ${(playerSprite.animationSpeed * 60).toFixed(1)} fps`);
+    }
     
     // Update sprite position
-    playerSprite.x = player.x;
-    playerSprite.y = player.y;
+    playerContainer.x = player.x;
+    playerContainer.y = player.y;
+
+    // Pan camera to follow player
+    updateCamera();
 }
 
 // Start the game when the page loads
