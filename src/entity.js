@@ -3,167 +3,150 @@
  * Entities have a position, a container, and an optional animated sprite.
  */
 class Entity {
-    constructor({ x, y, direction = 0, textures = null }) {
+    constructor({ x, y, spriteKey = null, directions = 16, direction = 0, defaultAnimFps = 10 }) {
         this.x = x;
         this.y = y;
+        this.spriteKey = spriteKey;
         this.direction = direction;
+        this.defaultAnimFps = defaultAnimFps;
 
-        // Animation textures keyed by direction: { walk: { angle: [frames] }, idle: { angle: [frames] } }
-        this.textures = textures || { walk: {}, idle: {} };
+        // Number of discrete facing directions and their computed angles
+        this.directions = directions;
+        this.angles = Array.from({ length: directions }, (_, i) => {
+            const step = 360 / directions;
+            const angle = i * step;
+            return angle > 180 ? angle - 360 : angle;
+        }).sort((a, b) => a - b);
+
+        // Animation textures keyed by name, then direction: { animName: { angle: [frames] } }
+        this.textures = {};
 
         // PIXI display objects
         this.container = new PIXI.Container();
         this.container.x = x;
         this.container.y = y;
 
-        // Create the animated sprite from the first available idle direction
-        const firstDirection = Object.keys(this.textures.idle)[0];
-        const idleFrames = (firstDirection && this.textures.idle[firstDirection]) || [];
-
-        if (idleFrames.length > 0) {
-            this.sprite = new PIXI.AnimatedSprite({ textures: idleFrames, updateAnchor: true });
-            this.sprite.x = 0;
-            this.sprite.y = -50;
-            this.sprite.animationSpeed = IDLE_FPS / 60;
-            this.container.addChild(this.sprite);
-            this.direction = parseFloat(firstDirection);
-        } else {
-            this.sprite = null;
-        }
-    }
-}
-
-/**
- * A Character is an Entity that can move and has walk/idle animations.
- * Includes the player, NPCs, and enemies.
- */
-class Character extends Entity {
-    constructor({ x, y, speed = 0, direction = 0, textures = null }) {
-        super({ x, y, direction, textures });
-        this.speed = speed;
-        this.targetPosition = null;
-        this.isWalking = false;
-        this.idlePingPongForward = true;
+        this.sprite = null;
     }
 
-    /** Start the idle ping-pong animation */
-    startIdlePingPong() {
-        if (!this.sprite) return;
-
-        const idleFrames = this.textures.idle[this.direction]
-            || this.textures.idle[Object.keys(this.textures.idle)[0]]
-            || [];
-
-        if (idleFrames.length <= 1) {
-            this.sprite.gotoAndStop(0);
+    /**
+     * Load spritesheets from the manifest for this entity's spriteKey,
+     * parse animation frames by name and direction, and create the animated sprite.
+     */
+    async loadTextures() {
+        if (!this.spriteKey) {
+            console.warn('Entity has no spriteKey – skipping texture load');
             return;
         }
 
-        this.idlePingPongForward = true;
-        this.sprite.loop = false;
-        this.sprite.animationSpeed = IDLE_FPS / 60;
-        this.sprite.gotoAndPlay(0);
+        const animationTextures = {};
 
-        this.sprite.onComplete = () => {
-            if (!this.isWalking) {
-                this.idlePingPongForward = !this.idlePingPongForward;
-                if (this.idlePingPongForward) {
-                    this.sprite.animationSpeed = IDLE_FPS / 60;
-                    this.sprite.gotoAndPlay(0);
-                } else {
-                    this.sprite.animationSpeed = -(IDLE_FPS / 60);
-                    this.sprite.gotoAndPlay(this.sprite.totalFrames - 1);
+        // Load the manifest to know which spritesheets exist
+        const manifest = await fetch('./spritesheets/manifest.json').then(r => r.json());
+        const sheets = manifest[this.spriteKey] || [];
+
+        if (sheets.length === 0) {
+            console.error(`No ${this.spriteKey} spritesheets found in manifest!`);
+            return;
+        }
+
+        // Load all spritesheets listed in the manifest
+        const spritesheets = [];
+        for (const sheetPath of sheets) {
+            const fullPath = `./spritesheets/${sheetPath.replace('./', '')}`;
+            const spritesheet = await PIXI.Assets.load(fullPath);
+            spritesheets.push(spritesheet);
+        }
+
+        // Parse all frames from all spritesheets
+        // Frame naming convention: spriteKey-animName_direction-frameNum
+        const keyPattern = new RegExp(`${this.spriteKey}-(\\w+)_([\\-\\d.]+)-(\\d+)`);
+
+        for (const spritesheet of spritesheets) {
+            for (const frameName in spritesheet.textures) {
+                const match = frameName.match(keyPattern);
+                if (match) {
+                    const animName = match[1];
+                    const direction = parseFloat(match[2]);
+                    const frameNum = parseInt(match[3]);
+
+                    if (!animationTextures[animName]) {
+                        animationTextures[animName] = {};
+                    }
+                    if (!animationTextures[animName][direction]) {
+                        animationTextures[animName][direction] = [];
+                    }
+
+                    animationTextures[animName][direction][frameNum] = spritesheet.textures[frameName];
                 }
             }
-        };
-    }
+        }
 
-    /** Start the walk animation for the current direction */
-    startWalkAnimation() {
-        if (!this.sprite) return;
-
-        let walkFrames = this.textures.walk[this.direction];
-
-        if (!walkFrames || walkFrames.length === 0) {
-            console.warn(`No frames for direction ${this.direction}, using fallback`);
-            const availableDirections = Object.keys(this.textures.walk);
-            if (availableDirections.length > 0) {
-                walkFrames = this.textures.walk[availableDirections[0]];
+        // Filter out any undefined entries from sparse arrays
+        for (const animName in animationTextures) {
+            for (const direction in animationTextures[animName]) {
+                animationTextures[animName][direction] =
+                    animationTextures[animName][direction].filter(f => f !== undefined);
             }
         }
 
-        if (walkFrames && walkFrames.length > 0) {
-            const savedFrame = this.isWalking ? this.sprite.currentFrame : 0;
-            this.sprite.textures = walkFrames;
-            this.sprite.loop = true;
-            this.sprite.onComplete = null;
-            this.sprite.animationSpeed = WALK_FPS / 60;
-            this.sprite.gotoAndPlay(savedFrame % walkFrames.length);
-            this.isWalking = true;
-        } else {
-            console.warn('No walk frames available');
+        this.textures = animationTextures;
+        this.initSprite();
+    }
+
+    /** Create (or re-create) the animated sprite from loaded textures */
+    initSprite() {
+        // Use the first available animation and direction
+        const firstAnim = Object.keys(this.textures)[0];
+        if (!firstAnim) return;
+
+        const firstDirection = Object.keys(this.textures[firstAnim])[0];
+        const frames = (firstDirection && this.textures[firstAnim][firstDirection]) || [];
+
+        if (frames.length > 0) {
+            this.sprite = new PIXI.AnimatedSprite({ textures: frames, updateAnchor: true });
+            this.sprite.x = 0;
+            this.sprite.y = 0;
+            this.sprite.animationSpeed = this.defaultAnimFps / 60;
+            this.container.addChild(this.sprite);
+            this.direction = parseFloat(firstDirection);
         }
     }
 
-    /** Stop walking and return to idle animation */
-    stopWalkAnimation() {
-        if (!this.isWalking) return;
-        this.isWalking = false;
+    /**
+     * Get frames for a given animation name and direction, with fallback.
+     * Returns the frames array, or an empty array if nothing is available.
+     */
+    getAnimationFrames(animName, direction) {
+        const anim = this.textures[animName];
+        if (!anim) return [];
 
-        let idleFrames = this.textures.idle[this.direction];
+        let frames = anim[direction];
+        if (frames && frames.length > 0) return frames;
 
-        if (!idleFrames || idleFrames.length === 0) {
-            const availableDirections = Object.keys(this.textures.idle);
-            if (availableDirections.length > 0) {
-                idleFrames = this.textures.idle[availableDirections[0]];
+        // Fallback to first available direction for this animation
+        const fallbackDir = Object.keys(anim)[0];
+        return (fallbackDir && anim[fallbackDir]) || [];
+    }
+
+    /** Find the closest facing angle to a given angle in degrees */
+    findClosestDirection(angle) {
+        let normalized = angle;
+        while (normalized > 180) normalized -= 360;
+        while (normalized < -180) normalized += 360;
+
+        let closest = this.angles[0];
+        let minDiff = Infinity;
+
+        for (const dir of this.angles) {
+            let diff = Math.abs(normalized - dir);
+            if (diff > 180) diff = 360 - diff;
+            if (diff < minDiff) {
+                minDiff = diff;
+                closest = dir;
             }
         }
 
-        if (idleFrames && idleFrames.length > 0 && this.sprite) {
-            this.sprite.textures = idleFrames;
-            this.startIdlePingPong();
-        }
-    }
-
-    /** Update movement toward targetPosition. Call once per frame. */
-    update(delta) {
-        if (!this.targetPosition) return;
-
-        // Safety check for NaN
-        if (isNaN(this.x) || isNaN(this.y)) {
-            console.error('Character position is NaN! Resetting.');
-            this.x = this.container.x;
-            this.y = this.container.y;
-            this.targetPosition = null;
-            this.stopWalkAnimation();
-            return;
-        }
-
-        const dx = this.targetPosition.x - this.x;
-        const dy = this.targetPosition.y - this.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        // Check if we've reached the target
-        if (distance < 5) {
-            this.targetPosition = null;
-            this.stopWalkAnimation();
-            return;
-        }
-
-        // Elliptical speed: full speed horizontal, half speed vertical
-        const angle = Math.atan2(dy, dx);
-        const effectiveSpeed = Math.sqrt(
-            Math.pow(this.speed * Math.cos(angle), 2) +
-            Math.pow((this.speed / 2) * Math.sin(angle), 2)
-        );
-        const speed = effectiveSpeed * (delta / 60);
-        const ratio = Math.min(speed / distance, 1);
-
-        this.x += dx * ratio;
-        this.y += dy * ratio;
-
-        // Sync container position
-        this.container.x = this.x;
-        this.container.y = this.y;
+        return closest;
     }
 }

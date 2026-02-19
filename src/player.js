@@ -3,8 +3,8 @@
  * handling and camera tracking.
  */
 class Player extends Character {
-    constructor({ x, y, speed = 0, textures = null }) {
-        super({ x, y, speed, textures });
+    constructor({ x, y, speed = 0, walkFps = 30, idleFps = 10 }) {
+        super({ x, y, spriteKey: 'man', speed, walkFps, idleFps });
     }
 
     /** Handle a click/tap to move toward a world position */
@@ -16,7 +16,29 @@ class Player extends Character {
         const dy = worldY - this.y;
         const angle = Math.atan2(dy, dx) * (180 / Math.PI);
 
-        this.direction = findClosestDirection(angle);
-        this.startWalkAnimation();
+        const newDirection = this.findClosestDirection(angle);
+
+        // Only restart the walk animation if direction changed or not already walking
+        if (!this.isWalking || newDirection !== this.direction) {
+            this.direction = newDirection;
+            this.startWalkAnimation();
+        }
     }
+}
+
+// Create the player character
+async function createPlayer() {
+    player = new Player({
+        x: area.playerStartX,
+        y: area.playerStartY,
+        speed: 250,
+    });
+
+    await player.loadTextures();
+
+    area.container.addChild(player.container);
+    player.startIdlePingPong();
+
+    // Position camera on the player immediately
+    updateCamera();
 }
