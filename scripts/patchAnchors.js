@@ -4,60 +4,82 @@
  * Patches the "anchor" field in spritesheet JSON files with the correct
  * per-frame origin data from DaggerQuest objectType JSON files.
  *
+ * Recursively scans the entire DaggerQuest objectTypes directory for JSON
+ * files that contain animation data with originX/originY per frame.  Each
+ * objectType JSON has a "name" field (e.g. "man", "goblinArcher",
+ * "man_simpleSword_gear") which is matched case-insensitively to a
+ * spritesheet folder in the spritesheets directory.
+ *
  * Spritesheet frame names follow the pattern:
  *   <objectName>-<animType>_<direction>-<frameIndex>
  *   e.g. man-walk_135-008
- *
- * The DaggerQuest objectType JSON stores per-frame originX / originY
- * under animations.subfolders[].items[].frames[].
  *
  * Usage:
  *   node scripts/patchAnchors.js [daggerQuestObjectTypesDir] [spritesheetsDir]
  *
  * Defaults:
- *   daggerQuestObjectTypesDir = ../DaggerQuest/objectTypes/characters
+ *   daggerQuestObjectTypesDir = ../DaggerQuest/objectTypes
  *   spritesheetsDir           = ./spritesheets
  */
 
-const { readdir, readFile, writeFile } = require('fs/promises');
-const { join, basename } = require('path');
+const { readdir, readFile, writeFile, stat } = require('fs/promises');
+const { join, basename, relative } = require('path');
 
 const scriptDir = __dirname;
 const rootDir = join(scriptDir, '..');
 
 const objectTypesDir = process.argv[2]
-    || join(rootDir, '..', 'DaggerQuest', 'objectTypes', 'characters');
+    || join(rootDir, '..', 'DaggerQuest', 'objectTypes');
 const spritesheetsDir = process.argv[3]
     || join(rootDir, 'spritesheets');
 
 async function main() {
-    // 1. Discover objectType JSON files
-    const objectTypeFiles = (await readdir(objectTypesDir))
-        .filter(f => f.endsWith('.json'));
+    // 1. Recursively discover all objectType JSON files
+    const objectTypeFiles = await findJsonFiles(objectTypesDir);
+    console.log(`Found ${objectTypeFiles.length} objectType JSON file(s) in ${objectTypesDir}`);
 
-    console.log(`Found ${objectTypeFiles.length} objectType file(s) in ${objectTypesDir}`);
+    // Build an index of spritesheet folder names (lowercase → actual name)
+    const sheetFolderIndex = {};
+    for (const entry of await readdir(spritesheetsDir, { withFileTypes: true })) {
+        if (entry.isDirectory()) {
+            sheetFolderIndex[entry.name.toLowerCase()] = entry.name;
+        }
+    }
 
-    for (const otFile of objectTypeFiles) {
-        const objectName = basename(otFile, '.json'); // e.g. "man"
-        const otPath = join(objectTypesDir, otFile);
-        const otData = JSON.parse(await readFile(otPath, 'utf8'));
+    let grandTotal = 0;
+    let objectsPatched = 0;
+    let objectsSkippedNoAnims = 0;
+    let objectsSkippedNoSheet = 0;
 
-        // Build a lookup:  "walk_135" → [ { frameIndex, originX, originY }, … ]
+    for (const otPath of objectTypeFiles) {
+        const relPath = relative(objectTypesDir, otPath);
+        let otData;
+        try {
+            otData = JSON.parse(await readFile(otPath, 'utf8'));
+        } catch (err) {
+            console.log(`  [!] ${relPath}: failed to parse JSON, skipping. (${err.message})`);
+            continue;
+        }
+
+        // Use the "name" field from the JSON as the object identifier.
+        // Fall back to the filename (without extension) if "name" is missing.
+        const objectName = otData.name || basename(otPath, '.json');
+
+        // Build a lookup:  "walk_135" → [ { originX, originY }, … ]
         const originsByAnim = buildOriginLookup(otData);
 
         if (Object.keys(originsByAnim).length === 0) {
-            console.log(`  ${objectName}: no animation origin data found, skipping.`);
+            objectsSkippedNoAnims++;
             continue;
         }
 
-        // 2. Find matching spritesheet folders  (e.g. spritesheets/man/)
-        //    ObjectType names are camelCase (goblinArcher) but spritesheet
-        //    folders are lowercase (goblinarcher), so match case-insensitively.
-        const sheetDirName = await findCaseInsensitive(spritesheetsDir, objectName);
+        // 2. Find matching spritesheet folder case-insensitively
+        const sheetDirName = sheetFolderIndex[objectName.toLowerCase()];
         if (!sheetDirName) {
-            console.log(`  ${objectName}: no spritesheet folder found, skipping.`);
+            objectsSkippedNoSheet++;
             continue;
         }
+
         const sheetDir = join(spritesheetsDir, sheetDirName);
         let sheetFiles;
         try {
@@ -68,7 +90,6 @@ async function main() {
         }
 
         if (sheetFiles.length === 0) {
-            console.log(`  ${objectName}: no spritesheet JSON files found, skipping.`);
             continue;
         }
 
@@ -111,9 +132,16 @@ async function main() {
             }
         }
 
-        console.log(`  ${objectName}: patched ${totalPatched} frame anchor(s) across ${sheetFiles.length} spritesheet file(s).`);
+        if (totalPatched > 0) {
+            console.log(`  ${objectName}: patched ${totalPatched} anchor(s) across ${sheetFiles.length} file(s).`);
+            grandTotal += totalPatched;
+            objectsPatched++;
+        }
     }
 
+    console.log(`\nSummary: ${grandTotal} total anchor(s) patched across ${objectsPatched} object(s).`);
+    console.log(`  ${objectsSkippedNoAnims} object(s) had no animation data.`);
+    console.log(`  ${objectsSkippedNoSheet} object(s) had no matching spritesheet folder.`);
     console.log('Done.');
 }
 
@@ -158,17 +186,20 @@ function escapeRegex(str) {
 }
 
 /**
- * Find a directory entry matching `name` case-insensitively.
- * Returns the actual on-disk name, or null if not found.
+ * Recursively find all .json files under a directory.
  */
-async function findCaseInsensitive(parentDir, name) {
-    try {
-        const entries = await readdir(parentDir);
-        const lower = name.toLowerCase();
-        return entries.find(e => e.toLowerCase() === lower) || null;
-    } catch {
-        return null;
+async function findJsonFiles(dir) {
+    const results = [];
+    const entries = await readdir(dir, { withFileTypes: true });
+    for (const entry of entries) {
+        const fullPath = join(dir, entry.name);
+        if (entry.isDirectory()) {
+            results.push(...await findJsonFiles(fullPath));
+        } else if (entry.isFile() && entry.name.endsWith('.json')) {
+            results.push(fullPath);
+        }
     }
+    return results;
 }
 
 main().catch(err => {

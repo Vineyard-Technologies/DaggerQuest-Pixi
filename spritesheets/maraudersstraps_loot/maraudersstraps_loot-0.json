@@ -1,156 +1,400 @@
-{"frames": {
-
-"maraudersstraps_loot-static_-22.5-000":
 {
-	"frame": {"x":84,"y":227,"w":98,"h":51},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":98,"h":51},
-	"sourceSize": {"w":98,"h":51},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_-45-000":
-{
-	"frame": {"x":0,"y":174,"w":84,"h":50},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":84,"h":50},
-	"sourceSize": {"w":84,"h":50},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_-67.5-000":
-{
-	"frame": {"x":193,"y":42,"w":72,"h":44},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":44},
-	"sourceSize": {"w":72,"h":44},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_-90-000":
-{
-	"frame": {"x":0,"y":224,"w":84,"h":50},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":84,"h":50},
-	"sourceSize": {"w":84,"h":50},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_-112.5-000":
-{
-	"frame": {"x":182,"y":198,"w":98,"h":51},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":98,"h":51},
-	"sourceSize": {"w":98,"h":51},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_-135-000":
-{
-	"frame": {"x":96,"y":85,"w":97,"h":44},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":97,"h":44},
-	"sourceSize": {"w":97,"h":44},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_-157.5-000":
-{
-	"frame": {"x":83,"y":0,"w":83,"h":40},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":83,"h":40},
-	"sourceSize": {"w":83,"h":40},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_0-000":
-{
-	"frame": {"x":0,"y":40,"w":96,"h":43},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":43},
-	"sourceSize": {"w":96,"h":43},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_22.5-000":
-{
-	"frame": {"x":0,"y":0,"w":83,"h":39},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":83,"h":39},
-	"sourceSize": {"w":83,"h":39},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_45-000":
-{
-	"frame": {"x":96,"y":42,"w":97,"h":43},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":97,"h":43},
-	"sourceSize": {"w":97,"h":43},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_67.5-000":
-{
-	"frame": {"x":84,"y":129,"w":98,"h":49},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":98,"h":49},
-	"sourceSize": {"w":98,"h":49},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_90-000":
-{
-	"frame": {"x":193,"y":114,"w":84,"h":49},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":84,"h":49},
-	"sourceSize": {"w":84,"h":49},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_112.5-000":
-{
-	"frame": {"x":166,"y":0,"w":72,"h":42},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":42},
-	"sourceSize": {"w":72,"h":42},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_135-000":
-{
-	"frame": {"x":0,"y":126,"w":84,"h":48},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":84,"h":48},
-	"sourceSize": {"w":84,"h":48},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_157.5-000":
-{
-	"frame": {"x":84,"y":178,"w":97,"h":49},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":97,"h":49},
-	"sourceSize": {"w":97,"h":49},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersstraps_loot-static_180-000":
-{
-	"frame": {"x":0,"y":83,"w":96,"h":43},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":43},
-	"sourceSize": {"w":96,"h":43},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "maraudersstraps_loot-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":242,"h":296},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:d77b86001dfc2ac44a7f590df3927b41:b7dbeec98e08dde10f0a7415fbdfd2ce:f9a074acc763d17212d0f1a2f1fc5317$"
-}
+	"frames": {
+		"maraudersstraps_loot-static_-22.5-000": {
+			"frame": {
+				"x": 84,
+				"y": 227,
+				"w": 98,
+				"h": 51
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 98,
+				"h": 51
+			},
+			"sourceSize": {
+				"w": 98,
+				"h": 51
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_-45-000": {
+			"frame": {
+				"x": 0,
+				"y": 174,
+				"w": 84,
+				"h": 50
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 84,
+				"h": 50
+			},
+			"sourceSize": {
+				"w": 84,
+				"h": 50
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_-67.5-000": {
+			"frame": {
+				"x": 193,
+				"y": 42,
+				"w": 72,
+				"h": 44
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 72,
+				"h": 44
+			},
+			"sourceSize": {
+				"w": 72,
+				"h": 44
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_-90-000": {
+			"frame": {
+				"x": 0,
+				"y": 224,
+				"w": 84,
+				"h": 50
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 84,
+				"h": 50
+			},
+			"sourceSize": {
+				"w": 84,
+				"h": 50
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_-112.5-000": {
+			"frame": {
+				"x": 182,
+				"y": 198,
+				"w": 98,
+				"h": 51
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 98,
+				"h": 51
+			},
+			"sourceSize": {
+				"w": 98,
+				"h": 51
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_-135-000": {
+			"frame": {
+				"x": 96,
+				"y": 85,
+				"w": 97,
+				"h": 44
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 97,
+				"h": 44
+			},
+			"sourceSize": {
+				"w": 97,
+				"h": 44
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_-157.5-000": {
+			"frame": {
+				"x": 83,
+				"y": 0,
+				"w": 83,
+				"h": 40
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 83,
+				"h": 40
+			},
+			"sourceSize": {
+				"w": 83,
+				"h": 40
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_0-000": {
+			"frame": {
+				"x": 0,
+				"y": 40,
+				"w": 96,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 96,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 96,
+				"h": 43
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_22.5-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 83,
+				"h": 39
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 83,
+				"h": 39
+			},
+			"sourceSize": {
+				"w": 83,
+				"h": 39
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_45-000": {
+			"frame": {
+				"x": 96,
+				"y": 42,
+				"w": 97,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 97,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 97,
+				"h": 43
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_67.5-000": {
+			"frame": {
+				"x": 84,
+				"y": 129,
+				"w": 98,
+				"h": 49
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 98,
+				"h": 49
+			},
+			"sourceSize": {
+				"w": 98,
+				"h": 49
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_90-000": {
+			"frame": {
+				"x": 193,
+				"y": 114,
+				"w": 84,
+				"h": 49
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 84,
+				"h": 49
+			},
+			"sourceSize": {
+				"w": 84,
+				"h": 49
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_112.5-000": {
+			"frame": {
+				"x": 166,
+				"y": 0,
+				"w": 72,
+				"h": 42
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 72,
+				"h": 42
+			},
+			"sourceSize": {
+				"w": 72,
+				"h": 42
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_135-000": {
+			"frame": {
+				"x": 0,
+				"y": 126,
+				"w": 84,
+				"h": 48
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 84,
+				"h": 48
+			},
+			"sourceSize": {
+				"w": 84,
+				"h": 48
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_157.5-000": {
+			"frame": {
+				"x": 84,
+				"y": 178,
+				"w": 97,
+				"h": 49
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 97,
+				"h": 49
+			},
+			"sourceSize": {
+				"w": 97,
+				"h": 49
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersstraps_loot-static_180-000": {
+			"frame": {
+				"x": 0,
+				"y": 83,
+				"w": 96,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 96,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 96,
+				"h": 43
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "maraudersstraps_loot-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 242,
+			"h": 296
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:d77b86001dfc2ac44a7f590df3927b41:b7dbeec98e08dde10f0a7415fbdfd2ce:f9a074acc763d17212d0f1a2f1fc5317$"
+	}
 }

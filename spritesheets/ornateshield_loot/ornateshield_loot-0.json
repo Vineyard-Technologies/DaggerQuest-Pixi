@@ -1,147 +1,376 @@
-{"frames": {
-
-"ornateshield_loot-static_-22.5-000":
 {
-	"frame": {"x":455,"y":0,"w":64,"h":37},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":37},
-	"sourceSize": {"w":64,"h":37},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_-45-000":
-{
-	"frame": {"x":519,"y":0,"w":64,"h":37},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":37},
-	"sourceSize": {"w":64,"h":37},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_-90-000":
-{
-	"frame": {"x":583,"y":0,"w":64,"h":37},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":37},
-	"sourceSize": {"w":64,"h":37},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_-112.5-000":
-{
-	"frame": {"x":65,"y":0,"w":65,"h":37},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":65,"h":37},
-	"sourceSize": {"w":65,"h":37},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_-135-000":
-{
-	"frame": {"x":130,"y":0,"w":65,"h":37},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":65,"h":37},
-	"sourceSize": {"w":65,"h":37},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_-157.5-000":
-{
-	"frame": {"x":195,"y":0,"w":65,"h":37},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":65,"h":37},
-	"sourceSize": {"w":65,"h":37},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_0-000":
-{
-	"frame": {"x":647,"y":0,"w":64,"h":37},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":37},
-	"sourceSize": {"w":64,"h":37},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_22.5-000":
-{
-	"frame": {"x":711,"y":0,"w":64,"h":36},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":36},
-	"sourceSize": {"w":64,"h":36},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_45-000":
-{
-	"frame": {"x":839,"y":0,"w":64,"h":35},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":35},
-	"sourceSize": {"w":64,"h":35},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_67.5-000":
-{
-	"frame": {"x":903,"y":0,"w":64,"h":35},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":35},
-	"sourceSize": {"w":64,"h":35},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_90-000":
-{
-	"frame": {"x":0,"y":0,"w":65,"h":38},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":65,"h":38},
-	"sourceSize": {"w":65,"h":38},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_112.5-000":
-{
-	"frame": {"x":775,"y":0,"w":64,"h":36},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":36},
-	"sourceSize": {"w":64,"h":36},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_135-000":
-{
-	"frame": {"x":325,"y":0,"w":65,"h":35},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":65,"h":35},
-	"sourceSize": {"w":65,"h":35},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_157.5-000":
-{
-	"frame": {"x":390,"y":0,"w":65,"h":35},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":65,"h":35},
-	"sourceSize": {"w":65,"h":35},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"ornateshield_loot-static_180-000":
-{
-	"frame": {"x":260,"y":0,"w":65,"h":37},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":65,"h":37},
-	"sourceSize": {"w":65,"h":37},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "ornateshield_loot-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":967,"h":38},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:69eec0564df3e83f2db9e679fc52715d:c18cc92db80bee13272ea70779c38da4:b87942cd7457d35c02de2a5ccf300ef5$"
-}
+	"frames": {
+		"ornateshield_loot-static_-22.5-000": {
+			"frame": {
+				"x": 455,
+				"y": 0,
+				"w": 64,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 64,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 64,
+				"h": 37
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_-45-000": {
+			"frame": {
+				"x": 519,
+				"y": 0,
+				"w": 64,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 64,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 64,
+				"h": 37
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_-90-000": {
+			"frame": {
+				"x": 583,
+				"y": 0,
+				"w": 64,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 64,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 64,
+				"h": 37
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_-112.5-000": {
+			"frame": {
+				"x": 65,
+				"y": 0,
+				"w": 65,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 65,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 65,
+				"h": 37
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_-135-000": {
+			"frame": {
+				"x": 130,
+				"y": 0,
+				"w": 65,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 65,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 65,
+				"h": 37
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_-157.5-000": {
+			"frame": {
+				"x": 195,
+				"y": 0,
+				"w": 65,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 65,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 65,
+				"h": 37
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_0-000": {
+			"frame": {
+				"x": 647,
+				"y": 0,
+				"w": 64,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 64,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 64,
+				"h": 37
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_22.5-000": {
+			"frame": {
+				"x": 711,
+				"y": 0,
+				"w": 64,
+				"h": 36
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 64,
+				"h": 36
+			},
+			"sourceSize": {
+				"w": 64,
+				"h": 36
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_45-000": {
+			"frame": {
+				"x": 839,
+				"y": 0,
+				"w": 64,
+				"h": 35
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 64,
+				"h": 35
+			},
+			"sourceSize": {
+				"w": 64,
+				"h": 35
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_67.5-000": {
+			"frame": {
+				"x": 903,
+				"y": 0,
+				"w": 64,
+				"h": 35
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 64,
+				"h": 35
+			},
+			"sourceSize": {
+				"w": 64,
+				"h": 35
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_90-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 65,
+				"h": 38
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 65,
+				"h": 38
+			},
+			"sourceSize": {
+				"w": 65,
+				"h": 38
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_112.5-000": {
+			"frame": {
+				"x": 775,
+				"y": 0,
+				"w": 64,
+				"h": 36
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 64,
+				"h": 36
+			},
+			"sourceSize": {
+				"w": 64,
+				"h": 36
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_135-000": {
+			"frame": {
+				"x": 325,
+				"y": 0,
+				"w": 65,
+				"h": 35
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 65,
+				"h": 35
+			},
+			"sourceSize": {
+				"w": 65,
+				"h": 35
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_157.5-000": {
+			"frame": {
+				"x": 390,
+				"y": 0,
+				"w": 65,
+				"h": 35
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 65,
+				"h": 35
+			},
+			"sourceSize": {
+				"w": 65,
+				"h": 35
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"ornateshield_loot-static_180-000": {
+			"frame": {
+				"x": 260,
+				"y": 0,
+				"w": 65,
+				"h": 37
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 65,
+				"h": 37
+			},
+			"sourceSize": {
+				"w": 65,
+				"h": 37
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "ornateshield_loot-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 967,
+			"h": 38
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:69eec0564df3e83f2db9e679fc52715d:c18cc92db80bee13272ea70779c38da4:b87942cd7457d35c02de2a5ccf300ef5$"
+	}
 }

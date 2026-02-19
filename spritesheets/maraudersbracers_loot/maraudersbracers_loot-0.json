@@ -1,156 +1,400 @@
-{"frames": {
-
-"maraudersbracers_loot-static_-22.5-000":
 {
-	"frame": {"x":458,"y":0,"w":51,"h":27},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":51,"h":27},
-	"sourceSize": {"w":51,"h":27},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_-45-000":
-{
-	"frame": {"x":610,"y":0,"w":50,"h":25},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":25},
-	"sourceSize": {"w":50,"h":25},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_-67.5-000":
-{
-	"frame": {"x":710,"y":0,"w":49,"h":21},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":49,"h":21},
-	"sourceSize": {"w":49,"h":21},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_-90-000":
-{
-	"frame": {"x":560,"y":0,"w":50,"h":26},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":26},
-	"sourceSize": {"w":50,"h":26},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_-112.5-000":
-{
-	"frame": {"x":509,"y":0,"w":51,"h":27},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":51,"h":27},
-	"sourceSize": {"w":51,"h":27},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_-135-000":
-{
-	"frame": {"x":329,"y":0,"w":46,"h":29},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":29},
-	"sourceSize": {"w":46,"h":29},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_-157.5-000":
-{
-	"frame": {"x":375,"y":0,"w":35,"h":29},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":35,"h":29},
-	"sourceSize": {"w":35,"h":29},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_0-000":
-{
-	"frame": {"x":410,"y":0,"w":48,"h":28},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":28},
-	"sourceSize": {"w":48,"h":28},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_22.5-000":
-{
-	"frame": {"x":244,"y":0,"w":35,"h":30},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":35,"h":30},
-	"sourceSize": {"w":35,"h":30},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_45-000":
-{
-	"frame": {"x":152,"y":0,"w":46,"h":30},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":30},
-	"sourceSize": {"w":46,"h":30},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_67.5-000":
-{
-	"frame": {"x":0,"y":0,"w":51,"h":31},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":51,"h":31},
-	"sourceSize": {"w":51,"h":31},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_90-000":
-{
-	"frame": {"x":279,"y":0,"w":50,"h":29},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":29},
-	"sourceSize": {"w":50,"h":29},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_112.5-000":
-{
-	"frame": {"x":660,"y":0,"w":50,"h":24},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":24},
-	"sourceSize": {"w":50,"h":24},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_135-000":
-{
-	"frame": {"x":102,"y":0,"w":50,"h":31},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":31},
-	"sourceSize": {"w":50,"h":31},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_157.5-000":
-{
-	"frame": {"x":51,"y":0,"w":51,"h":31},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":51,"h":31},
-	"sourceSize": {"w":51,"h":31},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"maraudersbracers_loot-static_180-000":
-{
-	"frame": {"x":198,"y":0,"w":46,"h":30},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":30},
-	"sourceSize": {"w":46,"h":30},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "maraudersbracers_loot-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":759,"h":31},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:be4ad09b9bbf2ddd0fc236119d9c34c5:a3eb28b71572b2a94d325c57438de822:8cf8b2fdd5059843f4e9d7f158375945$"
-}
+	"frames": {
+		"maraudersbracers_loot-static_-22.5-000": {
+			"frame": {
+				"x": 458,
+				"y": 0,
+				"w": 51,
+				"h": 27
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 51,
+				"h": 27
+			},
+			"sourceSize": {
+				"w": 51,
+				"h": 27
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_-45-000": {
+			"frame": {
+				"x": 610,
+				"y": 0,
+				"w": 50,
+				"h": 25
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 25
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 25
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_-67.5-000": {
+			"frame": {
+				"x": 710,
+				"y": 0,
+				"w": 49,
+				"h": 21
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 49,
+				"h": 21
+			},
+			"sourceSize": {
+				"w": 49,
+				"h": 21
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_-90-000": {
+			"frame": {
+				"x": 560,
+				"y": 0,
+				"w": 50,
+				"h": 26
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 26
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 26
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_-112.5-000": {
+			"frame": {
+				"x": 509,
+				"y": 0,
+				"w": 51,
+				"h": 27
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 51,
+				"h": 27
+			},
+			"sourceSize": {
+				"w": 51,
+				"h": 27
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_-135-000": {
+			"frame": {
+				"x": 329,
+				"y": 0,
+				"w": 46,
+				"h": 29
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 46,
+				"h": 29
+			},
+			"sourceSize": {
+				"w": 46,
+				"h": 29
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_-157.5-000": {
+			"frame": {
+				"x": 375,
+				"y": 0,
+				"w": 35,
+				"h": 29
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 35,
+				"h": 29
+			},
+			"sourceSize": {
+				"w": 35,
+				"h": 29
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_0-000": {
+			"frame": {
+				"x": 410,
+				"y": 0,
+				"w": 48,
+				"h": 28
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 48,
+				"h": 28
+			},
+			"sourceSize": {
+				"w": 48,
+				"h": 28
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_22.5-000": {
+			"frame": {
+				"x": 244,
+				"y": 0,
+				"w": 35,
+				"h": 30
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 35,
+				"h": 30
+			},
+			"sourceSize": {
+				"w": 35,
+				"h": 30
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_45-000": {
+			"frame": {
+				"x": 152,
+				"y": 0,
+				"w": 46,
+				"h": 30
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 46,
+				"h": 30
+			},
+			"sourceSize": {
+				"w": 46,
+				"h": 30
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_67.5-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 51,
+				"h": 31
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 51,
+				"h": 31
+			},
+			"sourceSize": {
+				"w": 51,
+				"h": 31
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_90-000": {
+			"frame": {
+				"x": 279,
+				"y": 0,
+				"w": 50,
+				"h": 29
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 29
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 29
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_112.5-000": {
+			"frame": {
+				"x": 660,
+				"y": 0,
+				"w": 50,
+				"h": 24
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 24
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 24
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_135-000": {
+			"frame": {
+				"x": 102,
+				"y": 0,
+				"w": 50,
+				"h": 31
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 50,
+				"h": 31
+			},
+			"sourceSize": {
+				"w": 50,
+				"h": 31
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_157.5-000": {
+			"frame": {
+				"x": 51,
+				"y": 0,
+				"w": 51,
+				"h": 31
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 51,
+				"h": 31
+			},
+			"sourceSize": {
+				"w": 51,
+				"h": 31
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"maraudersbracers_loot-static_180-000": {
+			"frame": {
+				"x": 198,
+				"y": 0,
+				"w": 46,
+				"h": 30
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 46,
+				"h": 30
+			},
+			"sourceSize": {
+				"w": 46,
+				"h": 30
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "maraudersbracers_loot-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 759,
+			"h": 31
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:be4ad09b9bbf2ddd0fc236119d9c34c5:a3eb28b71572b2a94d325c57438de822:8cf8b2fdd5059843f4e9d7f158375945$"
+	}
 }
