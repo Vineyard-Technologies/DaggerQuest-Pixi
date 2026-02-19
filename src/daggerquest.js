@@ -185,9 +185,8 @@ function createPlayer() {
     playerContainer.x = WORLD_WIDTH - 250;
     playerContainer.y = WORLD_HEIGHT - 250;
 
-    // Man sprite pinned on top — anchor (0.5, 0.7) places feet at the container origin
-    playerSprite = new PIXI.AnimatedSprite(idleFrames);
-    playerSprite.anchor.set(0.5, 0.7);
+    // Man sprite — updateAnchor reads each frame's per-frame origin data automatically
+    playerSprite = new PIXI.AnimatedSprite({ textures: idleFrames, updateAnchor: true });
     playerSprite.x = 0;
     playerSprite.y = -50;
     playerSprite.animationSpeed = IDLE_FPS / 60;
