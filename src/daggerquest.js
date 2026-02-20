@@ -27,7 +27,7 @@ async function init() {
     await area.spawnObjects();
 
     // Create player
-    await createPlayer(Man);
+    await createPlayer(Woman);
 
     // Add pointer handlers for continuous click-to-move
     app.stage.eventMode = 'static';
@@ -55,12 +55,53 @@ function updateCamera() {
     area.container.y = camY;
 }
 
+/**
+ * Check if a screen position hits any loot on the ground.
+ * Uses screen-space coordinates because getBounds() returns global bounds.
+ * @param {number} screenX - Screen X (pointer position)
+ * @param {number} screenY - Screen Y (pointer position)
+ * @returns {Loot|null}
+ */
+function findLootAtPosition(screenX, screenY) {
+    if (!area?.lootOnGround) return null;
+
+    for (const loot of area.lootOnGround) {
+        if (!loot.sprite) continue;
+
+        // getBounds() returns global (screen-space) coordinates
+        const bounds = loot.sprite.getBounds();
+        if (screenX >= bounds.x && screenX <= bounds.x + bounds.width &&
+            screenY >= bounds.y && screenY <= bounds.y + bounds.height) {
+            return loot;
+        }
+    }
+    return null;
+}
+
 // Pointer handlers for continuous movement
 function onPointerDown(event) {
-    pointerHeld = true;
     const pos = event.data.global;
     pointerScreenX = pos.x;
     pointerScreenY = pos.y;
+
+    const worldX = pointerScreenX - area.container.x;
+    const worldY = pointerScreenY - area.container.y;
+
+    // Check if the click landed on a loot drop within pickup range
+    const loot = findLootAtPosition(pointerScreenX, pointerScreenY);
+    if (loot) {
+        const dx = loot.x - player.x;
+        const dy = loot.y - player.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist <= player.pickupRange) {
+            // Pick up and equip – don't move toward the click
+            player.pickupAndEquip(loot);
+            return;
+        }
+    }
+
+    pointerHeld = true;
     movePlayerToPointer();
 }
 
@@ -90,14 +131,13 @@ function gameLoop(ticker) {
         movePlayerToPointer();
     }
 
-    if (!player.targetPosition) return;
-    
-    // In PixiJS v8, ticker is an object with deltaTime property
-    const delta = ticker.deltaTime || ticker.elapsedMS / 16.67;
-    
-    player.update(delta);
+    if (player.targetPosition) {
+        // In PixiJS v8, ticker is an object with deltaTime property
+        const delta = ticker.deltaTime || ticker.elapsedMS / 16.67;
+        player.update(delta);
+    }
 
-    // Pan camera to follow player
+    // Pan camera to follow player (always, so window resizes are reflected)
     updateCamera();
 }
 

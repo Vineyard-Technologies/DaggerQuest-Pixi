@@ -27,6 +27,7 @@ class Character extends Entity {
         this.sprite.loop = false;
         this.sprite.animationSpeed = this.getAnimFps('idle') / 60;
         this.sprite.gotoAndPlay(0);
+        this.onAnimationChanged();
 
         this.sprite.onComplete = () => {
             if (!this.isWalking) {
@@ -56,6 +57,7 @@ class Character extends Entity {
             this.sprite.animationSpeed = this.getAnimFps('walk') / 60;
             this.sprite.gotoAndPlay(savedFrame % walkFrames.length);
             this.isWalking = true;
+            this.onAnimationChanged();
         } else {
             console.warn('No walk frames available');
         }
@@ -72,6 +74,14 @@ class Character extends Entity {
             this.sprite.textures = idleFrames;
             this.startIdlePingPong();
         }
+    }
+
+    /**
+     * Hook called immediately after this character's sprite textures change
+     * (direction or animation swap).  Subclasses override to sync overlays.
+     */
+    onAnimationChanged() {
+        // Override in subclasses (e.g. Player syncs gear here)
     }
 
     /** Update movement toward targetPosition. Call once per frame. */
