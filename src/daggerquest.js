@@ -47,6 +47,7 @@ async function init() {
     app.ticker.add(gameLoop);
 
     // Keyboard handlers for debug: H = lose 10 health, M = lose 10 mana
+    // Menu toggles: C = equipped menu, I = inventory menu
     window.addEventListener('keydown', (e) => {
         if (!player) return;
         if (e.key === 'h' || e.key === 'H') {
@@ -54,6 +55,12 @@ async function init() {
         }
         if (e.key === 'm' || e.key === 'M') {
             player.currentMana = Math.max(0, player.currentMana - 10);
+        }
+        if (e.key === 'c' || e.key === 'C') {
+            ui.toggleEquippedMenu();
+        }
+        if (e.key === 'i' || e.key === 'I') {
+            ui.toggleInventoryMenu();
         }
     });
 }
