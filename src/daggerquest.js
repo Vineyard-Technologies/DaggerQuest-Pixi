@@ -24,9 +24,10 @@ async function init() {
     area = new Farm();
     app.stage.addChild(area.container);
     await area.createBackground();
+    await area.spawnObjects();
 
     // Create player
-    await createPlayer();
+    await createPlayer(Man);
 
     // Add pointer handlers for continuous click-to-move
     app.stage.eventMode = 'static';

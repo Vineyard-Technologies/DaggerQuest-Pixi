@@ -3,12 +3,12 @@
  * Entities have a position, a container, and an optional animated sprite.
  */
 class Entity {
-    constructor({ x, y, spriteKey = null, directions = 16, direction = 0, defaultAnimFps = 10 }) {
+    constructor({ x, y, spriteKey = null, directions = 16, direction = 0, animFps = {} }) {
         this.x = x;
         this.y = y;
         this.spriteKey = spriteKey;
         this.direction = direction;
-        this.defaultAnimFps = defaultAnimFps;
+        this.animFps = animFps;
 
         // Number of discrete facing directions and their computed angles
         this.directions = directions;
@@ -91,6 +91,51 @@ class Entity {
         }
 
         this.textures = animationTextures;
+
+        // Build reverse lookup: textures array reference -> { animName, direction }
+        this._textureMap = new Map();
+        for (const animName in this.textures) {
+            for (const direction in this.textures[animName]) {
+                this._textureMap.set(this.textures[animName][direction], { animName, direction: parseFloat(direction) });
+            }
+        }
+
+        // Try to load shadow textures (spriteKey_shadow)
+        const shadowKey = `${this.spriteKey}_shadow`;
+        const shadowSheets = manifest[shadowKey] || [];
+
+        if (shadowSheets.length > 0) {
+            const shadowAnimationTextures = {};
+            const shadowKeyPattern = new RegExp(`${shadowKey}-(\\w+)_([\\-\\d.]+)-(\\d+)`);
+
+            for (const sheetPath of shadowSheets) {
+                const fullPath = `./spritesheets/${sheetPath.replace('./', '')}`;
+                const spritesheet = await PIXI.Assets.load(fullPath);
+
+                for (const frameName in spritesheet.textures) {
+                    const match = frameName.match(shadowKeyPattern);
+                    if (match) {
+                        const animName = match[1];
+                        const direction = parseFloat(match[2]);
+                        const frameNum = parseInt(match[3]);
+
+                        if (!shadowAnimationTextures[animName]) shadowAnimationTextures[animName] = {};
+                        if (!shadowAnimationTextures[animName][direction]) shadowAnimationTextures[animName][direction] = [];
+                        shadowAnimationTextures[animName][direction][frameNum] = spritesheet.textures[frameName];
+                    }
+                }
+            }
+
+            for (const animName in shadowAnimationTextures) {
+                for (const direction in shadowAnimationTextures[animName]) {
+                    shadowAnimationTextures[animName][direction] =
+                        shadowAnimationTextures[animName][direction].filter(f => f !== undefined);
+                }
+            }
+
+            this.shadowTextures = shadowAnimationTextures;
+        }
+
         this.initSprite();
     }
 
@@ -104,13 +149,93 @@ class Entity {
         const frames = (firstDirection && this.textures[firstAnim][firstDirection]) || [];
 
         if (frames.length > 0) {
+            // Create shadow sprite behind the main sprite
+            if (this.shadowTextures) {
+                const shadowFrames = this.getShadowFrames(firstAnim, parseFloat(firstDirection));
+                if (shadowFrames.length > 0) {
+                    this.shadowSprite = new PIXI.AnimatedSprite({ textures: shadowFrames, updateAnchor: true });
+                    this.shadowSprite.x = 0;
+                    this.shadowSprite.y = 0;
+                    this.shadowSprite.alpha = 0.5;
+                    this.shadowSprite.filters = [new PIXI.BlurFilter(4)];
+                    this.container.addChild(this.shadowSprite);
+                }
+            }
+
             this.sprite = new PIXI.AnimatedSprite({ textures: frames, updateAnchor: true });
             this.sprite.x = 0;
             this.sprite.y = 0;
-            this.sprite.animationSpeed = this.defaultAnimFps / 60;
+            this.sprite.animationSpeed = this.getAnimFps(firstAnim) / 60;
             this.container.addChild(this.sprite);
             this.direction = parseFloat(firstDirection);
+
+            // Register ticker to keep shadow in sync with main sprite
+            if (this.shadowSprite) {
+                this._lastSpriteTextures = this.sprite.textures;
+                this._shadowTickerFn = () => this._syncShadow();
+                PIXI.Ticker.shared.add(this._shadowTickerFn);
+            }
         }
+    }
+
+    /**
+     * Get shadow frames for a given animation name and direction, with fallback.
+     * Returns the frames array, or an empty array if shadow textures are unavailable.
+     */
+    getShadowFrames(animName, direction) {
+        const anim = this.shadowTextures?.[animName];
+        if (!anim) return [];
+
+        let frames = anim[direction];
+        if (frames && frames.length > 0) return frames;
+
+        // Fallback to first available direction for this shadow animation
+        const fallbackDir = Object.keys(anim)[0];
+        return (fallbackDir && anim[fallbackDir]) || [];
+    }
+
+    /**
+     * Sync the shadow sprite to match the main sprite's current animation and frame.
+     * Called every PIXI tick via _shadowTickerFn.
+     */
+    _syncShadow() {
+        if (!this.shadowSprite || !this.sprite) return;
+
+        // When the main sprite's texture set changes, update the shadow to match
+        if (this.sprite.textures !== this._lastSpriteTextures) {
+            this._lastSpriteTextures = this.sprite.textures;
+            const info = this._textureMap?.get(this.sprite.textures);
+            if (info) {
+                const shadowFrames = this.getShadowFrames(info.animName, info.direction);
+                if (shadowFrames.length > 0) {
+                    this.shadowSprite.textures = shadowFrames;
+                }
+            }
+        }
+
+        // Always mirror the current frame (clamp to shadow's frame count)
+        const frame = Math.min(this.sprite.currentFrame, this.shadowSprite.totalFrames - 1);
+        if (this.shadowSprite.currentFrame !== frame) {
+            this.shadowSprite.gotoAndStop(frame);
+        }
+    }
+
+    /**
+     * Remove this entity from the scene and clean up the shadow ticker.
+     */
+    destroy() {
+        if (this._shadowTickerFn) {
+            PIXI.Ticker.shared.remove(this._shadowTickerFn);
+            this._shadowTickerFn = null;
+        }
+        if (this.container.parent) {
+            this.container.parent.removeChild(this.container);
+        }
+    }
+
+    /** Return the fps for a named animation */
+    getAnimFps(animName) {
+        return this.animFps[animName] ?? 30;
     }
 
     /**

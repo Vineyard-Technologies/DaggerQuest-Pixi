@@ -13,6 +13,18 @@ class Area {
 
         // World container holds the background + all game objects for this area
         this.container = new PIXI.Container();
+
+        /** Loot entities currently on the ground in this area */
+        this.lootOnGround = [];
+    }
+
+    /**
+     * Spawn initial world objects for this area.
+     * Subclasses should override this to place entities.
+     * Call after createBackground().
+     */
+    async spawnObjects() {
+        // Override in subclasses
     }
 
     /** Load the background texture and add it as a tiling sprite */

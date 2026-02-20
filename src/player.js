@@ -3,8 +3,8 @@
  * handling and camera tracking.
  */
 class Player extends Character {
-    constructor({ x, y, speed = 0, walkFps = 30, idleFps = 10 }) {
-        super({ x, y, spriteKey: 'man', speed, walkFps, idleFps });
+    constructor({ x, y, spriteKey, speed = 0, animFps = {} }) {
+        super({ x, y, spriteKey, speed, animFps });
     }
 
     /** Handle a click/tap to move toward a world position */
@@ -27,11 +27,10 @@ class Player extends Character {
 }
 
 // Create the player character
-async function createPlayer() {
-    player = new Player({
+async function createPlayer(PlayerClass) {
+    player = new PlayerClass({
         x: area.playerStartX,
         y: area.playerStartY,
-        speed: 250,
     });
 
     await player.loadTextures();

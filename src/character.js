@@ -3,11 +3,9 @@
  * Includes the player, NPCs, and enemies.
  */
 class Character extends Entity {
-    constructor({ x, y, spriteKey = null, speed = 0, direction = 0, walkFps = 10, idleFps = 10 }) {
-        super({ x, y, spriteKey, direction, defaultAnimFps: idleFps });
+    constructor({ x, y, spriteKey = null, speed = 0, direction = 0, animFps = {} }) {
+        super({ x, y, spriteKey, direction, animFps });
         this.speed = speed;
-        this.walkFps = walkFps;
-        this.idleFps = idleFps;
         this.targetPosition = null;
         this.isWalking = false;
         this.idlePingPongForward = true;
@@ -27,17 +25,17 @@ class Character extends Entity {
         this.sprite.textures = idleFrames;
         this.idlePingPongForward = true;
         this.sprite.loop = false;
-        this.sprite.animationSpeed = this.idleFps / 60;
+        this.sprite.animationSpeed = this.getAnimFps('idle') / 60;
         this.sprite.gotoAndPlay(0);
 
         this.sprite.onComplete = () => {
             if (!this.isWalking) {
                 this.idlePingPongForward = !this.idlePingPongForward;
                 if (this.idlePingPongForward) {
-                    this.sprite.animationSpeed = this.idleFps / 60;
+                    this.sprite.animationSpeed = this.getAnimFps('idle') / 60;
                     this.sprite.gotoAndPlay(0);
                 } else {
-                    this.sprite.animationSpeed = -(this.idleFps / 60);
+                    this.sprite.animationSpeed = -(this.getAnimFps('idle') / 60);
                     this.sprite.gotoAndPlay(this.sprite.totalFrames - 1);
                 }
             }
@@ -55,7 +53,7 @@ class Character extends Entity {
             this.sprite.textures = walkFrames;
             this.sprite.loop = true;
             this.sprite.onComplete = null;
-            this.sprite.animationSpeed = this.walkFps / 60;
+            this.sprite.animationSpeed = this.getAnimFps('walk') / 60;
             this.sprite.gotoAndPlay(savedFrame % walkFrames.length);
             this.isWalking = true;
         } else {
