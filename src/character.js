@@ -3,12 +3,88 @@
  * Includes the player, NPCs, and enemies.
  */
 class Character extends Entity {
-    constructor({ x, y, spriteKey = null, speed = 0, direction = 0, animFps = {} }) {
+    constructor({
+        x, y, spriteKey = null, speed = 0, direction = 0, animFps = {},
+        level = 1,
+        experience = 0,
+        actionSpeed = 1,
+        pickupRange = 150,
+        attackRange = 50,
+        currentHealth = 100,
+        maxHealth = 100,
+        healthRegen = 1,
+        currentMana = 100,
+        maxMana = 100,
+        manaRegen = 1,
+        armor = 0,
+        slashDamage = 0,
+        smashDamage = 0,
+        stabDamage = 0,
+        coldDamage = 0,
+        fireDamage = 0,
+        lightningDamage = 0,
+        arcaneDamage = 0,
+        corruptDamage = 0,
+        holyDamage = 0,
+        physicalResistance = 0,
+        coldResistance = 0,
+        fireResistance = 0,
+        lightningResistance = 0,
+        arcaneResistance = 0,
+        corruptResistance = 0,
+        holyResistance = 0,
+        flinchResistance = 0,
+    } = {}) {
         super({ x, y, spriteKey, direction, animFps });
+
+        // Movement & general
         this.speed = speed;
         this.targetPosition = null;
         this.isWalking = false;
         this.idlePingPongForward = true;
+
+        // Progression
+        this.level = level;
+        this.experience = experience;
+
+        // Speeds & ranges
+        this.actionSpeed = actionSpeed;
+        this.pickupRange = pickupRange;
+        this.attackRange = attackRange;
+
+        // Health
+        this.currentHealth = currentHealth;
+        this.maxHealth = maxHealth;
+        this.healthRegen = healthRegen;
+
+        // Mana
+        this.currentMana = currentMana;
+        this.maxMana = maxMana;
+        this.manaRegen = manaRegen;
+
+        // Defence
+        this.armor = armor;
+
+        // Damage types
+        this.slashDamage = slashDamage;
+        this.smashDamage = smashDamage;
+        this.stabDamage = stabDamage;
+        this.coldDamage = coldDamage;
+        this.fireDamage = fireDamage;
+        this.lightningDamage = lightningDamage;
+        this.arcaneDamage = arcaneDamage;
+        this.corruptDamage = corruptDamage;
+        this.holyDamage = holyDamage;
+
+        // Resistances
+        this.physicalResistance = physicalResistance;
+        this.coldResistance = coldResistance;
+        this.fireResistance = fireResistance;
+        this.lightningResistance = lightningResistance;
+        this.arcaneResistance = arcaneResistance;
+        this.corruptResistance = corruptResistance;
+        this.holyResistance = holyResistance;
+        this.flinchResistance = flinchResistance;
     }
 
     /** Start the idle ping-pong animation */
@@ -86,6 +162,15 @@ class Character extends Entity {
 
     /** Update movement toward targetPosition. Call once per frame. */
     update(delta) {
+        // Regenerate health and mana
+        const dt = delta / 60; // delta is in frames at 60fps, convert to seconds
+        if (this.healthRegen > 0 && this.currentHealth < this.maxHealth) {
+            this.currentHealth = Math.min(this.maxHealth, this.currentHealth + this.healthRegen * dt);
+        }
+        if (this.manaRegen > 0 && this.currentMana < this.maxMana) {
+            this.currentMana = Math.min(this.maxMana, this.currentMana + this.manaRegen * dt);
+        }
+
         if (!this.targetPosition) return;
 
         // Safety check for NaN

@@ -3,11 +3,8 @@
  * handling and camera tracking.
  */
 class Player extends Character {
-    constructor({ x, y, spriteKey, speed = 0, animFps = {}, pickupRange = 150 }) {
-        super({ x, y, spriteKey, speed, animFps });
-
-        /** Maximum distance (in world pixels) at which loot can be picked up */
-        this.pickupRange = pickupRange;
+    constructor({ x, y, spriteKey, speed = 0, animFps = {}, pickupRange = 150, ...rest }) {
+        super({ x, y, spriteKey, speed, animFps, pickupRange, ...rest });
 
         /** Currently equipped gear pieces, keyed by slot name */
         this.equippedGear = {};

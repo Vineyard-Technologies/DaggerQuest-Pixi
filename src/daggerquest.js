@@ -2,6 +2,7 @@
 let app;
 let area;
 let player;
+let ui;
 
 // Input state
 let pointerHeld = false;
@@ -29,6 +30,11 @@ async function init() {
     // Create player
     await createPlayer(Woman);
 
+    // Create HUD (health & mana orbs)
+    ui = new UI();
+    await ui.load();
+    app.stage.addChild(ui.container);
+
     // Add pointer handlers for continuous click-to-move
     app.stage.eventMode = 'static';
     app.stage.hitArea = app.screen;
@@ -39,6 +45,17 @@ async function init() {
 
     // Start game loop
     app.ticker.add(gameLoop);
+
+    // Keyboard handlers for debug: H = lose 10 health, M = lose 10 mana
+    window.addEventListener('keydown', (e) => {
+        if (!player) return;
+        if (e.key === 'h' || e.key === 'H') {
+            player.currentHealth = Math.max(0, player.currentHealth - 10);
+        }
+        if (e.key === 'm' || e.key === 'M') {
+            player.currentMana = Math.max(0, player.currentMana - 10);
+        }
+    });
 }
 
 // Update camera to follow the player, clamped to world bounds
@@ -131,14 +148,18 @@ function gameLoop(ticker) {
         movePlayerToPointer();
     }
 
-    if (player.targetPosition) {
-        // In PixiJS v8, ticker is an object with deltaTime property
-        const delta = ticker.deltaTime || ticker.elapsedMS / 16.67;
-        player.update(delta);
-    }
+    // In PixiJS v8, ticker is an object with deltaTime property
+    const delta = ticker.deltaTime || ticker.elapsedMS / 16.67;
+    player.update(delta);
 
     // Pan camera to follow player (always, so window resizes are reflected)
     updateCamera();
+
+    // Update HUD orbs
+    if (ui) {
+        ui.layout(app.screen.width, app.screen.height);
+        ui.update(player, ticker.elapsedMS);
+    }
 }
 
 // Start the game when the page loads
