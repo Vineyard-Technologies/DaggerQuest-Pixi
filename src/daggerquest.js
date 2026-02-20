@@ -21,6 +21,9 @@ async function init() {
     document.body.appendChild(app.canvas);
     app.canvas.id = 'daggerquestCanvas';
 
+    // Prevent the browser context menu so right-click can be used for UI interactions
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+
     // Create the area and add its container to the stage
     area = new Farm();
     app.stage.addChild(area.container);
@@ -104,6 +107,15 @@ function findLootAtPosition(screenX, screenY) {
 
 // Pointer handlers for continuous movement
 function onPointerDown(event) {
+    // Ignore right-clicks – those are used for UI slot interactions
+    if (event.button === 2) return;
+
+    // Ignore left-clicks while dragging an item in the UI
+    if (ui && ui.isDragging) return;
+
+    // Ignore clicks that land on the UI (menus, orbs, etc.)
+    if (ui && ui.hitTest(event.data.global.x, event.data.global.y)) return;
+
     const pos = event.data.global;
     pointerScreenX = pos.x;
     pointerScreenY = pos.y;

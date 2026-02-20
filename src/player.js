@@ -57,6 +57,11 @@ class Player extends Character {
         }
 
         this.equippedGear[slot] = newGear;
+
+        // Update the HUD equipped-slot icon
+        if (typeof ui !== 'undefined' && ui) {
+            await ui.setEquippedItem(slot, item);
+        }
     }
 
     /**
@@ -79,6 +84,57 @@ class Player extends Character {
         }
 
         // Now remove the old gear (frees its textures from memory)
+        if (oldGear) {
+            await oldGear.unequip();
+        }
+
+        // Clear the HUD equipped-slot icon and restore the placeholder
+        if (typeof ui !== 'undefined' && ui) {
+            await ui.clearEquippedItem(slot);
+        }
+    }
+
+    /**
+     * Equip an Item from the inventory (not from loot on the ground).
+     * Loads gear, swaps it onto the character, and updates the equipped-slot icon.
+     * @param {Item} item
+     */
+    async equipItem(item) {
+        const slot = item.slot;
+
+        const newGear = item.createGear();
+        await newGear.equip(this);
+
+        const oldGear = this.equippedGear[slot];
+        if (oldGear) {
+            await oldGear.unequip();
+        }
+
+        this.equippedGear[slot] = newGear;
+
+        // Update the HUD equipped-slot icon
+        if (typeof ui !== 'undefined' && ui) {
+            await ui.setEquippedItem(slot, item);
+        }
+    }
+
+    /**
+     * Unequip gear from a slot WITHOUT touching the UI icons (the UI
+     * manages its own icon state when the action originates from right-click).
+     * @param {string} slot
+     */
+    async unequipSlotSilent(slot) {
+        const oldGear = this.equippedGear[slot] || null;
+
+        const base = this.defaultGearSlots[slot];
+        if (base) {
+            const defaultGear = new Gear({ slot, spriteKeyBase: base, isDefault: true });
+            await defaultGear.equip(this);
+            this.equippedGear[slot] = defaultGear;
+        } else {
+            delete this.equippedGear[slot];
+        }
+
         if (oldGear) {
             await oldGear.unequip();
         }
