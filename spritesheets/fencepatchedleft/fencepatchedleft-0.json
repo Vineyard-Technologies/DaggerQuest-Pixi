@@ -1,21 +1,40 @@
-{"frames": {
-
-"fencepatchedleft-default-000":
 {
-	"frame": {"x":0,"y":0,"w":351,"h":322},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":351,"h":322},
-	"sourceSize": {"w":351,"h":322},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "fencepatchedleft-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":351,"h":322},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:5db27f29150327dc52dc45b0dc5f443f:15029a172190a6641735822a6f08d848:7cfc43946545ff7dc89b8eb12cd95f9d$"
-}
+	"frames": {
+		"fencepatchedleft-default-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 351,
+				"h": 322
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 351,
+				"h": 322
+			},
+			"sourceSize": {
+				"w": 351,
+				"h": 322
+			},
+			"anchor": {
+				"x": 0.014245014245014245,
+				"y": 0.48757763975155277
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "fencepatchedleft-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 351,
+			"h": 322
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:5db27f29150327dc52dc45b0dc5f443f:15029a172190a6641735822a6f08d848:7cfc43946545ff7dc89b8eb12cd95f9d$"
+	}
 }

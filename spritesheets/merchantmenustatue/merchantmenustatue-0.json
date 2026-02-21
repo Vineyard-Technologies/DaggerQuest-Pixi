@@ -1,21 +1,40 @@
-{"frames": {
-
-"merchantmenustatue-default-000":
 {
-	"frame": {"x":0,"y":0,"w":203,"h":453},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":203,"h":453},
-	"sourceSize": {"w":203,"h":453},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "merchantmenustatue-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":203,"h":453},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:47e309bdf9bdde840f64ea058c861af7:45a3be5beae7742f6f2fc5abbe214087:f8329f36d8377e14b74353e20d26e28f$"
-}
+	"frames": {
+		"merchantmenustatue-default-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 203,
+				"h": 453
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 203,
+				"h": 453
+			},
+			"sourceSize": {
+				"w": 203,
+				"h": 453
+			},
+			"anchor": {
+				"x": 0.40384615384615385,
+				"y": 0.448
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "merchantmenustatue-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 203,
+			"h": 453
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:47e309bdf9bdde840f64ea058c861af7:45a3be5beae7742f6f2fc5abbe214087:f8329f36d8377e14b74353e20d26e28f$"
+	}
 }

@@ -103,19 +103,48 @@ async function main() {
             let patchedInFile = 0;
 
             // Build regex using the actual spritesheet prefix (lowercase)
-            const frameRegex = new RegExp(
+            // Pattern 1: directional frames — man-walk_135-008
+            const directionalRegex = new RegExp(
                 `^${escapeRegex(sheetDirName)}-([\\w]+_[\\-\\d.]+)-(\\d+)$`, 'i'
+            );
+            // Pattern 2: non-directional (static) frames — farmhouse-animation 1-000, cart-default-000
+            const staticRegex = new RegExp(
+                `^${escapeRegex(sheetDirName)}-(.+?)-(\\d+)$`, 'i'
             );
 
             for (const frameName in sheetData.frames) {
-                // Parse:  man-walk_135-008  →  animKey="walk_135", frameIndex=8
-                const match = frameName.match(frameRegex);
-                if (!match) continue;
+                let animKey = null;
+                let frameIndex = null;
 
-                const animKey = match[1];             // e.g. "walk_135"
-                const frameIndex = parseInt(match[2]); // e.g. 8
+                // Try directional pattern first (more specific)
+                const dirMatch = frameName.match(directionalRegex);
+                if (dirMatch) {
+                    animKey = dirMatch[1];
+                    frameIndex = parseInt(dirMatch[2]);
+                } else {
+                    // Try static/non-directional pattern
+                    const statMatch = frameName.match(staticRegex);
+                    if (statMatch) {
+                        animKey = statMatch[1];
+                        frameIndex = parseInt(statMatch[2]);
+                    }
+                }
 
-                const origins = originsByAnim[animKey];
+                if (animKey === null) continue;
+
+                // Try exact match first, then case-insensitive match
+                let origins = originsByAnim[animKey];
+                if (!origins) {
+                    // Case-insensitive lookup (objectType may have "Default" while frame has "default")
+                    const lowerKey = animKey.toLowerCase();
+                    for (const key in originsByAnim) {
+                        if (key.toLowerCase() === lowerKey) {
+                            origins = originsByAnim[key];
+                            break;
+                        }
+                    }
+                }
+
                 if (!origins || frameIndex >= origins.length) continue;
 
                 const { originX, originY } = origins[frameIndex];

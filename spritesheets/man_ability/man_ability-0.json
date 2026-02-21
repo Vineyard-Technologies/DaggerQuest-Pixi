@@ -1,111 +1,280 @@
-{"frames": {
-
-"man_ability-bootkick-000":
 {
-	"frame": {"x":0,"y":0,"w":62,"h":62},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":62,"h":62},
-	"sourceSize": {"w":62,"h":62},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"man_ability-cripplingstrike-000":
-{
-	"frame": {"x":62,"y":0,"w":62,"h":62},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":62,"h":62},
-	"sourceSize": {"w":62,"h":62},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"man_ability-criticalstrike-000":
-{
-	"frame": {"x":124,"y":0,"w":62,"h":62},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":62,"h":62},
-	"sourceSize": {"w":62,"h":62},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"man_ability-groundslam-000":
-{
-	"frame": {"x":186,"y":0,"w":62,"h":62},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":62,"h":62},
-	"sourceSize": {"w":62,"h":62},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"man_ability-heroicstrike-000":
-{
-	"frame": {"x":248,"y":0,"w":62,"h":62},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":62,"h":62},
-	"sourceSize": {"w":62,"h":62},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"man_ability-kick-000":
-{
-	"frame": {"x":310,"y":0,"w":62,"h":62},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":62,"h":62},
-	"sourceSize": {"w":62,"h":62},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"man_ability-none-000":
-{
-	"frame": {"x":620,"y":0,"w":1,"h":1},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1,"h":1},
-	"sourceSize": {"w":1,"h":1},
-	"anchor": {"x":31,"y":35.65}
-},
-"man_ability-phantomstrike-000":
-{
-	"frame": {"x":372,"y":0,"w":62,"h":62},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":62,"h":62},
-	"sourceSize": {"w":62,"h":62},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"man_ability-rendarmor-000":
-{
-	"frame": {"x":434,"y":0,"w":62,"h":62},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":62,"h":62},
-	"sourceSize": {"w":62,"h":62},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"man_ability-stunningkick-000":
-{
-	"frame": {"x":496,"y":0,"w":62,"h":62},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":62,"h":62},
-	"sourceSize": {"w":62,"h":62},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"man_ability-warcry-000":
-{
-	"frame": {"x":558,"y":0,"w":62,"h":62},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":62,"h":62},
-	"sourceSize": {"w":62,"h":62},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "man_ability-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":621,"h":62},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:33a7b033337d25201019846a3f636ca3:a0a4d6295bb86f82590e5efd011ff905:442ed6b46e21c4c6ca2317de38651824$"
-}
+	"frames": {
+		"man_ability-bootkick-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"sourceSize": {
+				"w": 62,
+				"h": 62
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"man_ability-cripplingstrike-000": {
+			"frame": {
+				"x": 62,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"sourceSize": {
+				"w": 62,
+				"h": 62
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"man_ability-criticalstrike-000": {
+			"frame": {
+				"x": 124,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"sourceSize": {
+				"w": 62,
+				"h": 62
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"man_ability-groundslam-000": {
+			"frame": {
+				"x": 186,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"sourceSize": {
+				"w": 62,
+				"h": 62
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"man_ability-heroicstrike-000": {
+			"frame": {
+				"x": 248,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"sourceSize": {
+				"w": 62,
+				"h": 62
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"man_ability-kick-000": {
+			"frame": {
+				"x": 310,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"sourceSize": {
+				"w": 62,
+				"h": 62
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"man_ability-none-000": {
+			"frame": {
+				"x": 620,
+				"y": 0,
+				"w": 1,
+				"h": 1
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1,
+				"h": 1
+			},
+			"sourceSize": {
+				"w": 1,
+				"h": 1
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"man_ability-phantomstrike-000": {
+			"frame": {
+				"x": 372,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"sourceSize": {
+				"w": 62,
+				"h": 62
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"man_ability-rendarmor-000": {
+			"frame": {
+				"x": 434,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"sourceSize": {
+				"w": 62,
+				"h": 62
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"man_ability-stunningkick-000": {
+			"frame": {
+				"x": 496,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"sourceSize": {
+				"w": 62,
+				"h": 62
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"man_ability-warcry-000": {
+			"frame": {
+				"x": 558,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 62,
+				"h": 62
+			},
+			"sourceSize": {
+				"w": 62,
+				"h": 62
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "man_ability-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 621,
+			"h": 62
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:33a7b033337d25201019846a3f636ca3:a0a4d6295bb86f82590e5efd011ff905:442ed6b46e21c4c6ca2317de38651824$"
+	}
 }

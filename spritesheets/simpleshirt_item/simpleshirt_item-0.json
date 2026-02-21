@@ -1,21 +1,40 @@
-{"frames": {
-
-"simpleshirt_item-animation 1-000":
 {
-	"frame": {"x":0,"y":0,"w":62,"h":59},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":3,"w":62,"h":59},
-	"sourceSize": {"w":62,"h":59},
-	"anchor": {"x":0.5,"y":0.55339}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "simpleshirt_item-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":62,"h":59},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:36f8f4b44a5cbf537e4414a5035041c1:ef8c5b73094f06f150d7829dc26d3ee7:fab0d7f7af1e490a8b58ceceba3763ce$"
-}
+	"frames": {
+		"simpleshirt_item-animation 1-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 62,
+				"h": 59
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 3,
+				"w": 62,
+				"h": 59
+			},
+			"sourceSize": {
+				"w": 62,
+				"h": 59
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "simpleshirt_item-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 62,
+			"h": 59
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:36f8f4b44a5cbf537e4414a5035041c1:ef8c5b73094f06f150d7829dc26d3ee7:fab0d7f7af1e490a8b58ceceba3763ce$"
+	}
 }

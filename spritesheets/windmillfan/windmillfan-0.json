@@ -1,285 +1,770 @@
-{"frames": {
-
-"windmillfan-animation 2-000":
 {
-	"frame": {"x":6217,"y":2174,"w":1291,"h":1194},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1291,"h":1194},
-	"sourceSize": {"w":1291,"h":1194},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-001":
-{
-	"frame": {"x":0,"y":3238,"w":1301,"h":1203},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1301,"h":1203},
-	"sourceSize": {"w":1301,"h":1203},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-002":
-{
-	"frame": {"x":3726,"y":3356,"w":1309,"h":1212},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1309,"h":1212},
-	"sourceSize": {"w":1309,"h":1212},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-003":
-{
-	"frame": {"x":5035,"y":3368,"w":1315,"h":1213},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1315,"h":1213},
-	"sourceSize": {"w":1315,"h":1213},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-004":
-{
-	"frame": {"x":6350,"y":3368,"w":1314,"h":1215},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1314,"h":1215},
-	"sourceSize": {"w":1314,"h":1215},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-005":
-{
-	"frame": {"x":1252,"y":4531,"w":1315,"h":1224},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1315,"h":1224},
-	"sourceSize": {"w":1315,"h":1224},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-006":
-{
-	"frame": {"x":2567,"y":4568,"w":1308,"h":1232},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1308,"h":1232},
-	"sourceSize": {"w":1308,"h":1232},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-007":
-{
-	"frame": {"x":5149,"y":4583,"w":1299,"h":1238},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1299,"h":1238},
-	"sourceSize": {"w":1299,"h":1238},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-008":
-{
-	"frame": {"x":6448,"y":4583,"w":1287,"h":1238},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1287,"h":1238},
-	"sourceSize": {"w":1287,"h":1238},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-009":
-{
-	"frame": {"x":3875,"y":4581,"w":1274,"h":1235},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1274,"h":1235},
-	"sourceSize": {"w":1274,"h":1235},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-010":
-{
-	"frame": {"x":0,"y":4441,"w":1252,"h":1230},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1252,"h":1230},
-	"sourceSize": {"w":1252,"h":1230},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-011":
-{
-	"frame": {"x":2507,"y":3301,"w":1230,"h":1219},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1230,"h":1219},
-	"sourceSize": {"w":1230,"h":1219},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-012":
-{
-	"frame": {"x":1301,"y":3301,"w":1204,"h":1206},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1204,"h":1206},
-	"sourceSize": {"w":1204,"h":1206},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-013":
-{
-	"frame": {"x":3736,"y":2155,"w":1177,"h":1192},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1177,"h":1192},
-	"sourceSize": {"w":1177,"h":1192},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-014":
-{
-	"frame": {"x":0,"y":2066,"w":1142,"h":1175},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1142,"h":1175},
-	"sourceSize": {"w":1142,"h":1175},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-015":
-{
-	"frame": {"x":4679,"y":1047,"w":1108,"h":1150},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1108,"h":1150},
-	"sourceSize": {"w":1108,"h":1150},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-016":
-{
-	"frame": {"x":1066,"y":996,"w":1070,"h":1125},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1070,"h":1125},
-	"sourceSize": {"w":1070,"h":1125},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-017":
-{
-	"frame": {"x":3487,"y":0,"w":1028,"h":1099},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1028,"h":1099},
-	"sourceSize": {"w":1028,"h":1099},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-018":
-{
-	"frame": {"x":0,"y":974,"w":1064,"h":1066},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1064,"h":1066},
-	"sourceSize": {"w":1064,"h":1066},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-019":
-{
-	"frame": {"x":4586,"y":0,"w":1101,"h":1032},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1101,"h":1032},
-	"sourceSize": {"w":1101,"h":1032},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-020":
-{
-	"frame": {"x":1163,"y":0,"w":1133,"h":996},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1133,"h":996},
-	"sourceSize": {"w":1133,"h":996},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-021":
-{
-	"frame": {"x":0,"y":0,"w":1163,"h":974},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1163,"h":974},
-	"sourceSize": {"w":1163,"h":974},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-022":
-{
-	"frame": {"x":2296,"y":0,"w":1191,"h":1012},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1191,"h":1012},
-	"sourceSize": {"w":1191,"h":1012},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-023":
-{
-	"frame": {"x":5687,"y":0,"w":1214,"h":1047},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1214,"h":1047},
-	"sourceSize": {"w":1214,"h":1047},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-024":
-{
-	"frame": {"x":2191,"y":1012,"w":1235,"h":1077},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1235,"h":1077},
-	"sourceSize": {"w":1235,"h":1077},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-025":
-{
-	"frame": {"x":3426,"y":1032,"w":1253,"h":1102},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1253,"h":1102},
-	"sourceSize": {"w":1253,"h":1102},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-026":
-{
-	"frame": {"x":5829,"y":1047,"w":1266,"h":1127},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1266,"h":1127},
-	"sourceSize": {"w":1266,"h":1127},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-027":
-{
-	"frame": {"x":1175,"y":2089,"w":1277,"h":1149},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1277,"h":1149},
-	"sourceSize": {"w":1277,"h":1149},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-028":
-{
-	"frame": {"x":2452,"y":2134,"w":1284,"h":1167},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1284,"h":1167},
-	"sourceSize": {"w":1284,"h":1167},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"windmillfan-animation 2-029":
-{
-	"frame": {"x":4928,"y":2174,"w":1289,"h":1182},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1289,"h":1182},
-	"sourceSize": {"w":1289,"h":1182},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"animations": {
-	"windmillfan-animation 2": ["windmillfan-animation 2-000","windmillfan-animation 2-001","windmillfan-animation 2-002","windmillfan-animation 2-003","windmillfan-animation 2-004","windmillfan-animation 2-005","windmillfan-animation 2-006","windmillfan-animation 2-007","windmillfan-animation 2-008","windmillfan-animation 2-009","windmillfan-animation 2-010","windmillfan-animation 2-011","windmillfan-animation 2-012","windmillfan-animation 2-013","windmillfan-animation 2-014","windmillfan-animation 2-015","windmillfan-animation 2-016","windmillfan-animation 2-017","windmillfan-animation 2-018","windmillfan-animation 2-019","windmillfan-animation 2-020","windmillfan-animation 2-021","windmillfan-animation 2-022","windmillfan-animation 2-023","windmillfan-animation 2-024","windmillfan-animation 2-025","windmillfan-animation 2-026","windmillfan-animation 2-027","windmillfan-animation 2-028","windmillfan-animation 2-029"]
-},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "windmillfan-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":7735,"h":5821},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:87e606900f471d23ac89df96a0bce2a9:0a9adda956faf7b3d018775d30712253:92d49faf30c8d7a6e4fda9fe18cd8bbb$"
-}
+	"frames": {
+		"windmillfan-animation 2-000": {
+			"frame": {
+				"x": 6217,
+				"y": 2174,
+				"w": 1291,
+				"h": 1194
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1291,
+				"h": 1194
+			},
+			"sourceSize": {
+				"w": 1291,
+				"h": 1194
+			},
+			"anchor": {
+				"x": 0.8489542989930287,
+				"y": 1.1993299832495812
+			}
+		},
+		"windmillfan-animation 2-001": {
+			"frame": {
+				"x": 0,
+				"y": 3238,
+				"w": 1301,
+				"h": 1203
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1301,
+				"h": 1203
+			},
+			"sourceSize": {
+				"w": 1301,
+				"h": 1203
+			},
+			"anchor": {
+				"x": 0.846272098385857,
+				"y": 1.1945137157107233
+			}
+		},
+		"windmillfan-animation 2-002": {
+			"frame": {
+				"x": 3726,
+				"y": 3356,
+				"w": 1309,
+				"h": 1212
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1309,
+				"h": 1212
+			},
+			"sourceSize": {
+				"w": 1309,
+				"h": 1212
+			},
+			"anchor": {
+				"x": 0.8441558441558441,
+				"y": 1.188943894389439
+			}
+		},
+		"windmillfan-animation 2-003": {
+			"frame": {
+				"x": 5035,
+				"y": 3368,
+				"w": 1315,
+				"h": 1213
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1315,
+				"h": 1213
+			},
+			"sourceSize": {
+				"w": 1315,
+				"h": 1213
+			},
+			"anchor": {
+				"x": 0.8433460076045627,
+				"y": 1.18878812860676
+			}
+		},
+		"windmillfan-animation 2-004": {
+			"frame": {
+				"x": 6350,
+				"y": 3368,
+				"w": 1314,
+				"h": 1215
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1314,
+				"h": 1215
+			},
+			"sourceSize": {
+				"w": 1314,
+				"h": 1215
+			},
+			"anchor": {
+				"x": 0.8424657534246576,
+				"y": 1.1868312757201647
+			}
+		},
+		"windmillfan-animation 2-005": {
+			"frame": {
+				"x": 1252,
+				"y": 4531,
+				"w": 1315,
+				"h": 1224
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1315,
+				"h": 1224
+			},
+			"sourceSize": {
+				"w": 1315,
+				"h": 1224
+			},
+			"anchor": {
+				"x": 0.8433460076045627,
+				"y": 1.1830065359477124
+			}
+		},
+		"windmillfan-animation 2-006": {
+			"frame": {
+				"x": 2567,
+				"y": 4568,
+				"w": 1308,
+				"h": 1232
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1308,
+				"h": 1232
+			},
+			"sourceSize": {
+				"w": 1308,
+				"h": 1232
+			},
+			"anchor": {
+				"x": 0.8440366972477065,
+				"y": 1.1777597402597402
+			}
+		},
+		"windmillfan-animation 2-007": {
+			"frame": {
+				"x": 5149,
+				"y": 4583,
+				"w": 1299,
+				"h": 1238
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1299,
+				"h": 1238
+			},
+			"sourceSize": {
+				"w": 1299,
+				"h": 1238
+			},
+			"anchor": {
+				"x": 0.8468052347959969,
+				"y": 1.1736672051696284
+			}
+		},
+		"windmillfan-animation 2-008": {
+			"frame": {
+				"x": 6448,
+				"y": 4583,
+				"w": 1287,
+				"h": 1238
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1287,
+				"h": 1238
+			},
+			"sourceSize": {
+				"w": 1287,
+				"h": 1238
+			},
+			"anchor": {
+				"x": 0.85003885003885,
+				"y": 1.1736672051696284
+			}
+		},
+		"windmillfan-animation 2-009": {
+			"frame": {
+				"x": 3875,
+				"y": 4581,
+				"w": 1274,
+				"h": 1235
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1274,
+				"h": 1235
+			},
+			"sourceSize": {
+				"w": 1274,
+				"h": 1235
+			},
+			"anchor": {
+				"x": 0.8547880690737834,
+				"y": 1.1765182186234817
+			}
+		},
+		"windmillfan-animation 2-010": {
+			"frame": {
+				"x": 0,
+				"y": 4441,
+				"w": 1252,
+				"h": 1230
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1252,
+				"h": 1230
+			},
+			"sourceSize": {
+				"w": 1252,
+				"h": 1230
+			},
+			"anchor": {
+				"x": 0.860223642172524,
+				"y": 1.1780487804878048
+			}
+		},
+		"windmillfan-animation 2-011": {
+			"frame": {
+				"x": 2507,
+				"y": 3301,
+				"w": 1230,
+				"h": 1219
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1230,
+				"h": 1219
+			},
+			"sourceSize": {
+				"w": 1230,
+				"h": 1219
+			},
+			"anchor": {
+				"x": 0.8666666666666667,
+				"y": 1.184577522559475
+			}
+		},
+		"windmillfan-animation 2-012": {
+			"frame": {
+				"x": 1301,
+				"y": 3301,
+				"w": 1204,
+				"h": 1206
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1204,
+				"h": 1206
+			},
+			"sourceSize": {
+				"w": 1204,
+				"h": 1206
+			},
+			"anchor": {
+				"x": 0.8745847176079734,
+				"y": 1.1923714759535655
+			}
+		},
+		"windmillfan-animation 2-013": {
+			"frame": {
+				"x": 3736,
+				"y": 2155,
+				"w": 1177,
+				"h": 1192
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1177,
+				"h": 1192
+			},
+			"sourceSize": {
+				"w": 1177,
+				"h": 1192
+			},
+			"anchor": {
+				"x": 0.8819031435853866,
+				"y": 1.200503355704698
+			}
+		},
+		"windmillfan-animation 2-014": {
+			"frame": {
+				"x": 0,
+				"y": 2066,
+				"w": 1142,
+				"h": 1175
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1142,
+				"h": 1175
+			},
+			"sourceSize": {
+				"w": 1142,
+				"h": 1175
+			},
+			"anchor": {
+				"x": 0.8949211908931699,
+				"y": 1.2119148936170212
+			}
+		},
+		"windmillfan-animation 2-015": {
+			"frame": {
+				"x": 4679,
+				"y": 1047,
+				"w": 1108,
+				"h": 1150
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1108,
+				"h": 1150
+			},
+			"sourceSize": {
+				"w": 1108,
+				"h": 1150
+			},
+			"anchor": {
+				"x": 0.9061371841155235,
+				"y": 1.2260869565217392
+			}
+		},
+		"windmillfan-animation 2-016": {
+			"frame": {
+				"x": 1066,
+				"y": 996,
+				"w": 1070,
+				"h": 1125
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1070,
+				"h": 1125
+			},
+			"sourceSize": {
+				"w": 1070,
+				"h": 1125
+			},
+			"anchor": {
+				"x": 0.922429906542056,
+				"y": 1.2417777777777779
+			}
+		},
+		"windmillfan-animation 2-017": {
+			"frame": {
+				"x": 3487,
+				"y": 0,
+				"w": 1028,
+				"h": 1099
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1028,
+				"h": 1099
+			},
+			"sourceSize": {
+				"w": 1028,
+				"h": 1099
+			},
+			"anchor": {
+				"x": 0.938715953307393,
+				"y": 1.2611464968152866
+			}
+		},
+		"windmillfan-animation 2-018": {
+			"frame": {
+				"x": 0,
+				"y": 974,
+				"w": 1064,
+				"h": 1066
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1064,
+				"h": 1066
+			},
+			"sourceSize": {
+				"w": 1064,
+				"h": 1066
+			},
+			"anchor": {
+				"x": 0.9238721804511278,
+				"y": 1.2833020637898687
+			}
+		},
+		"windmillfan-animation 2-019": {
+			"frame": {
+				"x": 4586,
+				"y": 0,
+				"w": 1101,
+				"h": 1032
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1101,
+				"h": 1032
+			},
+			"sourceSize": {
+				"w": 1101,
+				"h": 1032
+			},
+			"anchor": {
+				"x": 0.9100817438692098,
+				"y": 1.309108527131783
+			}
+		},
+		"windmillfan-animation 2-020": {
+			"frame": {
+				"x": 1163,
+				"y": 0,
+				"w": 1133,
+				"h": 996
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1133,
+				"h": 996
+			},
+			"sourceSize": {
+				"w": 1133,
+				"h": 996
+			},
+			"anchor": {
+				"x": 0.8984995586937334,
+				"y": 1.3373493975903614
+			}
+		},
+		"windmillfan-animation 2-021": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 1163,
+				"h": 974
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1163,
+				"h": 974
+			},
+			"sourceSize": {
+				"w": 1163,
+				"h": 974
+			},
+			"anchor": {
+				"x": 0.8882201203783319,
+				"y": 1.3572895277207393
+			}
+		},
+		"windmillfan-animation 2-022": {
+			"frame": {
+				"x": 2296,
+				"y": 0,
+				"w": 1191,
+				"h": 1012
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1191,
+				"h": 1012
+			},
+			"sourceSize": {
+				"w": 1191,
+				"h": 1012
+			},
+			"anchor": {
+				"x": 0.8790931989924433,
+				"y": 1.3241106719367588
+			}
+		},
+		"windmillfan-animation 2-023": {
+			"frame": {
+				"x": 5687,
+				"y": 0,
+				"w": 1214,
+				"h": 1047
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1214,
+				"h": 1047
+			},
+			"sourceSize": {
+				"w": 1214,
+				"h": 1047
+			},
+			"anchor": {
+				"x": 0.871499176276771,
+				"y": 1.2960840496657116
+			}
+		},
+		"windmillfan-animation 2-024": {
+			"frame": {
+				"x": 2191,
+				"y": 1012,
+				"w": 1235,
+				"h": 1077
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1235,
+				"h": 1077
+			},
+			"sourceSize": {
+				"w": 1235,
+				"h": 1077
+			},
+			"anchor": {
+				"x": 0.8655870445344129,
+				"y": 1.2739090064995358
+			}
+		},
+		"windmillfan-animation 2-025": {
+			"frame": {
+				"x": 3426,
+				"y": 1032,
+				"w": 1253,
+				"h": 1102
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1253,
+				"h": 1102
+			},
+			"sourceSize": {
+				"w": 1253,
+				"h": 1102
+			},
+			"anchor": {
+				"x": 0.859537110933759,
+				"y": 1.2577132486388385
+			}
+		},
+		"windmillfan-animation 2-026": {
+			"frame": {
+				"x": 5829,
+				"y": 1047,
+				"w": 1266,
+				"h": 1127
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1266,
+				"h": 1127
+			},
+			"sourceSize": {
+				"w": 1266,
+				"h": 1127
+			},
+			"anchor": {
+				"x": 0.8570300157977883,
+				"y": 1.2404614019520852
+			}
+		},
+		"windmillfan-animation 2-027": {
+			"frame": {
+				"x": 1175,
+				"y": 2089,
+				"w": 1277,
+				"h": 1149
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1277,
+				"h": 1149
+			},
+			"sourceSize": {
+				"w": 1277,
+				"h": 1149
+			},
+			"anchor": {
+				"x": 0.8535630383711824,
+				"y": 1.226283724978242
+			}
+		},
+		"windmillfan-animation 2-028": {
+			"frame": {
+				"x": 2452,
+				"y": 2134,
+				"w": 1284,
+				"h": 1167
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1284,
+				"h": 1167
+			},
+			"sourceSize": {
+				"w": 1284,
+				"h": 1167
+			},
+			"anchor": {
+				"x": 0.8504672897196262,
+				"y": 1.2150814053127679
+			}
+		},
+		"windmillfan-animation 2-029": {
+			"frame": {
+				"x": 4928,
+				"y": 2174,
+				"w": 1289,
+				"h": 1182
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1289,
+				"h": 1182
+			},
+			"sourceSize": {
+				"w": 1289,
+				"h": 1182
+			},
+			"anchor": {
+				"x": 0.8487199379363848,
+				"y": 1.206429780033841
+			}
+		}
+	},
+	"animations": {
+		"windmillfan-animation 2": [
+			"windmillfan-animation 2-000",
+			"windmillfan-animation 2-001",
+			"windmillfan-animation 2-002",
+			"windmillfan-animation 2-003",
+			"windmillfan-animation 2-004",
+			"windmillfan-animation 2-005",
+			"windmillfan-animation 2-006",
+			"windmillfan-animation 2-007",
+			"windmillfan-animation 2-008",
+			"windmillfan-animation 2-009",
+			"windmillfan-animation 2-010",
+			"windmillfan-animation 2-011",
+			"windmillfan-animation 2-012",
+			"windmillfan-animation 2-013",
+			"windmillfan-animation 2-014",
+			"windmillfan-animation 2-015",
+			"windmillfan-animation 2-016",
+			"windmillfan-animation 2-017",
+			"windmillfan-animation 2-018",
+			"windmillfan-animation 2-019",
+			"windmillfan-animation 2-020",
+			"windmillfan-animation 2-021",
+			"windmillfan-animation 2-022",
+			"windmillfan-animation 2-023",
+			"windmillfan-animation 2-024",
+			"windmillfan-animation 2-025",
+			"windmillfan-animation 2-026",
+			"windmillfan-animation 2-027",
+			"windmillfan-animation 2-028",
+			"windmillfan-animation 2-029"
+		]
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "windmillfan-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 7735,
+			"h": 5821
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:87e606900f471d23ac89df96a0bce2a9:0a9adda956faf7b3d018775d30712253:92d49faf30c8d7a6e4fda9fe18cd8bbb$"
+	}
 }

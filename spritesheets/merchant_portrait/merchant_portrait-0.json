@@ -1,555 +1,1520 @@
-{"frames": {
-
-"merchant_portrait-animation 1-000":
 {
-	"frame": {"x":1432,"y":0,"w":268,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":268,"h":716},
-	"sourceSize": {"w":268,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-001":
-{
-	"frame": {"x":1432,"y":716,"w":268,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":268,"h":716},
-	"sourceSize": {"w":268,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-002":
-{
-	"frame": {"x":1700,"y":0,"w":265,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":265,"h":716},
-	"sourceSize": {"w":265,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-003":
-{
-	"frame": {"x":1700,"y":716,"w":265,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":265,"h":716},
-	"sourceSize": {"w":265,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-004":
-{
-	"frame": {"x":1697,"y":4296,"w":264,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":264,"h":716},
-	"sourceSize": {"w":264,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-005":
-{
-	"frame": {"x":716,"y":5250,"w":264,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":264,"h":716},
-	"sourceSize": {"w":264,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-006":
-{
-	"frame": {"x":1432,"y":5012,"w":264,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":264,"h":716},
-	"sourceSize": {"w":264,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-007":
-{
-	"frame": {"x":1696,"y":5012,"w":264,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":264,"h":716},
-	"sourceSize": {"w":264,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-008":
-{
-	"frame": {"x":0,"y":5513,"w":264,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":264,"h":716},
-	"sourceSize": {"w":264,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-009":
-{
-	"frame": {"x":1432,"y":4296,"w":265,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":265,"h":716},
-	"sourceSize": {"w":265,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-010":
-{
-	"frame": {"x":1432,"y":1432,"w":267,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":267,"h":716},
-	"sourceSize": {"w":267,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-011":
-{
-	"frame": {"x":1699,"y":1432,"w":267,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":267,"h":716},
-	"sourceSize": {"w":267,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-012":
-{
-	"frame": {"x":1432,"y":2148,"w":267,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":267,"h":716},
-	"sourceSize": {"w":267,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-013":
-{
-	"frame": {"x":1699,"y":2148,"w":267,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":267,"h":716},
-	"sourceSize": {"w":267,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-014":
-{
-	"frame": {"x":1432,"y":2864,"w":267,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":267,"h":716},
-	"sourceSize": {"w":267,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-015":
-{
-	"frame": {"x":1699,"y":2864,"w":267,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":267,"h":716},
-	"sourceSize": {"w":267,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-016":
-{
-	"frame": {"x":1432,"y":3580,"w":267,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":267,"h":716},
-	"sourceSize": {"w":267,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-017":
-{
-	"frame": {"x":1699,"y":3580,"w":267,"h":716},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":267,"h":716},
-	"sourceSize": {"w":267,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-018":
-{
-	"frame": {"x":716,"y":5514,"w":264,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":264,"h":716},
-	"sourceSize": {"w":264,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-019":
-{
-	"frame": {"x":0,"y":2620,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-020":
-{
-	"frame": {"x":716,"y":2620,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-021":
-{
-	"frame": {"x":0,"y":2883,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-022":
-{
-	"frame": {"x":716,"y":2883,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-023":
-{
-	"frame": {"x":0,"y":0,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-024":
-{
-	"frame": {"x":716,"y":0,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-025":
-{
-	"frame": {"x":0,"y":262,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-026":
-{
-	"frame": {"x":716,"y":262,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-027":
-{
-	"frame": {"x":0,"y":524,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-028":
-{
-	"frame": {"x":716,"y":524,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-029":
-{
-	"frame": {"x":0,"y":786,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-030":
-{
-	"frame": {"x":716,"y":786,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-031":
-{
-	"frame": {"x":0,"y":3146,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-032":
-{
-	"frame": {"x":716,"y":3146,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-033":
-{
-	"frame": {"x":0,"y":3409,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-034":
-{
-	"frame": {"x":716,"y":3409,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-035":
-{
-	"frame": {"x":0,"y":3672,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-036":
-{
-	"frame": {"x":716,"y":3672,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-037":
-{
-	"frame": {"x":0,"y":3935,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-038":
-{
-	"frame": {"x":716,"y":3935,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-039":
-{
-	"frame": {"x":0,"y":4198,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-040":
-{
-	"frame": {"x":716,"y":4198,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-041":
-{
-	"frame": {"x":0,"y":4461,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-042":
-{
-	"frame": {"x":716,"y":4461,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-043":
-{
-	"frame": {"x":0,"y":4724,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-044":
-{
-	"frame": {"x":0,"y":1048,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-045":
-{
-	"frame": {"x":716,"y":1048,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-046":
-{
-	"frame": {"x":0,"y":1310,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-047":
-{
-	"frame": {"x":716,"y":1310,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-048":
-{
-	"frame": {"x":0,"y":1572,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-049":
-{
-	"frame": {"x":716,"y":1572,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-050":
-{
-	"frame": {"x":0,"y":1834,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-051":
-{
-	"frame": {"x":716,"y":1834,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-052":
-{
-	"frame": {"x":0,"y":2096,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-053":
-{
-	"frame": {"x":716,"y":2096,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-054":
-{
-	"frame": {"x":0,"y":2358,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-055":
-{
-	"frame": {"x":716,"y":2358,"w":262,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":262,"h":716},
-	"sourceSize": {"w":262,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-056":
-{
-	"frame": {"x":716,"y":4724,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-057":
-{
-	"frame": {"x":0,"y":4987,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-058":
-{
-	"frame": {"x":716,"y":4987,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"merchant_portrait-animation 1-059":
-{
-	"frame": {"x":0,"y":5250,"w":263,"h":716},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":716},
-	"sourceSize": {"w":263,"h":716},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"animations": {
-	"merchant_portrait-animation 1": ["merchant_portrait-animation 1-000","merchant_portrait-animation 1-001","merchant_portrait-animation 1-002","merchant_portrait-animation 1-003","merchant_portrait-animation 1-004","merchant_portrait-animation 1-005","merchant_portrait-animation 1-006","merchant_portrait-animation 1-007","merchant_portrait-animation 1-008","merchant_portrait-animation 1-009","merchant_portrait-animation 1-010","merchant_portrait-animation 1-011","merchant_portrait-animation 1-012","merchant_portrait-animation 1-013","merchant_portrait-animation 1-014","merchant_portrait-animation 1-015","merchant_portrait-animation 1-016","merchant_portrait-animation 1-017","merchant_portrait-animation 1-018","merchant_portrait-animation 1-019","merchant_portrait-animation 1-020","merchant_portrait-animation 1-021","merchant_portrait-animation 1-022","merchant_portrait-animation 1-023","merchant_portrait-animation 1-024","merchant_portrait-animation 1-025","merchant_portrait-animation 1-026","merchant_portrait-animation 1-027","merchant_portrait-animation 1-028","merchant_portrait-animation 1-029","merchant_portrait-animation 1-030","merchant_portrait-animation 1-031","merchant_portrait-animation 1-032","merchant_portrait-animation 1-033","merchant_portrait-animation 1-034","merchant_portrait-animation 1-035","merchant_portrait-animation 1-036","merchant_portrait-animation 1-037","merchant_portrait-animation 1-038","merchant_portrait-animation 1-039","merchant_portrait-animation 1-040","merchant_portrait-animation 1-041","merchant_portrait-animation 1-042","merchant_portrait-animation 1-043","merchant_portrait-animation 1-044","merchant_portrait-animation 1-045","merchant_portrait-animation 1-046","merchant_portrait-animation 1-047","merchant_portrait-animation 1-048","merchant_portrait-animation 1-049","merchant_portrait-animation 1-050","merchant_portrait-animation 1-051","merchant_portrait-animation 1-052","merchant_portrait-animation 1-053","merchant_portrait-animation 1-054","merchant_portrait-animation 1-055","merchant_portrait-animation 1-056","merchant_portrait-animation 1-057","merchant_portrait-animation 1-058","merchant_portrait-animation 1-059"]
-},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "merchant_portrait-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":1966,"h":5778},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:81d7edefbda783e033a28fa7603e8135:88434342e4f16c571f7fb3f30b675f5c:09c94c7351fd4b82fe761902f3716b8c$"
-}
+	"frames": {
+		"merchant_portrait-animation 1-000": {
+			"frame": {
+				"x": 1432,
+				"y": 0,
+				"w": 268,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 268,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 268,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5597014925373134,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-001": {
+			"frame": {
+				"x": 1432,
+				"y": 716,
+				"w": 268,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 268,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 268,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5597014925373134,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-002": {
+			"frame": {
+				"x": 1700,
+				"y": 0,
+				"w": 265,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5547169811320755,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-003": {
+			"frame": {
+				"x": 1700,
+				"y": 716,
+				"w": 265,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5547169811320755,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-004": {
+			"frame": {
+				"x": 1697,
+				"y": 4296,
+				"w": 264,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 264,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 264,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.553030303030303,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-005": {
+			"frame": {
+				"x": 716,
+				"y": 5250,
+				"w": 264,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 264,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 264,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.553030303030303,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-006": {
+			"frame": {
+				"x": 1432,
+				"y": 5012,
+				"w": 264,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 264,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 264,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.553030303030303,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-007": {
+			"frame": {
+				"x": 1696,
+				"y": 5012,
+				"w": 264,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 264,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 264,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.553030303030303,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-008": {
+			"frame": {
+				"x": 0,
+				"y": 5513,
+				"w": 264,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 264,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 264,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.553030303030303,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-009": {
+			"frame": {
+				"x": 1432,
+				"y": 4296,
+				"w": 265,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 265,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 265,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5547169811320755,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-010": {
+			"frame": {
+				"x": 1432,
+				"y": 1432,
+				"w": 267,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 267,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 267,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5617977528089888,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-011": {
+			"frame": {
+				"x": 1699,
+				"y": 1432,
+				"w": 267,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 267,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 267,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5617977528089888,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-012": {
+			"frame": {
+				"x": 1432,
+				"y": 2148,
+				"w": 267,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 267,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 267,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5617977528089888,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-013": {
+			"frame": {
+				"x": 1699,
+				"y": 2148,
+				"w": 267,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 267,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 267,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5617977528089888,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-014": {
+			"frame": {
+				"x": 1432,
+				"y": 2864,
+				"w": 267,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 267,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 267,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5617977528089888,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-015": {
+			"frame": {
+				"x": 1699,
+				"y": 2864,
+				"w": 267,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 267,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 267,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5617977528089888,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-016": {
+			"frame": {
+				"x": 1432,
+				"y": 3580,
+				"w": 267,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 267,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 267,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5617977528089888,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-017": {
+			"frame": {
+				"x": 1699,
+				"y": 3580,
+				"w": 267,
+				"h": 716
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 267,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 267,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5617977528089888,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-018": {
+			"frame": {
+				"x": 716,
+				"y": 5514,
+				"w": 264,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 264,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 264,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5568181818181818,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-019": {
+			"frame": {
+				"x": 0,
+				"y": 2620,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-020": {
+			"frame": {
+				"x": 716,
+				"y": 2620,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-021": {
+			"frame": {
+				"x": 0,
+				"y": 2883,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-022": {
+			"frame": {
+				"x": 716,
+				"y": 2883,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-023": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-024": {
+			"frame": {
+				"x": 716,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-025": {
+			"frame": {
+				"x": 0,
+				"y": 262,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-026": {
+			"frame": {
+				"x": 716,
+				"y": 262,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-027": {
+			"frame": {
+				"x": 0,
+				"y": 524,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-028": {
+			"frame": {
+				"x": 716,
+				"y": 524,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-029": {
+			"frame": {
+				"x": 0,
+				"y": 786,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-030": {
+			"frame": {
+				"x": 716,
+				"y": 786,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-031": {
+			"frame": {
+				"x": 0,
+				"y": 3146,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-032": {
+			"frame": {
+				"x": 716,
+				"y": 3146,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-033": {
+			"frame": {
+				"x": 0,
+				"y": 3409,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-034": {
+			"frame": {
+				"x": 716,
+				"y": 3409,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-035": {
+			"frame": {
+				"x": 0,
+				"y": 3672,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-036": {
+			"frame": {
+				"x": 716,
+				"y": 3672,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-037": {
+			"frame": {
+				"x": 0,
+				"y": 3935,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-038": {
+			"frame": {
+				"x": 716,
+				"y": 3935,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-039": {
+			"frame": {
+				"x": 0,
+				"y": 4198,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-040": {
+			"frame": {
+				"x": 716,
+				"y": 4198,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-041": {
+			"frame": {
+				"x": 0,
+				"y": 4461,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-042": {
+			"frame": {
+				"x": 716,
+				"y": 4461,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-043": {
+			"frame": {
+				"x": 0,
+				"y": 4724,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5551330798479087,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-044": {
+			"frame": {
+				"x": 0,
+				"y": 1048,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-045": {
+			"frame": {
+				"x": 716,
+				"y": 1048,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-046": {
+			"frame": {
+				"x": 0,
+				"y": 1310,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-047": {
+			"frame": {
+				"x": 716,
+				"y": 1310,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-048": {
+			"frame": {
+				"x": 0,
+				"y": 1572,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-049": {
+			"frame": {
+				"x": 716,
+				"y": 1572,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-050": {
+			"frame": {
+				"x": 0,
+				"y": 1834,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-051": {
+			"frame": {
+				"x": 716,
+				"y": 1834,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-052": {
+			"frame": {
+				"x": 0,
+				"y": 2096,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-053": {
+			"frame": {
+				"x": 716,
+				"y": 2096,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-054": {
+			"frame": {
+				"x": 0,
+				"y": 2358,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-055": {
+			"frame": {
+				"x": 716,
+				"y": 2358,
+				"w": 262,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 262,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 262,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5534351145038168,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-056": {
+			"frame": {
+				"x": 716,
+				"y": 4724,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5513307984790875,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-057": {
+			"frame": {
+				"x": 0,
+				"y": 4987,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5513307984790875,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-058": {
+			"frame": {
+				"x": 716,
+				"y": 4987,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5513307984790875,
+				"y": 1
+			}
+		},
+		"merchant_portrait-animation 1-059": {
+			"frame": {
+				"x": 0,
+				"y": 5250,
+				"w": 263,
+				"h": 716
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 263,
+				"h": 716
+			},
+			"sourceSize": {
+				"w": 263,
+				"h": 716
+			},
+			"anchor": {
+				"x": 0.5513307984790875,
+				"y": 1
+			}
+		}
+	},
+	"animations": {
+		"merchant_portrait-animation 1": [
+			"merchant_portrait-animation 1-000",
+			"merchant_portrait-animation 1-001",
+			"merchant_portrait-animation 1-002",
+			"merchant_portrait-animation 1-003",
+			"merchant_portrait-animation 1-004",
+			"merchant_portrait-animation 1-005",
+			"merchant_portrait-animation 1-006",
+			"merchant_portrait-animation 1-007",
+			"merchant_portrait-animation 1-008",
+			"merchant_portrait-animation 1-009",
+			"merchant_portrait-animation 1-010",
+			"merchant_portrait-animation 1-011",
+			"merchant_portrait-animation 1-012",
+			"merchant_portrait-animation 1-013",
+			"merchant_portrait-animation 1-014",
+			"merchant_portrait-animation 1-015",
+			"merchant_portrait-animation 1-016",
+			"merchant_portrait-animation 1-017",
+			"merchant_portrait-animation 1-018",
+			"merchant_portrait-animation 1-019",
+			"merchant_portrait-animation 1-020",
+			"merchant_portrait-animation 1-021",
+			"merchant_portrait-animation 1-022",
+			"merchant_portrait-animation 1-023",
+			"merchant_portrait-animation 1-024",
+			"merchant_portrait-animation 1-025",
+			"merchant_portrait-animation 1-026",
+			"merchant_portrait-animation 1-027",
+			"merchant_portrait-animation 1-028",
+			"merchant_portrait-animation 1-029",
+			"merchant_portrait-animation 1-030",
+			"merchant_portrait-animation 1-031",
+			"merchant_portrait-animation 1-032",
+			"merchant_portrait-animation 1-033",
+			"merchant_portrait-animation 1-034",
+			"merchant_portrait-animation 1-035",
+			"merchant_portrait-animation 1-036",
+			"merchant_portrait-animation 1-037",
+			"merchant_portrait-animation 1-038",
+			"merchant_portrait-animation 1-039",
+			"merchant_portrait-animation 1-040",
+			"merchant_portrait-animation 1-041",
+			"merchant_portrait-animation 1-042",
+			"merchant_portrait-animation 1-043",
+			"merchant_portrait-animation 1-044",
+			"merchant_portrait-animation 1-045",
+			"merchant_portrait-animation 1-046",
+			"merchant_portrait-animation 1-047",
+			"merchant_portrait-animation 1-048",
+			"merchant_portrait-animation 1-049",
+			"merchant_portrait-animation 1-050",
+			"merchant_portrait-animation 1-051",
+			"merchant_portrait-animation 1-052",
+			"merchant_portrait-animation 1-053",
+			"merchant_portrait-animation 1-054",
+			"merchant_portrait-animation 1-055",
+			"merchant_portrait-animation 1-056",
+			"merchant_portrait-animation 1-057",
+			"merchant_portrait-animation 1-058",
+			"merchant_portrait-animation 1-059"
+		]
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "merchant_portrait-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 1966,
+			"h": 5778
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:81d7edefbda783e033a28fa7603e8135:88434342e4f16c571f7fb3f30b675f5c:09c94c7351fd4b82fe761902f3716b8c$"
+	}
 }

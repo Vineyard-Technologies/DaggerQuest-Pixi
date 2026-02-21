@@ -1,21 +1,40 @@
-{"frames": {
-
-"maraudersbracers_item-animation 1-000":
 {
-	"frame": {"x":0,"y":0,"w":58,"h":46},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":2,"y":9,"w":58,"h":46},
-	"sourceSize": {"w":58,"h":46},
-	"anchor": {"x":0.5,"y":0.579348}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "maraudersbracers_item-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":58,"h":46},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:1421653bd878b148e24c56e245f068cb:64812f62e24b76b2743f7c4e80d5e943:bf5dba0499b02d35fe48ee1717bdcae4$"
-}
+	"frames": {
+		"maraudersbracers_item-animation 1-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 58,
+				"h": 46
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 2,
+				"y": 9,
+				"w": 58,
+				"h": 46
+			},
+			"sourceSize": {
+				"w": 58,
+				"h": 46
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "maraudersbracers_item-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 58,
+			"h": 46
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:1421653bd878b148e24c56e245f068cb:64812f62e24b76b2743f7c4e80d5e943:bf5dba0499b02d35fe48ee1717bdcae4$"
+	}
 }

@@ -1,21 +1,40 @@
-{"frames": {
-
-"windmillexterior_shadow-default-000":
 {
-	"frame": {"x":0,"y":0,"w":1108,"h":910},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1108,"h":910},
-	"sourceSize": {"w":1108,"h":910},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "windmillexterior_shadow-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":1108,"h":910},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:ca50ac6ddd698570b4835c928fdf9c2f:5def6a35c394400e09b128dfe58efe02:a8bf4e6ffe1f4db128d0597bf49abbd1$"
-}
+	"frames": {
+		"windmillexterior_shadow-default-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 1108,
+				"h": 910
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1108,
+				"h": 910
+			},
+			"sourceSize": {
+				"w": 1108,
+				"h": 910
+			},
+			"anchor": {
+				"x": 0.9945848375451264,
+				"y": 0.8010989010989011
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "windmillexterior_shadow-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 1108,
+			"h": 910
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:ca50ac6ddd698570b4835c928fdf9c2f:5def6a35c394400e09b128dfe58efe02:a8bf4e6ffe1f4db128d0597bf49abbd1$"
+	}
 }

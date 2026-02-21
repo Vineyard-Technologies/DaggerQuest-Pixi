@@ -1,21 +1,40 @@
-{"frames": {
-
-"lootnamebackground-animation 1-000":
 {
-	"frame": {"x":0,"y":0,"w":2,"h":2},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":2,"h":2},
-	"sourceSize": {"w":2,"h":2},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "lootnamebackground-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":2,"h":2},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:ae948b4d9c445334880289249ee47e21:c6635dff0cea43729974e1b6e4176d0a:eed246e3c9c70a25c8a001d03310051c$"
-}
+	"frames": {
+		"lootnamebackground-animation 1-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 2,
+				"h": 2
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 2,
+				"h": 2
+			},
+			"sourceSize": {
+				"w": 2,
+				"h": 2
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 1
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "lootnamebackground-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 2,
+			"h": 2
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:ae948b4d9c445334880289249ee47e21:c6635dff0cea43729974e1b6e4176d0a:eed246e3c9c70a25c8a001d03310051c$"
+	}
 }

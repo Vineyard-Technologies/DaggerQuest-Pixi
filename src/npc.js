@@ -3,7 +3,7 @@
  * NPCs can have dialog, wander in a small area, and face the player when spoken to.
  */
 class NPC extends Character {
-    constructor({ x, y, spriteKey = 'guide', name = 'NPC', speed = 50, animFps = {}, interactRange = 100, dialog = [] }) {
+    constructor({ x, y, spriteKey = 'guide', name = 'NPC', speed = 50, animFps = {}, interactRange = 100, dialog = [], wanderRadius = 0 }) {
         super({ x, y, spriteKey, speed, animFps });
         this.name = name;
         this.interactRange = interactRange;
@@ -11,7 +11,7 @@ class NPC extends Character {
         this.dialogIndex = 0;
         this.isInteracting = false;
         this.wanderOrigin = { x, y };
-        this.wanderRadius = 80;
+        this.wanderRadius = wanderRadius;
     }
 
     /** Check distance to a target entity */
@@ -117,7 +117,7 @@ class NPC extends Character {
         super.update(delta);
 
         // Occasionally wander when idle
-        if (!this.targetPosition && Math.random() < 0.002) {
+        if (!this.targetPosition && this.wanderRadius > 0 && Math.random() < 0.002) {
             this.pickWanderTarget();
         }
     }

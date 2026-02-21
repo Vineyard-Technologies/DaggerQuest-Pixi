@@ -1,285 +1,770 @@
-{"frames": {
-
-"woodenchest-animation-000":
 {
-	"frame": {"x":4816,"y":0,"w":162,"h":189},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":162,"h":189},
-	"sourceSize": {"w":162,"h":189},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-001":
-{
-	"frame": {"x":4978,"y":0,"w":162,"h":189},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":162,"h":189},
-	"sourceSize": {"w":162,"h":189},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-002":
-{
-	"frame": {"x":5140,"y":0,"w":162,"h":189},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":162,"h":189},
-	"sourceSize": {"w":162,"h":189},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-003":
-{
-	"frame": {"x":4654,"y":0,"w":162,"h":191},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":162,"h":191},
-	"sourceSize": {"w":162,"h":191},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-004":
-{
-	"frame": {"x":4492,"y":0,"w":162,"h":192},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":162,"h":192},
-	"sourceSize": {"w":162,"h":192},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-005":
-{
-	"frame": {"x":4331,"y":0,"w":161,"h":194},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":161,"h":194},
-	"sourceSize": {"w":161,"h":194},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-006":
-{
-	"frame": {"x":4170,"y":0,"w":161,"h":196},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":161,"h":196},
-	"sourceSize": {"w":161,"h":196},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-007":
-{
-	"frame": {"x":4009,"y":0,"w":161,"h":198},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":161,"h":198},
-	"sourceSize": {"w":161,"h":198},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-008":
-{
-	"frame": {"x":3848,"y":0,"w":161,"h":200},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":161,"h":200},
-	"sourceSize": {"w":161,"h":200},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-009":
-{
-	"frame": {"x":3687,"y":0,"w":161,"h":203},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":161,"h":203},
-	"sourceSize": {"w":161,"h":203},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-010":
-{
-	"frame": {"x":3525,"y":0,"w":162,"h":205},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":162,"h":205},
-	"sourceSize": {"w":162,"h":205},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-011":
-{
-	"frame": {"x":3362,"y":0,"w":163,"h":209},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":163,"h":209},
-	"sourceSize": {"w":163,"h":209},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-012":
-{
-	"frame": {"x":3197,"y":0,"w":165,"h":210},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":165,"h":210},
-	"sourceSize": {"w":165,"h":210},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-013":
-{
-	"frame": {"x":3028,"y":0,"w":169,"h":212},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":169,"h":212},
-	"sourceSize": {"w":169,"h":212},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-014":
-{
-	"frame": {"x":2859,"y":0,"w":169,"h":214},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":169,"h":214},
-	"sourceSize": {"w":169,"h":214},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-015":
-{
-	"frame": {"x":2686,"y":0,"w":173,"h":216},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":173,"h":216},
-	"sourceSize": {"w":173,"h":216},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-016":
-{
-	"frame": {"x":547,"y":0,"w":175,"h":221},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":175,"h":221},
-	"sourceSize": {"w":175,"h":221},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-017":
-{
-	"frame": {"x":369,"y":0,"w":178,"h":221},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":178,"h":221},
-	"sourceSize": {"w":178,"h":221},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-018":
-{
-	"frame": {"x":188,"y":0,"w":181,"h":221},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":181,"h":221},
-	"sourceSize": {"w":181,"h":221},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-019":
-{
-	"frame": {"x":1299,"y":0,"w":186,"h":220},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":186,"h":220},
-	"sourceSize": {"w":186,"h":220},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-020":
-{
-	"frame": {"x":0,"y":0,"w":188,"h":221},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":188,"h":221},
-	"sourceSize": {"w":188,"h":221},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-021":
-{
-	"frame": {"x":1109,"y":0,"w":190,"h":220},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":190,"h":220},
-	"sourceSize": {"w":190,"h":220},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-022":
-{
-	"frame": {"x":917,"y":0,"w":192,"h":220},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":192,"h":220},
-	"sourceSize": {"w":192,"h":220},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-023":
-{
-	"frame": {"x":722,"y":0,"w":195,"h":220},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":195,"h":220},
-	"sourceSize": {"w":195,"h":220},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-024":
-{
-	"frame": {"x":1485,"y":0,"w":197,"h":219},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":197,"h":219},
-	"sourceSize": {"w":197,"h":219},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-025":
-{
-	"frame": {"x":1682,"y":0,"w":199,"h":218},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":199,"h":218},
-	"sourceSize": {"w":199,"h":218},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-026":
-{
-	"frame": {"x":1881,"y":0,"w":200,"h":217},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":217},
-	"sourceSize": {"w":200,"h":217},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-027":
-{
-	"frame": {"x":2485,"y":0,"w":201,"h":216},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":201,"h":216},
-	"sourceSize": {"w":201,"h":216},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-028":
-{
-	"frame": {"x":2081,"y":0,"w":202,"h":216},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":202,"h":216},
-	"sourceSize": {"w":202,"h":216},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"woodenchest-animation-029":
-{
-	"frame": {"x":2283,"y":0,"w":202,"h":216},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":202,"h":216},
-	"sourceSize": {"w":202,"h":216},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"animations": {
-	"woodenchest-animation": ["woodenchest-animation-000","woodenchest-animation-001","woodenchest-animation-002","woodenchest-animation-003","woodenchest-animation-004","woodenchest-animation-005","woodenchest-animation-006","woodenchest-animation-007","woodenchest-animation-008","woodenchest-animation-009","woodenchest-animation-010","woodenchest-animation-011","woodenchest-animation-012","woodenchest-animation-013","woodenchest-animation-014","woodenchest-animation-015","woodenchest-animation-016","woodenchest-animation-017","woodenchest-animation-018","woodenchest-animation-019","woodenchest-animation-020","woodenchest-animation-021","woodenchest-animation-022","woodenchest-animation-023","woodenchest-animation-024","woodenchest-animation-025","woodenchest-animation-026","woodenchest-animation-027","woodenchest-animation-028","woodenchest-animation-029"]
-},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "woodenchest-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":5302,"h":221},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:435c28ecbead1578431e3ee396c621d5:fdbfda0d1dba776a15fc6ffa7ee861bc:9d4d5e13eaffa6b4c6266809a487d603$"
-}
+	"frames": {
+		"woodenchest-animation-000": {
+			"frame": {
+				"x": 4816,
+				"y": 0,
+				"w": 162,
+				"h": 189
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 162,
+				"h": 189
+			},
+			"sourceSize": {
+				"w": 162,
+				"h": 189
+			},
+			"anchor": {
+				"x": 0.024691358024691357,
+				"y": 0.8941798941798942
+			}
+		},
+		"woodenchest-animation-001": {
+			"frame": {
+				"x": 4978,
+				"y": 0,
+				"w": 162,
+				"h": 189
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 162,
+				"h": 189
+			},
+			"sourceSize": {
+				"w": 162,
+				"h": 189
+			},
+			"anchor": {
+				"x": 0.024691358024691357,
+				"y": 0.8941798941798942
+			}
+		},
+		"woodenchest-animation-002": {
+			"frame": {
+				"x": 5140,
+				"y": 0,
+				"w": 162,
+				"h": 189
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 162,
+				"h": 189
+			},
+			"sourceSize": {
+				"w": 162,
+				"h": 189
+			},
+			"anchor": {
+				"x": 0.024691358024691357,
+				"y": 0.8941798941798942
+			}
+		},
+		"woodenchest-animation-003": {
+			"frame": {
+				"x": 4654,
+				"y": 0,
+				"w": 162,
+				"h": 191
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 162,
+				"h": 191
+			},
+			"sourceSize": {
+				"w": 162,
+				"h": 191
+			},
+			"anchor": {
+				"x": 0.024691358024691357,
+				"y": 0.8952879581151832
+			}
+		},
+		"woodenchest-animation-004": {
+			"frame": {
+				"x": 4492,
+				"y": 0,
+				"w": 162,
+				"h": 192
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 162,
+				"h": 192
+			},
+			"sourceSize": {
+				"w": 162,
+				"h": 192
+			},
+			"anchor": {
+				"x": 0.024691358024691357,
+				"y": 0.8958333333333334
+			}
+		},
+		"woodenchest-animation-005": {
+			"frame": {
+				"x": 4331,
+				"y": 0,
+				"w": 161,
+				"h": 194
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 161,
+				"h": 194
+			},
+			"sourceSize": {
+				"w": 161,
+				"h": 194
+			},
+			"anchor": {
+				"x": 0.018633540372670808,
+				"y": 0.8969072164948454
+			}
+		},
+		"woodenchest-animation-006": {
+			"frame": {
+				"x": 4170,
+				"y": 0,
+				"w": 161,
+				"h": 196
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 161,
+				"h": 196
+			},
+			"sourceSize": {
+				"w": 161,
+				"h": 196
+			},
+			"anchor": {
+				"x": 0.018633540372670808,
+				"y": 0.8979591836734694
+			}
+		},
+		"woodenchest-animation-007": {
+			"frame": {
+				"x": 4009,
+				"y": 0,
+				"w": 161,
+				"h": 198
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 161,
+				"h": 198
+			},
+			"sourceSize": {
+				"w": 161,
+				"h": 198
+			},
+			"anchor": {
+				"x": 0.018633540372670808,
+				"y": 0.898989898989899
+			}
+		},
+		"woodenchest-animation-008": {
+			"frame": {
+				"x": 3848,
+				"y": 0,
+				"w": 161,
+				"h": 200
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 161,
+				"h": 200
+			},
+			"sourceSize": {
+				"w": 161,
+				"h": 200
+			},
+			"anchor": {
+				"x": 0.018633540372670808,
+				"y": 0.9
+			}
+		},
+		"woodenchest-animation-009": {
+			"frame": {
+				"x": 3687,
+				"y": 0,
+				"w": 161,
+				"h": 203
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 161,
+				"h": 203
+			},
+			"sourceSize": {
+				"w": 161,
+				"h": 203
+			},
+			"anchor": {
+				"x": 0.018633540372670808,
+				"y": 0.9014778325123153
+			}
+		},
+		"woodenchest-animation-010": {
+			"frame": {
+				"x": 3525,
+				"y": 0,
+				"w": 162,
+				"h": 205
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 162,
+				"h": 205
+			},
+			"sourceSize": {
+				"w": 162,
+				"h": 205
+			},
+			"anchor": {
+				"x": 0.018518518518518517,
+				"y": 0.9024390243902439
+			}
+		},
+		"woodenchest-animation-011": {
+			"frame": {
+				"x": 3362,
+				"y": 0,
+				"w": 163,
+				"h": 209
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 163,
+				"h": 209
+			},
+			"sourceSize": {
+				"w": 163,
+				"h": 209
+			},
+			"anchor": {
+				"x": 0.018404907975460124,
+				"y": 0.9043062200956937
+			}
+		},
+		"woodenchest-animation-012": {
+			"frame": {
+				"x": 3197,
+				"y": 0,
+				"w": 165,
+				"h": 210
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 165,
+				"h": 210
+			},
+			"sourceSize": {
+				"w": 165,
+				"h": 210
+			},
+			"anchor": {
+				"x": 0.01818181818181818,
+				"y": 0.9047619047619048
+			}
+		},
+		"woodenchest-animation-013": {
+			"frame": {
+				"x": 3028,
+				"y": 0,
+				"w": 169,
+				"h": 212
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 169,
+				"h": 212
+			},
+			"sourceSize": {
+				"w": 169,
+				"h": 212
+			},
+			"anchor": {
+				"x": 0.01775147928994083,
+				"y": 0.9056603773584906
+			}
+		},
+		"woodenchest-animation-014": {
+			"frame": {
+				"x": 2859,
+				"y": 0,
+				"w": 169,
+				"h": 214
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 169,
+				"h": 214
+			},
+			"sourceSize": {
+				"w": 169,
+				"h": 214
+			},
+			"anchor": {
+				"x": 0.01775147928994083,
+				"y": 0.9065420560747663
+			}
+		},
+		"woodenchest-animation-015": {
+			"frame": {
+				"x": 2686,
+				"y": 0,
+				"w": 173,
+				"h": 216
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 173,
+				"h": 216
+			},
+			"sourceSize": {
+				"w": 173,
+				"h": 216
+			},
+			"anchor": {
+				"x": 0.017341040462427744,
+				"y": 0.9074074074074074
+			}
+		},
+		"woodenchest-animation-016": {
+			"frame": {
+				"x": 547,
+				"y": 0,
+				"w": 175,
+				"h": 221
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 175,
+				"h": 221
+			},
+			"sourceSize": {
+				"w": 175,
+				"h": 221
+			},
+			"anchor": {
+				"x": 0.017142857142857144,
+				"y": 0.9095022624434389
+			}
+		},
+		"woodenchest-animation-017": {
+			"frame": {
+				"x": 369,
+				"y": 0,
+				"w": 178,
+				"h": 221
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 178,
+				"h": 221
+			},
+			"sourceSize": {
+				"w": 178,
+				"h": 221
+			},
+			"anchor": {
+				"x": 0.016853932584269662,
+				"y": 0.9095022624434389
+			}
+		},
+		"woodenchest-animation-018": {
+			"frame": {
+				"x": 188,
+				"y": 0,
+				"w": 181,
+				"h": 221
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 181,
+				"h": 221
+			},
+			"sourceSize": {
+				"w": 181,
+				"h": 221
+			},
+			"anchor": {
+				"x": 0.016574585635359115,
+				"y": 0.9095022624434389
+			}
+		},
+		"woodenchest-animation-019": {
+			"frame": {
+				"x": 1299,
+				"y": 0,
+				"w": 186,
+				"h": 220
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 186,
+				"h": 220
+			},
+			"sourceSize": {
+				"w": 186,
+				"h": 220
+			},
+			"anchor": {
+				"x": 0.016129032258064516,
+				"y": 0.9090909090909091
+			}
+		},
+		"woodenchest-animation-020": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 188,
+				"h": 221
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 188,
+				"h": 221
+			},
+			"sourceSize": {
+				"w": 188,
+				"h": 221
+			},
+			"anchor": {
+				"x": 0.015957446808510637,
+				"y": 0.9095022624434389
+			}
+		},
+		"woodenchest-animation-021": {
+			"frame": {
+				"x": 1109,
+				"y": 0,
+				"w": 190,
+				"h": 220
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 190,
+				"h": 220
+			},
+			"sourceSize": {
+				"w": 190,
+				"h": 220
+			},
+			"anchor": {
+				"x": 0.015789473684210527,
+				"y": 0.9090909090909091
+			}
+		},
+		"woodenchest-animation-022": {
+			"frame": {
+				"x": 917,
+				"y": 0,
+				"w": 192,
+				"h": 220
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 192,
+				"h": 220
+			},
+			"sourceSize": {
+				"w": 192,
+				"h": 220
+			},
+			"anchor": {
+				"x": 0.015625,
+				"y": 0.9090909090909091
+			}
+		},
+		"woodenchest-animation-023": {
+			"frame": {
+				"x": 722,
+				"y": 0,
+				"w": 195,
+				"h": 220
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 195,
+				"h": 220
+			},
+			"sourceSize": {
+				"w": 195,
+				"h": 220
+			},
+			"anchor": {
+				"x": 0.015384615384615385,
+				"y": 0.9090909090909091
+			}
+		},
+		"woodenchest-animation-024": {
+			"frame": {
+				"x": 1485,
+				"y": 0,
+				"w": 197,
+				"h": 219
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 197,
+				"h": 219
+			},
+			"sourceSize": {
+				"w": 197,
+				"h": 219
+			},
+			"anchor": {
+				"x": 0.015228426395939087,
+				"y": 0.908675799086758
+			}
+		},
+		"woodenchest-animation-025": {
+			"frame": {
+				"x": 1682,
+				"y": 0,
+				"w": 199,
+				"h": 218
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 199,
+				"h": 218
+			},
+			"sourceSize": {
+				"w": 199,
+				"h": 218
+			},
+			"anchor": {
+				"x": 0.01507537688442211,
+				"y": 0.908256880733945
+			}
+		},
+		"woodenchest-animation-026": {
+			"frame": {
+				"x": 1881,
+				"y": 0,
+				"w": 200,
+				"h": 217
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 200,
+				"h": 217
+			},
+			"sourceSize": {
+				"w": 200,
+				"h": 217
+			},
+			"anchor": {
+				"x": 0.015,
+				"y": 0.9078341013824884
+			}
+		},
+		"woodenchest-animation-027": {
+			"frame": {
+				"x": 2485,
+				"y": 0,
+				"w": 201,
+				"h": 216
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 201,
+				"h": 216
+			},
+			"sourceSize": {
+				"w": 201,
+				"h": 216
+			},
+			"anchor": {
+				"x": 0.014925373134328358,
+				"y": 0.9074074074074074
+			}
+		},
+		"woodenchest-animation-028": {
+			"frame": {
+				"x": 2081,
+				"y": 0,
+				"w": 202,
+				"h": 216
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 202,
+				"h": 216
+			},
+			"sourceSize": {
+				"w": 202,
+				"h": 216
+			},
+			"anchor": {
+				"x": 0.01485148514851485,
+				"y": 0.9074074074074074
+			}
+		},
+		"woodenchest-animation-029": {
+			"frame": {
+				"x": 2283,
+				"y": 0,
+				"w": 202,
+				"h": 216
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 202,
+				"h": 216
+			},
+			"sourceSize": {
+				"w": 202,
+				"h": 216
+			},
+			"anchor": {
+				"x": 0.01485148514851485,
+				"y": 0.9074074074074074
+			}
+		}
+	},
+	"animations": {
+		"woodenchest-animation": [
+			"woodenchest-animation-000",
+			"woodenchest-animation-001",
+			"woodenchest-animation-002",
+			"woodenchest-animation-003",
+			"woodenchest-animation-004",
+			"woodenchest-animation-005",
+			"woodenchest-animation-006",
+			"woodenchest-animation-007",
+			"woodenchest-animation-008",
+			"woodenchest-animation-009",
+			"woodenchest-animation-010",
+			"woodenchest-animation-011",
+			"woodenchest-animation-012",
+			"woodenchest-animation-013",
+			"woodenchest-animation-014",
+			"woodenchest-animation-015",
+			"woodenchest-animation-016",
+			"woodenchest-animation-017",
+			"woodenchest-animation-018",
+			"woodenchest-animation-019",
+			"woodenchest-animation-020",
+			"woodenchest-animation-021",
+			"woodenchest-animation-022",
+			"woodenchest-animation-023",
+			"woodenchest-animation-024",
+			"woodenchest-animation-025",
+			"woodenchest-animation-026",
+			"woodenchest-animation-027",
+			"woodenchest-animation-028",
+			"woodenchest-animation-029"
+		]
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "woodenchest-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 5302,
+			"h": 221
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:435c28ecbead1578431e3ee396c621d5:fdbfda0d1dba776a15fc6ffa7ee861bc:9d4d5e13eaffa6b4c6266809a487d603$"
+	}
 }

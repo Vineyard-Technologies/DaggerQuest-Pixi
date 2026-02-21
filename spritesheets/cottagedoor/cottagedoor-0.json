@@ -1,285 +1,770 @@
-{"frames": {
-
-"cottagedoor-open-000":
 {
-	"frame": {"x":277,"y":0,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-001":
-{
-	"frame": {"x":393,"y":0,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-002":
-{
-	"frame": {"x":277,"y":276,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-003":
-{
-	"frame": {"x":393,"y":276,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-004":
-{
-	"frame": {"x":277,"y":552,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-005":
-{
-	"frame": {"x":393,"y":552,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-006":
-{
-	"frame": {"x":0,"y":812,"w":116,"h":276},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-007":
-{
-	"frame": {"x":0,"y":928,"w":116,"h":276},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-008":
-{
-	"frame": {"x":276,"y":828,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-009":
-{
-	"frame": {"x":392,"y":828,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-010":
-{
-	"frame": {"x":0,"y":1044,"w":116,"h":276},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-011":
-{
-	"frame": {"x":0,"y":1160,"w":116,"h":276},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-012":
-{
-	"frame": {"x":276,"y":1104,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-013":
-{
-	"frame": {"x":392,"y":1104,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-014":
-{
-	"frame": {"x":0,"y":1276,"w":116,"h":276},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-015":
-{
-	"frame": {"x":0,"y":1392,"w":116,"h":276},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-016":
-{
-	"frame": {"x":0,"y":1508,"w":116,"h":276},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-017":
-{
-	"frame": {"x":276,"y":1380,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-018":
-{
-	"frame": {"x":392,"y":1380,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-019":
-{
-	"frame": {"x":0,"y":1624,"w":116,"h":276},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-020":
-{
-	"frame": {"x":0,"y":1740,"w":116,"h":276},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-021":
-{
-	"frame": {"x":276,"y":1656,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-022":
-{
-	"frame": {"x":392,"y":1656,"w":116,"h":276},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":276},
-	"sourceSize": {"w":116,"h":276},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-023":
-{
-	"frame": {"x":0,"y":0,"w":116,"h":277},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":277},
-	"sourceSize": {"w":116,"h":277},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-024":
-{
-	"frame": {"x":0,"y":116,"w":116,"h":277},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":277},
-	"sourceSize": {"w":116,"h":277},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-025":
-{
-	"frame": {"x":0,"y":232,"w":116,"h":277},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":277},
-	"sourceSize": {"w":116,"h":277},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-026":
-{
-	"frame": {"x":0,"y":348,"w":116,"h":277},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":277},
-	"sourceSize": {"w":116,"h":277},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-027":
-{
-	"frame": {"x":0,"y":464,"w":116,"h":277},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":277},
-	"sourceSize": {"w":116,"h":277},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-028":
-{
-	"frame": {"x":0,"y":580,"w":116,"h":277},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":277},
-	"sourceSize": {"w":116,"h":277},
-	"anchor": {"x":0.5,"y":0.575}
-},
-"cottagedoor-open-029":
-{
-	"frame": {"x":0,"y":696,"w":116,"h":277},
-	"rotated": true,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":116,"h":277},
-	"sourceSize": {"w":116,"h":277},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"animations": {
-	"cottagedoor-open": ["cottagedoor-open-000","cottagedoor-open-001","cottagedoor-open-002","cottagedoor-open-003","cottagedoor-open-004","cottagedoor-open-005","cottagedoor-open-006","cottagedoor-open-007","cottagedoor-open-008","cottagedoor-open-009","cottagedoor-open-010","cottagedoor-open-011","cottagedoor-open-012","cottagedoor-open-013","cottagedoor-open-014","cottagedoor-open-015","cottagedoor-open-016","cottagedoor-open-017","cottagedoor-open-018","cottagedoor-open-019","cottagedoor-open-020","cottagedoor-open-021","cottagedoor-open-022","cottagedoor-open-023","cottagedoor-open-024","cottagedoor-open-025","cottagedoor-open-026","cottagedoor-open-027","cottagedoor-open-028","cottagedoor-open-029"]
-},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "cottagedoor-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":509,"h":1932},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:bf7a8fdaa34791bc2aace292f5d60ca2:0cfc7a95e54213536ff4b8fe5397c638:06375c129ccc973fc6e1dbb52e9af2a6$"
-}
+	"frames": {
+		"cottagedoor-open-000": {
+			"frame": {
+				"x": 277,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-001": {
+			"frame": {
+				"x": 393,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-002": {
+			"frame": {
+				"x": 277,
+				"y": 276,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-003": {
+			"frame": {
+				"x": 393,
+				"y": 276,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-004": {
+			"frame": {
+				"x": 277,
+				"y": 552,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-005": {
+			"frame": {
+				"x": 393,
+				"y": 552,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-006": {
+			"frame": {
+				"x": 0,
+				"y": 812,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-007": {
+			"frame": {
+				"x": 0,
+				"y": 928,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-008": {
+			"frame": {
+				"x": 276,
+				"y": 828,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-009": {
+			"frame": {
+				"x": 392,
+				"y": 828,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-010": {
+			"frame": {
+				"x": 0,
+				"y": 1044,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-011": {
+			"frame": {
+				"x": 0,
+				"y": 1160,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-012": {
+			"frame": {
+				"x": 276,
+				"y": 1104,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-013": {
+			"frame": {
+				"x": 392,
+				"y": 1104,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-014": {
+			"frame": {
+				"x": 0,
+				"y": 1276,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-015": {
+			"frame": {
+				"x": 0,
+				"y": 1392,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-016": {
+			"frame": {
+				"x": 0,
+				"y": 1508,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-017": {
+			"frame": {
+				"x": 276,
+				"y": 1380,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-018": {
+			"frame": {
+				"x": 392,
+				"y": 1380,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-019": {
+			"frame": {
+				"x": 0,
+				"y": 1624,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-020": {
+			"frame": {
+				"x": 0,
+				"y": 1740,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-021": {
+			"frame": {
+				"x": 276,
+				"y": 1656,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-022": {
+			"frame": {
+				"x": 392,
+				"y": 1656,
+				"w": 116,
+				"h": 276
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 276
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 276
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.5181159420289855
+			}
+		},
+		"cottagedoor-open-023": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 277
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 277
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 277
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.516245487364621
+			}
+		},
+		"cottagedoor-open-024": {
+			"frame": {
+				"x": 0,
+				"y": 116,
+				"w": 116,
+				"h": 277
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 277
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 277
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.516245487364621
+			}
+		},
+		"cottagedoor-open-025": {
+			"frame": {
+				"x": 0,
+				"y": 232,
+				"w": 116,
+				"h": 277
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 277
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 277
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.516245487364621
+			}
+		},
+		"cottagedoor-open-026": {
+			"frame": {
+				"x": 0,
+				"y": 348,
+				"w": 116,
+				"h": 277
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 277
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 277
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.516245487364621
+			}
+		},
+		"cottagedoor-open-027": {
+			"frame": {
+				"x": 0,
+				"y": 464,
+				"w": 116,
+				"h": 277
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 277
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 277
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.516245487364621
+			}
+		},
+		"cottagedoor-open-028": {
+			"frame": {
+				"x": 0,
+				"y": 580,
+				"w": 116,
+				"h": 277
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 277
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 277
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.516245487364621
+			}
+		},
+		"cottagedoor-open-029": {
+			"frame": {
+				"x": 0,
+				"y": 696,
+				"w": 116,
+				"h": 277
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 116,
+				"h": 277
+			},
+			"sourceSize": {
+				"w": 116,
+				"h": 277
+			},
+			"anchor": {
+				"x": 2.0258620689655173,
+				"y": 0.516245487364621
+			}
+		}
+	},
+	"animations": {
+		"cottagedoor-open": [
+			"cottagedoor-open-000",
+			"cottagedoor-open-001",
+			"cottagedoor-open-002",
+			"cottagedoor-open-003",
+			"cottagedoor-open-004",
+			"cottagedoor-open-005",
+			"cottagedoor-open-006",
+			"cottagedoor-open-007",
+			"cottagedoor-open-008",
+			"cottagedoor-open-009",
+			"cottagedoor-open-010",
+			"cottagedoor-open-011",
+			"cottagedoor-open-012",
+			"cottagedoor-open-013",
+			"cottagedoor-open-014",
+			"cottagedoor-open-015",
+			"cottagedoor-open-016",
+			"cottagedoor-open-017",
+			"cottagedoor-open-018",
+			"cottagedoor-open-019",
+			"cottagedoor-open-020",
+			"cottagedoor-open-021",
+			"cottagedoor-open-022",
+			"cottagedoor-open-023",
+			"cottagedoor-open-024",
+			"cottagedoor-open-025",
+			"cottagedoor-open-026",
+			"cottagedoor-open-027",
+			"cottagedoor-open-028",
+			"cottagedoor-open-029"
+		]
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "cottagedoor-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 509,
+			"h": 1932
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:bf7a8fdaa34791bc2aace292f5d60ca2:0cfc7a95e54213536ff4b8fe5397c638:06375c129ccc973fc6e1dbb52e9af2a6$"
+	}
 }

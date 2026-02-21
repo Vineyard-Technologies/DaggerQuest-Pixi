@@ -1,21 +1,40 @@
-{"frames": {
-
-"cottageinterior-animation 1-000":
 {
-	"frame": {"x":0,"y":0,"w":956,"h":802},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":956,"h":802},
-	"sourceSize": {"w":956,"h":802},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "cottageinterior-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":956,"h":802},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:49c63ff3e2451bcf1f7ccf12f8ec9e2c:584849def0474f20e832d83f70ba770e:798ee46c8248f89b10f976efbf71447c$"
-}
+	"frames": {
+		"cottageinterior-animation 1-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 956,
+				"h": 802
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 956,
+				"h": 802
+			},
+			"sourceSize": {
+				"w": 956,
+				"h": 802
+			},
+			"anchor": {
+				"x": 0.944560669456067,
+				"y": 0.6945137157107232
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "cottageinterior-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 956,
+			"h": 802
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:49c63ff3e2451bcf1f7ccf12f8ec9e2c:584849def0474f20e832d83f70ba770e:798ee46c8248f89b10f976efbf71447c$"
+	}
 }

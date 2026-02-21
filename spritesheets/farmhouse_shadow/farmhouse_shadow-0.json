@@ -1,21 +1,40 @@
-{"frames": {
-
-"farmhouse_shadow-default-000":
 {
-	"frame": {"x":0,"y":0,"w":3323,"h":1444},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":3323,"h":1444},
-	"sourceSize": {"w":3323,"h":1444},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "farmhouse_shadow-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":3323,"h":1444},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:14a5aaaf595a4a7b90f1542f3030ee71:4413f7a528f591c3fddf5f004fa618f6:24b2f9245d68c2ff5e2780e4851643e1$"
-}
+	"frames": {
+		"farmhouse_shadow-default-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 3323,
+				"h": 1444
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 3323,
+				"h": 1444
+			},
+			"sourceSize": {
+				"w": 3323,
+				"h": 1444
+			},
+			"anchor": {
+				"x": 0.24375564249172435,
+				"y": 0.7195290858725761
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "farmhouse_shadow-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 3323,
+			"h": 1444
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:14a5aaaf595a4a7b90f1542f3030ee71:4413f7a528f591c3fddf5f004fa618f6:24b2f9245d68c2ff5e2780e4851643e1$"
+	}
 }

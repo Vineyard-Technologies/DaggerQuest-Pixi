@@ -1,21 +1,40 @@
-{"frames": {
-
-"abilityselectorstatue-default-000":
 {
-	"frame": {"x":0,"y":0,"w":80,"h":157},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":157},
-	"sourceSize": {"w":80,"h":157},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "abilityselectorstatue-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":80,"h":157},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:54c49143f47b2326d425e019615cf086:de8b3f4c865cd719fa9b29d7465d4b06:047cda6dce3500ac7cd51040b40f77c8$"
-}
+	"frames": {
+		"abilityselectorstatue-default-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 80,
+				"h": 157
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 80,
+				"h": 157
+			},
+			"sourceSize": {
+				"w": 80,
+				"h": 157
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "abilityselectorstatue-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 80,
+			"h": 157
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:54c49143f47b2326d425e019615cf086:de8b3f4c865cd719fa9b29d7465d4b06:047cda6dce3500ac7cd51040b40f77c8$"
+	}
 }

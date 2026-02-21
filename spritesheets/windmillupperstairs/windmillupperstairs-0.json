@@ -1,21 +1,40 @@
-{"frames": {
-
-"windmillupperstairs-default-000":
 {
-	"frame": {"x":0,"y":0,"w":149,"h":133},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":149,"h":133},
-	"sourceSize": {"w":149,"h":133},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "windmillupperstairs-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":149,"h":133},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:51949ef5a621e44f090e0e5150368b31:abf9e27c371e8e66a7dfc281448d24a1:3f38d2f0f976131c516006ae6e933c69$"
-}
+	"frames": {
+		"windmillupperstairs-default-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 149,
+				"h": 133
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 149,
+				"h": 133
+			},
+			"sourceSize": {
+				"w": 149,
+				"h": 133
+			},
+			"anchor": {
+				"x": 2.5436241610738257,
+				"y": 3.5864661654135337
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "windmillupperstairs-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 149,
+			"h": 133
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:51949ef5a621e44f090e0e5150368b31:abf9e27c371e8e66a7dfc281448d24a1:3f38d2f0f976131c516006ae6e933c69$"
+	}
 }

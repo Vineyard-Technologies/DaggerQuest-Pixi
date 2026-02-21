@@ -1,21 +1,40 @@
-{"frames": {
-
-"simplegloves_item-animation 1-000":
 {
-	"frame": {"x":0,"y":0,"w":53,"h":61},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":4,"y":0,"w":53,"h":61},
-	"sourceSize": {"w":53,"h":61},
-	"anchor": {"x":0.509434,"y":0.584426}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "simplegloves_item-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":53,"h":61},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:3e751cd794bb1db8c82d8ace31f7aab1:cf1bf441c3f7221f785f3ea7c0f03fbb:62c946bc28e05381c67d1b507422387a$"
-}
+	"frames": {
+		"simplegloves_item-animation 1-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 53,
+				"h": 61
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 4,
+				"y": 0,
+				"w": 53,
+				"h": 61
+			},
+			"sourceSize": {
+				"w": 53,
+				"h": 61
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "simplegloves_item-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 53,
+			"h": 61
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:3e751cd794bb1db8c82d8ace31f7aab1:cf1bf441c3f7221f785f3ea7c0f03fbb:62c946bc28e05381c67d1b507422387a$"
+	}
 }

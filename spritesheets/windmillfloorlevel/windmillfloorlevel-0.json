@@ -1,21 +1,40 @@
-{"frames": {
-
-"windmillfloorlevel-default-000":
 {
-	"frame": {"x":0,"y":0,"w":522,"h":832},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":522,"h":832},
-	"sourceSize": {"w":522,"h":832},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "windmillfloorlevel-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":522,"h":832},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:b5678e69ef18252a8f7d8564b6f026cf:48ac57f0c2a866e6fb489ee9bddf2e8b:d0361be3b7447e89b4a35403ea4d34d8$"
-}
+	"frames": {
+		"windmillfloorlevel-default-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 522,
+				"h": 832
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 522,
+				"h": 832
+			},
+			"sourceSize": {
+				"w": 522,
+				"h": 832
+			},
+			"anchor": {
+				"x": 1.160919540229885,
+				"y": 1.2608173076923077
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "windmillfloorlevel-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 522,
+			"h": 832
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:b5678e69ef18252a8f7d8564b6f026cf:48ac57f0c2a866e6fb489ee9bddf2e8b:d0361be3b7447e89b4a35403ea4d34d8$"
+	}
 }

@@ -1,21 +1,40 @@
-{"frames": {
-
-"dialogstatue-default-000":
 {
-	"frame": {"x":0,"y":0,"w":57,"h":180},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":57,"h":180},
-	"sourceSize": {"w":57,"h":180},
-	"anchor": {"x":0.5,"y":0.575}
-}},
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.1",
-	"image": "dialogstatue-0.webp",
-	"format": "RGBA8888",
-	"size": {"w":57,"h":180},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:696473fa7bd6cf9037e9baca1b0b5345:368d340c32ae88e9dea7ca40b3514947:824a1c3816ba2a10c44f34fc5ea26451$"
-}
+	"frames": {
+		"dialogstatue-default-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 57,
+				"h": 180
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 57,
+				"h": 180
+			},
+			"sourceSize": {
+				"w": 57,
+				"h": 180
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.9987421383647799
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "dialogstatue-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 57,
+			"h": 180
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:696473fa7bd6cf9037e9baca1b0b5345:368d340c32ae88e9dea7ca40b3514947:824a1c3816ba2a10c44f34fc5ea26451$"
+	}
 }

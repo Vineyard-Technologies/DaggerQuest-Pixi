@@ -171,6 +171,11 @@ function gameLoop(ticker) {
     const delta = ticker.deltaTime || ticker.elapsedMS / 16.67;
     player.update(delta);
 
+    // Update area entities (enemies, NPCs)
+    if (area) {
+        area.update(delta);
+    }
+
     // Pan camera to follow player (always, so window resizes are reflected)
     updateCamera();
 
