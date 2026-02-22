@@ -172,7 +172,7 @@ class Gear {
         const pattern = new RegExp(`${key}-(\\w+)_([\\-\\d.]+)-(\\d+)`);
 
         for (const sheetPath of sheets) {
-            const fullPath = `./spritesheets/${sheetPath.replace('./', '')}`;
+            const fullPath = `./images/spritesheets/${sheetPath.replace('./', '')}`;
             this._assetPaths.push(fullPath);
             const spritesheet = await PIXI.Assets.load(fullPath);
 

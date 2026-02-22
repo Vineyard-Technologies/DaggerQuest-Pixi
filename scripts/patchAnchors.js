@@ -19,7 +19,7 @@
  *
  * Defaults:
  *   daggerQuestObjectTypesDir = ../DaggerQuest/objectTypes
- *   spritesheetsDir           = ./spritesheets
+ *   spritesheetsDir           = ./images/spritesheets
  */
 
 const { readdir, readFile, writeFile, stat } = require('fs/promises');
@@ -31,7 +31,7 @@ const rootDir = join(scriptDir, '..');
 const objectTypesDir = process.argv[2]
     || join(rootDir, '..', 'DaggerQuest', 'objectTypes');
 const spritesheetsDir = process.argv[3]
-    || join(rootDir, 'spritesheets');
+    || join(rootDir, 'images', 'spritesheets');
 
 async function main() {
     // 1. Recursively discover all objectType JSON files

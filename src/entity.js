@@ -49,7 +49,7 @@ class Entity {
         const animationTextures = {};
 
         // Load the manifest to know which spritesheets exist
-        const manifest = await fetch('./spritesheets/manifest.json').then(r => r.json());
+        const manifest = await fetch('./images/spritesheets/manifest.json').then(r => r.json());
         const sheets = manifest[this.spriteKey] || [];
 
         if (sheets.length === 0) {
@@ -60,7 +60,7 @@ class Entity {
         // Load all spritesheets listed in the manifest
         const spritesheets = [];
         for (const sheetPath of sheets) {
-            const fullPath = `./spritesheets/${sheetPath.replace('./', '')}`;
+            const fullPath = `./images/spritesheets/${sheetPath.replace('./', '')}`;
             const spritesheet = await PIXI.Assets.load(fullPath);
             spritesheets.push(spritesheet);
         }
@@ -116,7 +116,7 @@ class Entity {
             const shadowKeyPattern = new RegExp(`${shadowKey}-(\\w+)_([\\-\\d.]+)-(\\d+)`);
 
             for (const sheetPath of shadowSheets) {
-                const fullPath = `./spritesheets/${sheetPath.replace('./', '')}`;
+                const fullPath = `./images/spritesheets/${sheetPath.replace('./', '')}`;
                 const spritesheet = await PIXI.Assets.load(fullPath);
 
                 for (const frameName in spritesheet.textures) {

@@ -8,7 +8,7 @@ class Farm extends Area {
         super({
             width: 4096,
             height: 4096,
-            backgroundTexture: './spritesheets/dirt/dirt-0.webp',
+            backgroundTexture: './images/spritesheets/dirt/dirt-0.webp',
             playerStartX: 3100,
             playerStartY: 3800,
         });
@@ -223,9 +223,15 @@ class Farm extends Area {
     // ── Loot items on tables ─────────────────────────────────────────────
 
     async _spawnLoot() {
+        // Each loot item's sortY is set to its table's Y + 1 so it sorts
+        // just after the table surface, but the player (with a higher Y
+        // when walking in front) still renders in front of both.
+        const TABLE_LEFT_Y  = 3565;
+        const TABLE_RIGHT_Y = 3661;
+
         const items = [
             {
-                x: 1750, y: 3480,
+                x: 1750, y: 3480, sortY: TABLE_LEFT_Y + 1,
                 item: new Item({
                     id: 'simplesword',
                     name: 'Simple Sword',
@@ -235,7 +241,7 @@ class Farm extends Area {
                 }),
             },
             {
-                x: 1833, y: 3531,
+                x: 1833, y: 3531, sortY: TABLE_LEFT_Y + 1,
                 item: new Item({
                     id: 'simpleshield',
                     name: 'Simple Shield',
@@ -245,7 +251,7 @@ class Farm extends Area {
                 }),
             },
             {
-                x: 2127, y: 3581,
+                x: 2127, y: 3581, sortY: TABLE_RIGHT_Y + 1,
                 item: new Item({
                     id: 'simpleshirt',
                     name: 'Simple Shirt',
@@ -255,7 +261,7 @@ class Farm extends Area {
                 }),
             },
             {
-                x: 2218, y: 3627,
+                x: 2218, y: 3627, sortY: TABLE_RIGHT_Y + 1,
                 item: new Item({
                     id: 'simplepants',
                     name: 'Simple Pants',
@@ -266,9 +272,10 @@ class Farm extends Area {
             },
         ];
 
-        await Promise.all(items.map(async ({ x, y, item }) => {
+        await Promise.all(items.map(async ({ x, y, sortY, item }) => {
             const loot = item.createLoot(x, y);
             await loot.loadTextures();
+            if (sortY != null) loot.container.sortY = sortY;
             this.container.addChild(loot.container);
             this.lootOnGround.push(loot);
         }));

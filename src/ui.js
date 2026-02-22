@@ -75,12 +75,12 @@ class UI {
      */
     async load() {
         // Helpers to load a single-frame spritesheet and return the first texture
-        const manifest = await fetch('./spritesheets/manifest.json').then(r => r.json());
+        const manifest = await fetch('./images/spritesheets/manifest.json').then(r => r.json());
 
         const loadTexture = async (key) => {
             const sheets = manifest[key] || [];
             for (const sheetPath of sheets) {
-                const fullPath = `./spritesheets/${sheetPath.replace('./', '')}`;
+                const fullPath = `./images/spritesheets/${sheetPath.replace('./', '')}`;
                 const spritesheet = await PIXI.Assets.load(fullPath);
                 const names = Object.keys(spritesheet.textures);
                 if (names.length > 0) return spritesheet.textures[names[0]];

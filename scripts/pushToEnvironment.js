@@ -25,7 +25,7 @@ const targetDir = environments[arg];
 const sourceDirs = [
     { src: join(rootDir, 'index.html'), label: 'index.html' },
     { src: join(rootDir, 'src'),         label: 'src/' },
-    { src: join(rootDir, 'spritesheets'), label: 'spritesheets/' }
+    { src: join(rootDir, 'images', 'spritesheets'), label: 'images/spritesheets/' }
 ];
 
 for (const { src, label } of sourceDirs) {
@@ -60,8 +60,8 @@ writeFileSync(indexPath, indexHtml, 'utf-8');
 console.log('Copying src/...');
 cpSync(join(rootDir, 'src'), join(targetDir, 'src'), { recursive: true });
 
-// Copy spritesheets/
-console.log('Copying spritesheets/...');
-cpSync(join(rootDir, 'spritesheets'), join(targetDir, 'spritesheets'), { recursive: true });
+// Copy images/spritesheets/
+console.log('Copying images/spritesheets/...');
+cpSync(join(rootDir, 'images', 'spritesheets'), join(targetDir, 'images', 'spritesheets'), { recursive: true });
 
 console.log(`\nDone! Game pushed to ${arg}.`);

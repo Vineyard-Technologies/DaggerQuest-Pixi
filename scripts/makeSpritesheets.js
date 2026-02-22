@@ -11,7 +11,7 @@ const rootDir = join(scriptDir, '..');
 
 // Parameters
 const sourceDirectory = process.argv[2] || join(rootDir, 'images');
-const outputDirectory = process.argv[3] || join(rootDir, 'spritesheets');
+const outputDirectory = process.argv[3] || join(rootDir, 'images', 'spritesheets');
 const manifestFileName = process.argv[4] || 'manifest.json';
 
 // Check if directory exists and has files

@@ -18,6 +18,8 @@ async function init() {
         resizeTo: window,
         antialias: true,
         preference: 'webgl',
+        background: '#000000',
+        backgroundAlpha: 1,
     });
     
     document.body.appendChild(app.canvas);

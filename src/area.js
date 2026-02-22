@@ -70,7 +70,7 @@ class Area {
     /** Fetch (and cache) the spritesheet manifest. */
     static async fetchManifest() {
         if (!Area._manifest) {
-            Area._manifest = await fetch('./spritesheets/manifest.json').then(r => r.json());
+            Area._manifest = await fetch('./images/spritesheets/manifest.json').then(r => r.json());
         }
         return Area._manifest;
     }
@@ -106,7 +106,7 @@ class Area {
             const shadowKey = `${spriteKey}_shadow`;
             const shadowSheets = manifest[shadowKey] || [];
             if (shadowSheets.length > 0) {
-                const shadowPath = `./spritesheets/${shadowSheets[0].replace('./', '')}`;
+                const shadowPath = `./images/spritesheets/${shadowSheets[0].replace('./', '')}`;
                 const shadowSheet = await PIXI.Assets.load(shadowPath);
                 const shadowTexName = Object.keys(shadowSheet.textures)[0];
                 if (shadowTexName) {
@@ -119,7 +119,7 @@ class Area {
         }
 
         // Main sprite
-        const fullPath = `./spritesheets/${sheets[0].replace('./', '')}`;
+        const fullPath = `./images/spritesheets/${sheets[0].replace('./', '')}`;
         const spritesheet = await PIXI.Assets.load(fullPath);
         const textureName = Object.keys(spritesheet.textures)[0];
         if (textureName) {
@@ -158,15 +158,18 @@ class Area {
 
         // Y-sort all children after the background tile so that objects
         // lower on the screen (higher Y) render in front.
+        // A child's optional `sortY` overrides its position for sorting,
+        // so that objects on elevated surfaces (tables, shelves, etc.)
+        // sort at their surface's Y rather than their own.
         const children = this.container.children;
         if (children.length > 1) {
             // Separate the background (index 0) from the sortable objects
             const start = this.backgroundTile ? 1 : 0;
             for (let i = start + 1; i < children.length; i++) {
                 const child = children[i];
-                const yVal = child.y;
+                const yVal = child.sortY ?? child.y;
                 let j = i - 1;
-                while (j >= start && children[j].y > yVal) {
+                while (j >= start && (children[j].sortY ?? children[j].y) > yVal) {
                     children[j + 1] = children[j];
                     j--;
                 }

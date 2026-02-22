@@ -67,7 +67,7 @@ class Item {
         }
 
         for (const sheetPath of sheets) {
-            const fullPath = `./spritesheets/${sheetPath.replace('./', '')}`;
+            const fullPath = `./images/spritesheets/${sheetPath.replace('./', '')}`;
             this._iconAssetPaths.push(fullPath);
             const spritesheet = await PIXI.Assets.load(fullPath);
 
@@ -135,7 +135,7 @@ class Item {
      */
     static async fetchManifest() {
         if (!Item._manifestCache) {
-            Item._manifestCache = await fetch('./spritesheets/manifest.json').then(r => r.json());
+            Item._manifestCache = await fetch('./images/spritesheets/manifest.json').then(r => r.json());
         }
         return Item._manifestCache;
     }
