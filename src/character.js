@@ -37,6 +37,9 @@ class Character extends Entity {
     } = {}) {
         super({ x, y, spriteKey, direction, animFps });
 
+        // Characters use the bottom-third collision polygon by default
+        this.setCollisionPoly(CHARACTER_COLLISION_BOX);
+
         // Movement & general
         this.speed = speed;
         this.targetPosition = null;
@@ -205,6 +208,26 @@ class Character extends Entity {
 
         this.x += dx * ratio;
         this.y += dy * ratio;
+
+        // ── Collision resolution ─────────────────────────────────────
+        if (typeof area !== 'undefined' && area) {
+            const myPoly = this.getWorldCollisionPoly();
+            if (myPoly) {
+                // Check against static colliders
+                const push = resolveCollisions(myPoly, area.colliders);
+
+                // Check against rectangular boundaries
+                const bPush = resolveBoundaryCollisions(myPoly, area.boundaries);
+                push.x += bPush.x;
+                push.y += bPush.y;
+
+                // Apply push-back
+                if (push.x !== 0 || push.y !== 0) {
+                    this.x += push.x;
+                    this.y += push.y;
+                }
+            }
+        }
 
         // Sync container position
         this.container.x = this.x;

@@ -1,4 +1,4 @@
-const { cpSync, existsSync, rmSync, mkdirSync } = require('fs');
+const { cpSync, existsSync, rmSync, mkdirSync, readFileSync, writeFileSync } = require('fs');
 const { join } = require('path');
 
 const rootDir = join(__dirname, '..');
@@ -48,9 +48,13 @@ console.log('Clearing existing game folder...');
 rmSync(targetDir, { recursive: true, force: true });
 mkdirSync(targetDir, { recursive: true });
 
-// Copy index.html
+// Copy index.html and uncomment the <base> tag for deployed environments
 console.log('Copying index.html...');
 cpSync(join(rootDir, 'index.html'), join(targetDir, 'index.html'));
+const indexPath = join(targetDir, 'index.html');
+let indexHtml = readFileSync(indexPath, 'utf-8');
+indexHtml = indexHtml.replace('<!-- <base href="/game/"> -->', '<base href="/game/">');
+writeFileSync(indexPath, indexHtml, 'utf-8');
 
 // Copy src/
 console.log('Copying src/...');

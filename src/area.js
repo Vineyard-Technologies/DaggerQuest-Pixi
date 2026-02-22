@@ -25,6 +25,9 @@ class Area {
 
         /** Invisible collision boundaries: { x, y, width, height } */
         this.boundaries = [];
+
+        /** World-space collision polygons for static objects */
+        this.colliders = [];
     }
 
     /**
@@ -75,6 +78,7 @@ class Area {
     /**
      * Load a single-frame (static) sprite from a spritesheet and place it
      * in the world.  Optionally loads the matching _shadow spritesheet.
+     * Automatically registers a collision polygon from COLLISION_POLYS.
      *
      * @param {string}  spriteKey   - Manifest key, e.g. "farmhouse"
      * @param {number}  x           - World X (anchor-relative)
@@ -82,9 +86,10 @@ class Area {
      * @param {object}  [opts]
      * @param {boolean} [opts.shadow=true]   - Whether to try loading a shadow
      * @param {boolean} [opts.visible=true]  - Whether the sprite is visible
+     * @param {boolean} [opts.collider=true] - Whether to register a collider
      * @returns {Promise<PIXI.Container>} The placed container
      */
-    async placeStaticSprite(spriteKey, x, y, { shadow = true, visible = true } = {}) {
+    async placeStaticSprite(spriteKey, x, y, { shadow = true, visible = true, collider = true } = {}) {
         const manifest = await Area.fetchManifest();
         const sheets = manifest[spriteKey] || [];
         if (sheets.length === 0) {
@@ -120,6 +125,18 @@ class Area {
         if (textureName) {
             const sprite = new PIXI.Sprite(spritesheet.textures[textureName]);
             container.addChild(sprite);
+
+            // Register collision polygon for this static sprite
+            if (collider) {
+                const normPoly = COLLISION_POLYS[spriteKey] || DEFAULT_BOX;
+                const texture = spritesheet.textures[textureName];
+                const w = texture.width;
+                const h = texture.height;
+                const ax = sprite.anchor?.x ?? 0;
+                const ay = sprite.anchor?.y ?? 0;
+                const worldPoly = polyToWorld(normPoly, x, y, w, h, ax, ay);
+                this.colliders.push(worldPoly);
+            }
         }
 
         container.visible = visible;

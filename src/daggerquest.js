@@ -12,10 +12,12 @@ let pointerScreenY = 0;
 // Initialize the game
 async function init() {
     app = new PIXI.Application();
+    // Using 'webgl' to work around a WebGPU buffer destruction bug.
+    // See: https://github.com/Vineyard-Technologies/DaggerQuest/issues/1
     await app.init({
         resizeTo: window,
         antialias: true,
-        preference: 'webgpu',
+        preference: 'webgl',
     });
     
     document.body.appendChild(app.canvas);

@@ -27,6 +27,13 @@ class Entity {
         this.container.y = y;
 
         this.sprite = null;
+
+        /**
+         * Normalised collision polygon [[x,y], …] (0–1 relative to
+         * the sprite's texture dimensions).  Set from COLLISION_POLYS
+         * for static objects or CHARACTER_COLLISION_BOX for characters.
+         */
+        this._collisionPolyNorm = null;
     }
 
     /**
@@ -236,6 +243,38 @@ class Entity {
     /** Return the fps for a named animation */
     getAnimFps(animName) {
         return this.animFps[animName] ?? 30;
+    }
+
+    // ── Collision helpers ─────────────────────────────────────────────
+
+    /**
+     * Set the normalised collision polygon for this entity.
+     * Called automatically when the sprite key is looked up or can be
+     * assigned manually.
+     * @param {Array<[number,number]>} normPoly
+     */
+    setCollisionPoly(normPoly) {
+        this._collisionPolyNorm = normPoly;
+    }
+
+    /**
+     * Get the current world-space collision polygon.
+     * Uses the sprite's current texture dimensions and anchor.
+     * @returns {Array<{x:number, y:number}>|null}
+     */
+    getWorldCollisionPoly() {
+        if (!this._collisionPolyNorm) return null;
+        if (!this.sprite) return null;
+
+        const texture = this.sprite.texture;
+        if (!texture) return null;
+
+        const w = texture.width;
+        const h = texture.height;
+        const ax = this.sprite.anchor?.x ?? 0;
+        const ay = this.sprite.anchor?.y ?? 0;
+
+        return polyToWorld(this._collisionPolyNorm, this.x, this.y, w, h, ax, ay);
     }
 
     /**

@@ -48,8 +48,8 @@ class Farm extends Area {
             this.placeStaticSprite('farmhousetree',    4030, 4049),
         ]);
 
-        // Cottage door (animated "open" sprite, placed atop the cottage)
-        this.placeStaticSprite('cottagedoor', 728, 493, { shadow: false });
+        // Cottage door (animated "open" sprite, placed atop the cottage – no collision)
+        this.placeStaticSprite('cottagedoor', 728, 493, { shadow: false, collider: false });
     }
 
     // ── Fences ───────────────────────────────────────────────────────────
