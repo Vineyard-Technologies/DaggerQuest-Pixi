@@ -9,6 +9,9 @@ let pointerHeld = false;
 let pointerScreenX = 0;
 let pointerScreenY = 0;
 
+// Hover outline state
+let hoveredEntity = null;
+
 /**
  * When the player clicks loot that is out of pickup range, we store it here
  * so the player walks toward it and auto-picks it up once close enough.
@@ -26,7 +29,7 @@ async function init() {
     await app.init({
         resizeTo: window,
         antialias: true,
-        preference: 'webgl2',
+        preference: 'webgpu',
         background: '#000000',
         backgroundAlpha: 1,
     });
@@ -134,6 +137,71 @@ function findLootAtPosition(screenX, screenY) {
     return null;
 }
 
+/**
+ * Find any hoverable entity (loot, enemy, or NPC) at screen position.
+ * Returns the entity or null.
+ */
+function findHoverableAtPosition(screenX, screenY) {
+    // Check loot first (smallest, on top visually)
+    const loot = findLootAtPosition(screenX, screenY);
+    if (loot) return loot;
+
+    // Check enemies
+    if (area?.enemies) {
+        for (const enemy of area.enemies) {
+            if (!enemy.sprite || enemy.isAlive === false) continue;
+            const b = enemy.sprite.getBounds();
+            if (screenX >= b.x && screenX <= b.x + b.width &&
+                screenY >= b.y && screenY <= b.y + b.height) {
+                return enemy;
+            }
+        }
+    }
+
+    // Check NPCs
+    if (area?.npcs) {
+        for (const npc of area.npcs) {
+            if (!npc.sprite) continue;
+            const b = npc.sprite.getBounds();
+            if (screenX >= b.x && screenX <= b.x + b.width &&
+                screenY >= b.y && screenY <= b.y + b.height) {
+                return npc;
+            }
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Apply or remove the outline filter based on what the mouse is hovering.
+ */
+function updateHoverOutline() {
+    // Don't show hover outlines when the pointer is over UI
+    const overUI = ui && ui.hitTest(pointerScreenX, pointerScreenY);
+    const target = overUI ? null : findHoverableAtPosition(pointerScreenX, pointerScreenY);
+
+    if (target === hoveredEntity) return;
+
+    // Remove outline from previous entity
+    if (hoveredEntity && hoveredEntity.sprite) {
+        hoveredEntity.sprite.filters = hoveredEntity.sprite.filters
+            ? hoveredEntity.sprite.filters.filter(f => f !== HOVER_OUTLINE)
+            : [];
+        if (hoveredEntity.sprite.filters.length === 0) {
+            hoveredEntity.sprite.filters = null;
+        }
+    }
+
+    hoveredEntity = target;
+
+    // Apply outline to new entity
+    if (hoveredEntity && hoveredEntity.sprite) {
+        const existing = hoveredEntity.sprite.filters || [];
+        hoveredEntity.sprite.filters = [...existing, HOVER_OUTLINE];
+    }
+}
+
 // Pointer handlers for continuous movement
 function onPointerDown(event) {
     // Ignore right-clicks – those are used for UI slot interactions
@@ -181,7 +249,6 @@ function onPointerDown(event) {
 }
 
 function onPointerMove(event) {
-    if (!pointerHeld) return;
     const pos = event.data.global;
     pointerScreenX = pos.x;
     pointerScreenY = pos.y;
@@ -200,6 +267,9 @@ function movePlayerToPointer() {
 // Main game loop
 function gameLoop(ticker) {
     if (!player) return;
+
+    // Update hover outline each frame
+    updateHoverOutline();
 
     // Continuously update target while pointer is held
     if (pointerHeld) {
