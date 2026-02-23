@@ -1,4 +1,10 @@
 /**
+ * Shared blur filter for all shadow sprites.  Reusing a single instance
+ * avoids creating a separate GPU render-pass per shadow.
+ */
+const SHADOW_BLUR = new PIXI.BlurFilter(4);
+
+/**
  * Base class for all game areas (zones, maps, regions, etc.)
  * An Area defines the world dimensions, background texture, and player spawn point.
  * Each area owns a PIXI.Container that holds the background and all game objects.
@@ -121,7 +127,7 @@ class Area {
                 if (shadowTexName) {
                     const shadowSprite = new PIXI.Sprite(shadowSheet.textures[shadowTexName]);
                     shadowSprite.alpha = 0.5;
-                    shadowSprite.filters = [new PIXI.BlurFilter(4)];
+                    shadowSprite.filters = [SHADOW_BLUR];
                     container.addChild(shadowSprite);
                 }
             }

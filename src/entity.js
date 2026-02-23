@@ -49,7 +49,7 @@ class Entity {
         const animationTextures = {};
 
         // Load the manifest to know which spritesheets exist
-        const manifest = await fetch('./images/spritesheets/manifest.json').then(r => r.json());
+        const manifest = await Area.fetchManifest();
         const sheets = manifest[this.spriteKey] || [];
 
         if (sheets.length === 0) {
@@ -164,7 +164,7 @@ class Entity {
                     this.shadowSprite.x = 0;
                     this.shadowSprite.y = 0;
                     this.shadowSprite.alpha = 0.5;
-                    this.shadowSprite.filters = [new PIXI.BlurFilter(4)];
+                    this.shadowSprite.filters = [SHADOW_BLUR];
                     this.container.addChild(this.shadowSprite);
                 }
             }

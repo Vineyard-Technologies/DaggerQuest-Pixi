@@ -89,7 +89,7 @@ class UI {
      */
     async load() {
         // Helpers to load a single-frame spritesheet and return the first texture
-        const manifest = await fetch('./images/spritesheets/manifest.json').then(r => r.json());
+        const manifest = await Area.fetchManifest();
 
         const loadTexture = async (key) => {
             const sheets = manifest[key] || [];

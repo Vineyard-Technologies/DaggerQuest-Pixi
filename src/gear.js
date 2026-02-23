@@ -226,7 +226,7 @@ class Gear {
                     updateAnchor: true,
                 });
                 this.shadowSprite.alpha = 0.5;
-                this.shadowSprite.filters = [new PIXI.BlurFilter(4)];
+                this.shadowSprite.filters = [SHADOW_BLUR];
                 this._character.container.addChildAt(this.shadowSprite, insertIdx);
                 this.shadowSprite.gotoAndStop(0);
             }

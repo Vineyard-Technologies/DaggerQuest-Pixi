@@ -14,13 +14,6 @@ class NPC extends Character {
         this.wanderRadius = wanderRadius;
     }
 
-    /** Check distance to a target entity */
-    distanceTo(entity) {
-        const dx = entity.x - this.x;
-        const dy = entity.y - this.y;
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-
     /** Turn to face a target entity */
     faceEntity(entity) {
         const dx = entity.x - this.x;
@@ -82,21 +75,6 @@ class NPC extends Character {
     isPlayerInRange() {
         if (typeof player === 'undefined' || !player) return false;
         return this.distanceTo(player) <= this.interactRange;
-    }
-
-    /** Move toward a world position and start walking */
-    moveToward(worldX, worldY) {
-        this.targetPosition = { x: worldX, y: worldY };
-
-        const dx = worldX - this.x;
-        const dy = worldY - this.y;
-        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-        const newDirection = this.findClosestDirection(angle);
-
-        if (!this.isWalking || newDirection !== this.direction) {
-            this.direction = newDirection;
-            this.startWalkAnimation();
-        }
     }
 
     /** Pick a random wander target near the origin */

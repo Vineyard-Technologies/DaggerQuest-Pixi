@@ -203,23 +203,6 @@ class Player extends Character {
         }
     }
 
-    /** Handle a click/tap to move toward a world position */
-    moveToward(worldX, worldY) {
-        this.targetPosition = { x: worldX, y: worldY };
-
-        // Calculate direction to target
-        const dx = worldX - this.x;
-        const dy = worldY - this.y;
-        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-
-        const newDirection = this.findClosestDirection(angle);
-
-        // Only restart the walk animation if direction changed or not already walking
-        if (!this.isWalking || newDirection !== this.direction) {
-            this.direction = newDirection;
-            this.startWalkAnimation();
-        }
-    }
 }
 
 // Create the player character

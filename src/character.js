@@ -166,6 +166,28 @@ class Character extends Entity {
         // Override in subclasses (e.g. Player syncs gear here)
     }
 
+    /** Move toward a world position and start walking */
+    moveToward(worldX, worldY) {
+        this.targetPosition = { x: worldX, y: worldY };
+
+        const dx = worldX - this.x;
+        const dy = worldY - this.y;
+        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+        const newDirection = this.findClosestDirection(angle);
+
+        if (!this.isWalking || newDirection !== this.direction) {
+            this.direction = newDirection;
+            this.startWalkAnimation();
+        }
+    }
+
+    /** Check distance to a target entity */
+    distanceTo(entity) {
+        const dx = entity.x - this.x;
+        const dy = entity.y - this.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
     /**
      * Override Entity's getWorldCollisionPoly to return a fixed-size
      * rectangle at the character's feet, independent of the current

@@ -183,12 +183,6 @@ class Item {
      * @returns {Promise<object>}
      */
     static async fetchManifest() {
-        if (!Item._manifestCache) {
-            Item._manifestCache = await fetch('./images/spritesheets/manifest.json').then(r => r.json());
-        }
-        return Item._manifestCache;
+        return Area.fetchManifest();
     }
 }
-
-/** @private Shared manifest cache so we only fetch it once */
-Item._manifestCache = null;

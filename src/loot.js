@@ -63,7 +63,7 @@ class Loot extends Entity {
                     updateAnchor: true,
                 });
                 this.shadowSprite.alpha = 0.5;
-                this.shadowSprite.filters = [new PIXI.BlurFilter(4)];
+                this.shadowSprite.filters = [SHADOW_BLUR];
                 this.container.addChild(this.shadowSprite);
                 this.shadowSprite.gotoAndStop(0);
             }
