@@ -439,8 +439,8 @@ class UI {
      * with key labels, and the abilitybarstatue on the right.
      */
     _buildAbilityBar(slotTex, statueTex) {
-        const slotSize = 90;    // display size per slot
-        const gap = 4;          // pixels between slots
+        const slotSize = 82;    // display size per slot
+        const gap = 0;          // pixels between slots
         const cols = 5;
         const rows = 2;
         const keys = [
@@ -450,6 +450,10 @@ class UI {
 
         const slotsContainer = new PIXI.Container();
         slotsContainer.label = 'abilitySlots';
+
+        // Grayscale filter for ability slots
+        const grayscaleFilter = new PIXI.ColorMatrixFilter();
+        grayscaleFilter.grayscale(0.35, false);
 
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
@@ -469,6 +473,17 @@ class UI {
                     });
                     bg.width = slotSize;
                     bg.height = slotSize;
+                    bg.filters = [grayscaleFilter];
+
+                    // Mask out the center fill, keeping only the 11px border
+                    const borderMask = new PIXI.Graphics();
+                    borderMask.rect(0, 0, slotSize, slotSize);
+                    borderMask.fill({ color: 0xffffff });
+                    borderMask.rect(11, 11, slotSize - 22, slotSize - 22);
+                    borderMask.cut();
+                    slotContainer.addChild(borderMask);
+                    bg.mask = borderMask;
+
                     slotContainer.addChild(bg);
                 }
 
@@ -491,17 +506,17 @@ class UI {
             }
         }
 
-        this.abilityBarContainer.addChild(slotsContainer);
-
-        // Statue on the right side
+        // Statue on the right side (added first so it renders behind slots)
         if (statueTex) {
             const statue = new PIXI.Sprite(statueTex);
             statue.anchor.set(0, 0.5);
-            statue.x = cols * (slotSize + gap) - gap + 4;
+            statue.x = cols * (slotSize + gap) - gap + 4 - 42;
             statue.y = (rows * (slotSize + gap) - gap) / 2;
             statue.label = 'abilityBarStatue';
             this.abilityBarContainer.addChild(statue);
         }
+
+        this.abilityBarContainer.addChild(slotsContainer);
     }
 
     /** Toggle the equipped-items menu open/closed. */
@@ -525,16 +540,17 @@ class UI {
 
         // Health orb – bottom‑left
         this.healthOrbContainer.x = margin + orbRadius;
-        this.healthOrbContainer.y = screenH - margin - orbRadius;
+        this.healthOrbContainer.y = screenH - margin - orbRadius + 5;
 
         // Mana orb – bottom‑right
         this.manaOrbContainer.x = screenW - margin - orbRadius;
-        this.manaOrbContainer.y = screenH - margin - orbRadius;
+        this.manaOrbContainer.y = screenH - margin - orbRadius + 5;
 
-        // Ability bar – bottom-center
-        const abBounds = this.abilityBarContainer.getLocalBounds();
-        this.abilityBarContainer.x = Math.round((screenW - abBounds.width) / 2);
-        this.abilityBarContainer.y = screenH - margin - abBounds.height;
+        // Ability bar – bottom-left area, to the right of the health orb statue
+        const healthOrbRight = margin + orbRadius + 250; // clear the health orb + statue
+        const abSlotsHeight = 2 * 82; // 2 rows × 82px slot size
+        this.abilityBarContainer.x = healthOrbRight;
+        this.abilityBarContainer.y = screenH - abSlotsHeight;
 
         // Equipped menu – upper-left, slides in from left
         // At slide=0 the menu is fully off-screen; at slide=1 it's at x=0
