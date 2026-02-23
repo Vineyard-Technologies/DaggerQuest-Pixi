@@ -237,7 +237,10 @@ class Farm extends Area {
                     name: 'Simple Sword',
                     description: 'The first of many',
                     slot: 'mainhand',
-                    stats: { slashDamage: 3 },
+                    baseStats: { slashDamage: 3 },
+                    mods: [
+                        { modId: 'flat_stab_damage', value: 2 },
+                    ],
                 }),
             },
             {
@@ -247,7 +250,10 @@ class Farm extends Area {
                     name: 'Simple Shield',
                     description: 'No respite for the scorned',
                     slot: 'offhand',
-                    stats: { armor: 5 },
+                    baseStats: { armor: 5 },
+                    mods: [
+                        { modId: 'flat_max_health', value: 4 },
+                    ],
                 }),
             },
             {
@@ -257,7 +263,11 @@ class Farm extends Area {
                     name: 'Simple Shirt',
                     description: 'Deep in the midst, you conceal him',
                     slot: 'chest',
-                    stats: { maxHealth: 2 },
+                    baseStats: { maxHealth: 2 },
+                    mods: [
+                        { modId: 'flat_armor', value: 1 },
+                        { modId: 'flat_health_regen', value: 1 },
+                    ],
                 }),
             },
             {
@@ -267,7 +277,8 @@ class Farm extends Area {
                     name: 'Simple Pants',
                     description: 'Whoso is simple, let him perish!',
                     slot: 'legs',
-                    stats: { manaRegen: 1 },
+                    baseStats: { manaRegen: 1 },
+                    mods: [],
                 }),
             },
         ];
@@ -277,6 +288,7 @@ class Farm extends Area {
             await loot.loadTextures();
             if (sortY != null) loot.container.sortY = sortY;
             this.container.addChild(loot.container);
+            loot.attachLabelsTo(this.lootLabelsContainer);
             this.lootOnGround.push(loot);
         }));
     }

@@ -17,6 +17,36 @@ class Player extends Character {
         this.defaultGearSlots = {};
     }
 
+    // ── Item-stat helpers ────────────────────────────────────────────────
+
+    /**
+     * Apply an item's combined stats (base + mods) to this character.
+     * @param {Item} item
+     */
+    _applyItemStats(item) {
+        if (!item) return;
+        const stats = item.stats; // computed: base + mod contributions
+        for (const [key, value] of Object.entries(stats)) {
+            if (typeof this[key] === 'number') {
+                this[key] += value;
+            }
+        }
+    }
+
+    /**
+     * Remove an item's combined stats (base + mods) from this character.
+     * @param {Item} item
+     */
+    _removeItemStats(item) {
+        if (!item) return;
+        const stats = item.stats;
+        for (const [key, value] of Object.entries(stats)) {
+            if (typeof this[key] === 'number') {
+                this[key] -= value;
+            }
+        }
+    }
+
     /**
      * Load and equip default gear for every slot listed in defaultGearSlots.
      * Called once after the player's textures are loaded.
@@ -50,8 +80,14 @@ class Player extends Character {
         const newGear = item.createGear();
         await newGear.equip(this);
 
-        // Now remove the old gear (frees its textures from memory)
+        // Remove old gear's stats, then apply new item's stats
         const oldGear = this.equippedGear[slot];
+        if (oldGear && oldGear.item) {
+            this._removeItemStats(oldGear.item);
+        }
+        this._applyItemStats(item);
+
+        // Now remove the old gear (frees its textures from memory)
         if (oldGear) {
             await oldGear.unequip();
         }
@@ -72,6 +108,11 @@ class Player extends Character {
      */
     async unequipSlot(slot) {
         const oldGear = this.equippedGear[slot] || null;
+
+        // Remove old item's stats
+        if (oldGear && oldGear.item) {
+            this._removeItemStats(oldGear.item);
+        }
 
         // Load and equip default gear first (if defined) so the body stays covered
         const base = this.defaultGearSlots[slot];
@@ -105,7 +146,13 @@ class Player extends Character {
         const newGear = item.createGear();
         await newGear.equip(this);
 
+        // Remove old gear's stats, apply new item's stats
         const oldGear = this.equippedGear[slot];
+        if (oldGear && oldGear.item) {
+            this._removeItemStats(oldGear.item);
+        }
+        this._applyItemStats(item);
+
         if (oldGear) {
             await oldGear.unequip();
         }
@@ -125,6 +172,11 @@ class Player extends Character {
      */
     async unequipSlotSilent(slot) {
         const oldGear = this.equippedGear[slot] || null;
+
+        // Remove old item's stats
+        if (oldGear && oldGear.item) {
+            this._removeItemStats(oldGear.item);
+        }
 
         const base = this.defaultGearSlots[slot];
         if (base) {

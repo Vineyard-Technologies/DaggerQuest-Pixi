@@ -36,6 +36,11 @@ class UI {
         this.inventoryMenuContainer.label = 'inventoryMenu';
         this.container.addChild(this.inventoryMenuContainer);
 
+        // ---- Ability bar (bottom-center) ----
+        this.abilityBarContainer = new PIXI.Container();
+        this.abilityBarContainer.label = 'abilityBar';
+        this.container.addChild(this.abilityBarContainer);
+
         // Menu visibility state
         this._equippedMenuOpen = false;
         this._inventoryMenuOpen = false;
@@ -51,6 +56,7 @@ class UI {
         /** Slot arrays for external access (e.g. drag-and-drop). */
         this.equippedSlots = [];   // { container, placeholder, slotType, iconSprite, item }
         this.inventorySlots = [];  // { container, placeholder, iconSprite, item }
+        this.abilitySlots = [];    // { container, row, col, key }
 
         /** Guard to prevent overlapping right-click operations */
         this._rightClickBusy = false;
@@ -65,6 +71,14 @@ class UI {
 
         // Orb fill dimensions (set after textures load)
         this._orbHeight = 0;
+
+        // ---- Tooltip state ----
+        /** @type {PIXI.Container|null} Tooltip popup container */
+        this._tooltipContainer = null;
+        /** @type {Item|null} The item currently shown in the tooltip */
+        this._tooltipItem = null;
+        /** Whether the tooltip is visible */
+        this._tooltipVisible = false;
     }
 
     // ------------------------------------------------------------------ Load
@@ -114,6 +128,9 @@ class UI {
             // Inventory menu textures
             slotTex,
             inventorymenustatueTex,
+            // Ability bar textures
+            abilityslotTex,
+            abilitybarstatueTex,
         ] = await Promise.all([
             loadTexture('orbcoverback'),
             loadTexture('orbcoverfront'),
@@ -138,11 +155,15 @@ class UI {
             // Inventory menu
             loadTexture('slot'),
             loadTexture('inventorymenustatue'),
+            // Ability bar
+            loadTexture('abilityslot'),
+            loadTexture('abilitybarstatue'),
         ]);
 
         // Reset default anchors on slot textures so NineSliceSprite renders from (0,0)
         if (charactermenuTex) charactermenuTex.defaultAnchor = { x: 0, y: 0 };
         if (slotTex) slotTex.defaultAnchor = { x: 0, y: 0 };
+        if (abilityslotTex) abilityslotTex.defaultAnchor = { x: 0, y: 0 };
 
         // ---- Health orb (bottom‑left) ----
         this._buildOrb(this.healthOrbContainer, {
@@ -189,6 +210,13 @@ class UI {
 
         // ---- Inventory menu (5 cols × 5 rows, statue on left) ----
         this._buildInventoryMenu(slotTex, inventorymenustatueTex, 5, 5);
+
+        // ---- Ability bar (5 cols × 2 rows, statue on right) ----
+        this._buildAbilityBar(abilityslotTex, abilitybarstatueTex);
+
+        // ---- Item tooltip ----
+        this._buildTooltip();
+        this._wireSlotHoverEvents();
 
         // Initial layout
         this.layout(window.innerWidth, window.innerHeight);
@@ -406,6 +434,76 @@ class UI {
         this._inventoryMenuWidth = margin + statueWidth + gridWidth + margin;
     }
 
+    /**
+     * Build the ability bar: 5 cols × 2 rows of abilityslot 9-patches
+     * with key labels, and the abilitybarstatue on the right.
+     */
+    _buildAbilityBar(slotTex, statueTex) {
+        const slotSize = 90;    // display size per slot
+        const gap = 4;          // pixels between slots
+        const cols = 5;
+        const rows = 2;
+        const keys = [
+            ['Q', 'W', 'E', 'R', 'T'],
+            ['A', 'S', 'D', 'F', 'G'],
+        ];
+
+        const slotsContainer = new PIXI.Container();
+        slotsContainer.label = 'abilitySlots';
+
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                const slotContainer = new PIXI.Container();
+                slotContainer.label = `abilitySlot_${keys[row][col]}`;
+                slotContainer.x = col * (slotSize + gap);
+                slotContainer.y = row * (slotSize + gap);
+
+                // Slot background (9-patch with 11px margins)
+                if (slotTex) {
+                    const bg = new PIXI.NineSliceSprite({
+                        texture: slotTex,
+                        leftWidth: 11,
+                        rightWidth: 11,
+                        topHeight: 11,
+                        bottomHeight: 11,
+                    });
+                    bg.width = slotSize;
+                    bg.height = slotSize;
+                    slotContainer.addChild(bg);
+                }
+
+                // Key label (upper-left corner)
+                const label = new PIXI.Text({
+                    text: keys[row][col],
+                    style: {
+                        fontFamily: 'serif',
+                        fontSize: 18,
+                        fill: 0xffffff,
+                        stroke: { color: 0x000000, width: 3 },
+                    },
+                });
+                label.x = 6;
+                label.y = 2;
+                slotContainer.addChild(label);
+
+                slotsContainer.addChild(slotContainer);
+                this.abilitySlots.push({ container: slotContainer, row, col, key: keys[row][col] });
+            }
+        }
+
+        this.abilityBarContainer.addChild(slotsContainer);
+
+        // Statue on the right side
+        if (statueTex) {
+            const statue = new PIXI.Sprite(statueTex);
+            statue.anchor.set(0, 0.5);
+            statue.x = cols * (slotSize + gap) - gap + 4;
+            statue.y = (rows * (slotSize + gap) - gap) / 2;
+            statue.label = 'abilityBarStatue';
+            this.abilityBarContainer.addChild(statue);
+        }
+    }
+
     /** Toggle the equipped-items menu open/closed. */
     toggleEquippedMenu() {
         this._equippedMenuOpen = !this._equippedMenuOpen;
@@ -432,6 +530,11 @@ class UI {
         // Mana orb – bottom‑right
         this.manaOrbContainer.x = screenW - margin - orbRadius;
         this.manaOrbContainer.y = screenH - margin - orbRadius;
+
+        // Ability bar – bottom-center
+        const abBounds = this.abilityBarContainer.getLocalBounds();
+        this.abilityBarContainer.x = Math.round((screenW - abBounds.width) / 2);
+        this.abilityBarContainer.y = screenH - margin - abBounds.height;
 
         // Equipped menu – upper-left, slides in from left
         // At slide=0 the menu is fully off-screen; at slide=1 it's at x=0
@@ -722,6 +825,9 @@ class UI {
         // Stop the event from propagating to the stage (prevents player movement)
         e.stopPropagation();
 
+        // Hide any visible tooltip
+        this._hideTooltip();
+
         // Hide the icon in the source slot (but keep the entry data so we can snap back)
         if (entry.iconSprite) {
             entry.iconSprite.visible = false;
@@ -989,6 +1095,7 @@ class UI {
         const loot = item.createLoot(worldX, worldY);
         await loot.loadTextures();
         area.container.addChild(loot.container);
+        loot.attachLabelsTo(area.lootLabelsContainer);
         area.lootOnGround.push(loot);
 
         // Unequip gear in the background (visual only, non-blocking)
@@ -1018,6 +1125,7 @@ class UI {
             this.inventoryMenuContainer,
             this.healthOrbContainer,
             this.manaOrbContainer,
+            this.abilityBarContainer,
         ];
         for (const c of containers) {
             if (!c.visible) continue;
@@ -1054,5 +1162,246 @@ class UI {
         // Shift the sprite down so the visible portion stays at the bottom of the orb
         orbSprite.anchor.set(0.5, 0.5);
         orbSprite.y = yOffset / 2;
+    }
+
+    // ------------------------------------------------------------ Tooltip
+
+    /**
+     * Create the reusable tooltip container (initially hidden).
+     * The tooltip is a PIXI.Container with a Graphics background and
+     * text children that are rebuilt each time a new item is shown.
+     */
+    _buildTooltip() {
+        this._tooltipContainer = new PIXI.Container();
+        this._tooltipContainer.label = 'itemTooltip';
+        this._tooltipContainer.visible = false;
+        this._tooltipContainer.eventMode = 'none'; // non-interactive overlay
+        this.container.addChild(this._tooltipContainer);
+    }
+
+    /**
+     * Attach pointerover / pointerout events to every equipped and
+     * inventory slot so hovering shows the item tooltip.
+     */
+    _wireSlotHoverEvents() {
+        for (const entry of this.equippedSlots) {
+            entry.container.on('pointerover', (e) => this._onSlotHover(entry, e));
+            entry.container.on('pointerout',  ()  => this._hideTooltip());
+        }
+        for (const entry of this.inventorySlots) {
+            entry.container.on('pointerover', (e) => this._onSlotHover(entry, e));
+            entry.container.on('pointerout',  ()  => this._hideTooltip());
+        }
+    }
+
+    /**
+     * Called when the pointer enters a slot that may contain an item.
+     */
+    _onSlotHover(entry, e) {
+        if (!entry.item) {
+            this._hideTooltip();
+            return;
+        }
+        // Don't show tooltip while dragging
+        if (this._drag) return;
+
+        this._showTooltip(entry.item, e.global.x, e.global.y);
+    }
+
+    /**
+     * Build and show the tooltip for a given Item at screen position.
+     * @param {Item} item
+     * @param {number} screenX
+     * @param {number} screenY
+     */
+    _showTooltip(item, screenX, screenY) {
+        if (!this._tooltipContainer) return;
+        this._tooltipItem = item;
+        this._tooltipVisible = true;
+
+        // Clear previous content
+        this._tooltipContainer.removeChildren();
+
+        const pad = 12;
+        const innerWidth = 220;
+        let yOffset = pad;
+
+        // ── Item name (Cinzel, gold) ──
+        const nameText = new PIXI.Text({
+            text: item.name,
+            style: {
+                fontFamily: 'Cinzel, serif',
+                fontSize: 18,
+                fontWeight: '600',
+                fill: 0xFFD700,
+                wordWrap: true,
+                wordWrapWidth: innerWidth,
+                stroke: { color: 0x000000, width: 2 },
+            },
+        });
+        nameText.x = pad;
+        nameText.y = yOffset;
+        this._tooltipContainer.addChild(nameText);
+        yOffset += nameText.height + 4;
+
+        // ── Equipment slot (Grenze, italic, light grey) ──
+        const slotLabel = item.slot.charAt(0).toUpperCase() + item.slot.slice(1);
+        const slotText = new PIXI.Text({
+            text: slotLabel,
+            style: {
+                fontFamily: 'Grenze, serif',
+                fontSize: 14,
+                fontStyle: 'italic',
+                fill: 0xAAAAAA,
+                stroke: { color: 0x000000, width: 1 },
+            },
+        });
+        slotText.x = pad;
+        slotText.y = yOffset;
+        this._tooltipContainer.addChild(slotText);
+        yOffset += slotText.height + 6;
+
+        // ── Base stats (Grenze, white) ──
+        const baseEntries = Object.entries(item.baseStats);
+        if (baseEntries.length > 0) {
+            for (const [key, value] of baseEntries) {
+                const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, c => c.toUpperCase());
+                const statText = new PIXI.Text({
+                    text: `+${value} ${label}`,
+                    style: {
+                        fontFamily: 'Grenze, serif',
+                        fontSize: 15,
+                        fontWeight: '600',
+                        fill: 0xFFFFFF,
+                        stroke: { color: 0x000000, width: 1 },
+                    },
+                });
+                statText.x = pad;
+                statText.y = yOffset;
+                this._tooltipContainer.addChild(statText);
+                yOffset += statText.height + 2;
+            }
+            yOffset += 4;
+        }
+
+        // ── Mods (Grenze, cyan/blue tones) ──
+        if (item.mods && item.mods.length > 0) {
+            // Separator line
+            const sepLine = new PIXI.Graphics();
+            sepLine.moveTo(pad, yOffset);
+            sepLine.lineTo(pad + innerWidth, yOffset);
+            sepLine.stroke({ width: 1, color: 0x5566AA, alpha: 0.6 });
+            this._tooltipContainer.addChild(sepLine);
+            yOffset += 6;
+
+            for (const modDesc of item.modDescriptions) {
+                const modText = new PIXI.Text({
+                    text: modDesc,
+                    style: {
+                        fontFamily: 'Grenze, serif',
+                        fontSize: 15,
+                        fontWeight: '600',
+                        fill: 0x66CCFF,
+                        wordWrap: true,
+                        wordWrapWidth: innerWidth,
+                        stroke: { color: 0x000000, width: 1 },
+                    },
+                });
+                modText.x = pad;
+                modText.y = yOffset;
+                this._tooltipContainer.addChild(modText);
+                yOffset += modText.height + 2;
+            }
+            yOffset += 2;
+        }
+
+        // ── Description / flavour text (Grenze, italic, dim) ──
+        if (item.description) {
+            // Separator line
+            const sepLine2 = new PIXI.Graphics();
+            sepLine2.moveTo(pad, yOffset);
+            sepLine2.lineTo(pad + innerWidth, yOffset);
+            sepLine2.stroke({ width: 1, color: 0x5566AA, alpha: 0.4 });
+            this._tooltipContainer.addChild(sepLine2);
+            yOffset += 6;
+
+            const descText = new PIXI.Text({
+                text: item.description,
+                style: {
+                    fontFamily: 'Grenze, serif',
+                    fontSize: 14,
+                    fontStyle: 'italic',
+                    fill: 0x999999,
+                    wordWrap: true,
+                    wordWrapWidth: innerWidth,
+                    stroke: { color: 0x000000, width: 1 },
+                },
+            });
+            descText.x = pad;
+            descText.y = yOffset;
+            this._tooltipContainer.addChild(descText);
+            yOffset += descText.height + 2;
+        }
+
+        yOffset += pad; // bottom padding
+
+        // ── Background panel ──
+        const totalWidth = innerWidth + pad * 2;
+        const totalHeight = yOffset;
+        const bg = new PIXI.Graphics();
+        bg.roundRect(0, 0, totalWidth, totalHeight, 6);
+        bg.fill({ color: 0x111122, alpha: 0.92 });
+        bg.roundRect(0, 0, totalWidth, totalHeight, 6);
+        bg.stroke({ width: 1.5, color: 0x4455AA, alpha: 0.7 });
+
+        // Insert background behind all text
+        this._tooltipContainer.addChildAt(bg, 0);
+
+        // ── Position tooltip near the pointer ──
+        this._positionTooltip(screenX, screenY, totalWidth, totalHeight);
+        this._tooltipContainer.visible = true;
+    }
+
+    /**
+     * Position the tooltip adjacent to the pointer, clamped to screen bounds.
+     * @param {number} screenX
+     * @param {number} screenY
+     * @param {number} tipW - tooltip width
+     * @param {number} tipH - tooltip height
+     */
+    _positionTooltip(screenX, screenY, tipW, tipH) {
+        const margin = 14;
+        const screenW = app?.screen?.width || window.innerWidth;
+        const screenH = app?.screen?.height || window.innerHeight;
+
+        // Default: place to the right and slightly below the pointer
+        let tx = screenX + margin;
+        let ty = screenY + margin;
+
+        // If it would overflow right, flip to the left
+        if (tx + tipW > screenW) {
+            tx = screenX - tipW - margin;
+        }
+        // If it would overflow bottom, shift up
+        if (ty + tipH > screenH) {
+            ty = screenH - tipH - 4;
+        }
+        // Clamp to top-left
+        if (tx < 0) tx = 4;
+        if (ty < 0) ty = 4;
+
+        this._tooltipContainer.x = tx;
+        this._tooltipContainer.y = ty;
+    }
+
+    /**
+     * Hide the tooltip.
+     */
+    _hideTooltip() {
+        if (this._tooltipContainer) {
+            this._tooltipContainer.visible = false;
+        }
+        this._tooltipItem = null;
+        this._tooltipVisible = false;
     }
 }

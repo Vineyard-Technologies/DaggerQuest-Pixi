@@ -1,8 +1,12 @@
 /**
  * An Item is the data definition for an equippable/collectible object.
- * It holds metadata (name, slot, stats) and provides:
+ * It holds metadata (name, slot, stats, mods) and provides:
  *   - Icon loading for menus / inventory display
  *   - Factory methods to create Loot (world entity) and Gear (character overlay)
+ *   - Random mod generation (or pre-baked mods for world-placed items)
+ *
+ * Items can have up to 6 mods. Fewer mods are common; more mods are
+ * exponentially rarer. Higher rolled values within each mod are also rarer.
  *
  * The icon spritesheet follows the naming convention: {itemId}_item
  * (e.g., "crudehelmet_item").
@@ -14,19 +18,64 @@ class Item {
      * @param {string} opts.name        - Display name, e.g. 'Crude Helmet'
      * @param {string} [opts.description] - Flavour / tooltip text
      * @param {string} opts.slot        - Equipment slot: head, chest, legs, feet, hands, mainhand, offhand, neck, ring
-     * @param {object} [opts.stats]     - Stat modifiers, e.g. { armor: 5, strength: 2 }
+     * @param {object} [opts.baseStats] - Inherent stat modifiers, e.g. { armor: 5, slashDamage: 3 }
+     * @param {Array}  [opts.mods]      - Pre-baked mods array; if omitted, mods are rolled randomly.
+     *                                    Each entry: { modId: string, value: number }
      */
-    constructor({ id, name, description = '', slot, stats = {} }) {
+    constructor({ id, name, description = '', slot, baseStats = {}, stats = {}, mods = undefined }) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.slot = slot;
-        this.stats = stats;
+
+        /**
+         * Inherent (non-random) stats that are always on this item.
+         * Accepts either `baseStats` or legacy `stats` parameter.
+         */
+        this.baseStats = Object.keys(baseStats).length > 0 ? baseStats : stats;
+
+        /**
+         * Rolled (or pre-baked) mods on this item.
+         * Each entry: { modId: string, value: number }
+         */
+        this.mods = mods !== undefined ? mods : rollMods();
 
         /** @private */
         this._iconTexture = null;
         /** @private */
         this._iconAssetPaths = [];
+    }
+
+    // ── Stats (base + mods) ──────────────────────────────────────────────
+
+    /**
+     * Combined stats: base stats merged with all stat-granting mods.
+     * This is the total stat contribution when the item is equipped.
+     * @returns {object} e.g. { armor: 10, maxHealth: 5 }
+     */
+    get stats() {
+        const modStats = aggregateModStats(this.mods);
+        const merged = { ...this.baseStats };
+        for (const [key, val] of Object.entries(modStats)) {
+            merged[key] = (merged[key] || 0) + val;
+        }
+        return merged;
+    }
+
+    /**
+     * Get a formatted list of mod descriptions for tooltip display.
+     * @returns {string[]} e.g. ["+5 Armor", "+3 Slash Damage"]
+     */
+    get modDescriptions() {
+        return this.mods.map(m => formatMod(m));
+    }
+
+    /**
+     * The number of mods on this item (0–6).
+     * @returns {number}
+     */
+    get modCount() {
+        return this.mods.length;
     }
 
     /** Manifest key for the item icon spritesheet */

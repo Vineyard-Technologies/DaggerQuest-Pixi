@@ -28,6 +28,15 @@ class Area {
 
         /** World-space collision polygons for static objects */
         this.colliders = [];
+
+        /**
+         * Overlay container for loot name labels.
+         * Uses sortY = Infinity so Y-sort always places it last (rendered on top).
+         */
+        this.lootLabelsContainer = new PIXI.Container();
+        this.lootLabelsContainer.label = 'lootLabels';
+        this.lootLabelsContainer.sortY = Infinity;
+        this.container.addChild(this.lootLabelsContainer);
     }
 
     /**

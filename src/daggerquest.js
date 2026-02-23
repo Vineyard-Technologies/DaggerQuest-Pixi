@@ -28,6 +28,13 @@ async function init() {
     // Prevent the browser context menu so right-click can be used for UI interactions
     document.addEventListener('contextmenu', (e) => e.preventDefault());
 
+    // Preload fonts so PIXI.Text measurements are correct from the start
+    await Promise.all([
+        document.fonts.load('600 14px Cinzel'),
+        document.fonts.load('600 14px Grenze'),
+        document.fonts.load('italic 600 14px Grenze'),
+    ]);
+
     // Create the area and add its container to the stage
     area = new Farm();
     app.stage.addChild(area.container);
@@ -99,7 +106,16 @@ function findLootAtPosition(screenX, screenY) {
     for (const loot of area.lootOnGround) {
         if (!loot.sprite) continue;
 
-        // getBounds() returns global (screen-space) coordinates
+        // Check the name label first (larger click target above the sprite)
+        if (loot.nameLabel) {
+            const labelBounds = loot.nameLabel.getBounds();
+            if (screenX >= labelBounds.x && screenX <= labelBounds.x + labelBounds.width &&
+                screenY >= labelBounds.y && screenY <= labelBounds.y + labelBounds.height) {
+                return loot;
+            }
+        }
+
+        // Then check the sprite itself
         const bounds = loot.sprite.getBounds();
         if (screenX >= bounds.x && screenX <= bounds.x + bounds.width &&
             screenY >= bounds.y && screenY <= bounds.y + bounds.height) {

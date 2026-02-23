@@ -27,6 +27,9 @@ class Loot extends Entity {
         });
         /** The Item definition backing this loot drop */
         this.item = item;
+
+        /** @type {PIXI.Text|null} Floating name label above the loot */
+        this.nameLabel = null;
     }
 
     /**
@@ -74,6 +77,75 @@ class Loot extends Entity {
         this.container.addChild(this.sprite);
         this.sprite.gotoAndStop(0);
         this.direction = randomDir;
+
+        // ── Name label ──────────────────────────────────────────────────
+        // Labels are built here but live in a wrapper container so they
+        // can be reparented to a top-level overlay via attachLabelsTo().
+        this._labelWrapper = new PIXI.Container();
+
+        this.nameLabel = new PIXI.Text({
+            text: this.item.name,
+            style: {
+                fontFamily: 'Cinzel, serif',
+                fontSize: 14,
+                fontWeight: '600',
+                fill: 0xFFD700,
+                stroke: { color: 0x000000, width: 3 },
+                align: 'center',
+                padding: 4,
+            },
+        });
+        this.nameLabel.anchor.set(0.5, 1);
+        // Position above the sprite
+        const labelY = this.sprite.y - (this.sprite.height * this.sprite.anchor.y) - 6;
+        this.nameLabel.y = labelY;
+
+        // Black background rectangle behind the text
+        // Use a one-frame delay so PIXI.Text has measured with the loaded font
+        const padX = 6;
+        const padY = 3;
+        this._nameLabelBg = new PIXI.Graphics();
+        this._nameLabelBg.y = labelY;
+        this._labelWrapper.addChild(this._nameLabelBg);
+        this._labelWrapper.addChild(this.nameLabel);
+
+        // Rebuild the background rect after the text has been measured
+        this._updateLabelBg = () => {
+            const lblW = this.nameLabel.width;
+            const lblH = this.nameLabel.height;
+            this._nameLabelBg.clear();
+            this._nameLabelBg.roundRect(-lblW / 2 - padX, -lblH - padY, lblW + padX * 2, lblH + padY * 2, 4);
+            this._nameLabelBg.fill({ color: 0x000000, alpha: 0.7 });
+        };
+        // Run once now and once more next frame to catch late font swaps
+        this._updateLabelBg();
+        requestAnimationFrame(() => {
+            if (this.nameLabel && this._nameLabelBg) {
+                this._updateLabelBg();
+            }
+        });
+
+        // Default: add to our own container (will be reparented by attachLabelsTo)
+        this._labelWrapper.x = 0;
+        this._labelWrapper.y = 0;
+        this.container.addChild(this._labelWrapper);
+    }
+
+    /**
+     * Move the name label into an external overlay container so it
+     * always renders above all other world objects.
+     * @param {PIXI.Container} overlayContainer - e.g. area.lootLabelsContainer
+     */
+    attachLabelsTo(overlayContainer) {
+        if (!this._labelWrapper) return;
+        // Remove from loot's own container
+        if (this._labelWrapper.parent) {
+            this._labelWrapper.parent.removeChild(this._labelWrapper);
+        }
+        // Position at world coords since overlay is at (0,0) in world space
+        this._labelWrapper.x = this.x;
+        this._labelWrapper.y = this.y;
+        overlayContainer.addChild(this._labelWrapper);
     }
 
     /**
@@ -85,5 +157,20 @@ class Loot extends Entity {
         const item = this.item;
         this.destroy();
         return item;
+    }
+
+    /**
+     * Clean up the name label along with everything else.
+     * @override
+     */
+    destroy() {
+        if (this._labelWrapper) {
+            if (this._labelWrapper.parent) this._labelWrapper.parent.removeChild(this._labelWrapper);
+            this._labelWrapper.destroy({ children: true });
+            this._labelWrapper = null;
+            this._nameLabelBg = null;
+            this.nameLabel = null;
+        }
+        super.destroy();
     }
 }
