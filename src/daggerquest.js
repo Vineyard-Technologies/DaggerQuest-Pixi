@@ -9,6 +9,15 @@ let pointerHeld = false;
 let pointerScreenX = 0;
 let pointerScreenY = 0;
 
+/**
+ * When the player clicks loot that is out of pickup range, we store it here
+ * so the player walks toward it and auto-picks it up once close enough.
+ * This handles items sitting on top of collidable surfaces (e.g. tables)
+ * where the collision polygon prevents the player from reaching normal
+ * pickup range.
+ */
+let pendingLootPickup = null;
+
 // Initialize the game
 async function init() {
     app = new PIXI.Application();
@@ -17,7 +26,7 @@ async function init() {
     await app.init({
         resizeTo: window,
         antialias: true,
-        preference: 'webgl',
+        preference: 'webgl2',
         background: '#000000',
         backgroundAlpha: 1,
     });
@@ -143,7 +152,7 @@ function onPointerDown(event) {
     const worldX = pointerScreenX - area.container.x;
     const worldY = pointerScreenY - area.container.y;
 
-    // Check if the click landed on a loot drop within pickup range
+    // Check if the click landed on a loot drop
     const loot = findLootAtPosition(pointerScreenX, pointerScreenY);
     if (loot) {
         const dx = loot.x - player.x;
@@ -151,11 +160,21 @@ function onPointerDown(event) {
         const dist = Math.sqrt(dx * dx + dy * dy);
 
         if (dist <= player.pickupRange) {
-            // Pick up and equip – don't move toward the click
+            // Already in range – pick up immediately
+            pendingLootPickup = null;
             player.pickupAndEquip(loot);
             return;
         }
+
+        // Out of range – walk toward the loot and pick up when close enough.
+        // This handles items on top of collidable surfaces (e.g. tables).
+        pendingLootPickup = loot;
+        player.moveToward(loot.x, loot.y);
+        return;
     }
+
+    // Clicked somewhere else – cancel any pending pickup
+    pendingLootPickup = null;
 
     pointerHeld = true;
     movePlayerToPointer();
@@ -185,11 +204,43 @@ function gameLoop(ticker) {
     // Continuously update target while pointer is held
     if (pointerHeld) {
         movePlayerToPointer();
+        // Cancel any walk-to-pickup if the player is now dragging to move
+        pendingLootPickup = null;
     }
 
     // In PixiJS v8, ticker is an object with deltaTime property
     const delta = ticker.deltaTime || ticker.elapsedMS / 16.67;
     player.update(delta);
+
+    // ── Pending loot pickup (walk-to-pickup) ────────────────────────
+    // Runs after player.update() so collision resolution has already
+    // occurred this frame and targetPosition is null if blocked.
+    if (pendingLootPickup) {
+        // Loot may have been picked up or destroyed by something else
+        if (!pendingLootPickup.sprite || !area.lootOnGround.includes(pendingLootPickup)) {
+            pendingLootPickup = null;
+        } else {
+            const dx = pendingLootPickup.x - player.x;
+            const dy = pendingLootPickup.y - player.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            // Use an extended range (2×) when the player has stopped moving,
+            // which typically means collision blocked further approach.
+            const stopped = !player.targetPosition;
+            const range = stopped
+                ? player.pickupRange * 2
+                : player.pickupRange;
+
+            if (dist <= range) {
+                const loot = pendingLootPickup;
+                pendingLootPickup = null;
+                player.pickupAndEquip(loot);
+            } else if (stopped) {
+                // Stopped but still too far – give up
+                pendingLootPickup = null;
+            }
+        }
+    }
 
     // Update area entities (enemies, NPCs)
     if (area) {

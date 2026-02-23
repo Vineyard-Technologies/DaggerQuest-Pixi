@@ -627,11 +627,12 @@ class UI {
             return;
         }
 
-        // Size and centre it in the slot (same treatment as placeholder: 62×62)
+        // Size and centre it in the slot, fitting within 62×62 without stretching
         const slotSize = 90;
+        const maxIconSize = 62;
+        const scale = Math.min(maxIconSize / icon.texture.width, maxIconSize / icon.texture.height);
         icon.anchor.set(0.5);
-        icon.width = 62;
-        icon.height = 62;
+        icon.scale.set(scale);
         icon.x = slotSize / 2;
         icon.y = slotSize / 2;
 
@@ -708,9 +709,10 @@ class UI {
         if (!icon) return false;
 
         const slotSize = 90;
+        const maxIconSize = 62;
+        const scale = Math.min(maxIconSize / icon.texture.width, maxIconSize / icon.texture.height);
         icon.anchor.set(0.5);
-        icon.width = 62;
-        icon.height = 62;
+        icon.scale.set(scale);
         icon.x = slotSize / 2;
         icon.y = slotSize / 2;
 
@@ -1157,27 +1159,58 @@ class UI {
     /**
      * Visually represent fill by cropping the orb sprite from the top.
      * A percentage of 1 shows the full orb; 0 hides it completely.
+     *
+     * Uses a Graphics mask instead of creating sub-textures every frame,
+     * which avoids both GC pressure and a WebGL diagonal-line artifact
+     * caused by sub-rectangle texture sampling at full fill.
      */
     _setOrbFill(orbSprite, pct) {
-        if (!orbSprite || !orbSprite.texture) return;
+        if (!orbSprite) return;
 
-        const tex = orbSprite.texture;
-        const fullH = tex.source.height;
-        const fullW = tex.source.width;
+        // First call: stash the original texture dimensions and create a
+        // reusable Graphics mask so we never allocate per-frame textures.
+        if (orbSprite._orbFillH === undefined) {
+            const tex = orbSprite.texture;
+            orbSprite._orbFillW = tex.source.width;
+            orbSprite._orbFillH = tex.source.height;
 
-        // Crop from the top – show only the bottom `pct` portion
-        const visibleH = Math.round(fullH * pct);
-        const yOffset = fullH - visibleH;
+            const mask = new PIXI.Graphics();
+            mask.label = 'orbMask';
+            orbSprite.parent.addChild(mask);
+            orbSprite.mask = mask;
+            orbSprite._orbMask = mask;
+            orbSprite._orbLastPct = -1; // force first draw
+        }
 
-        // Create a sub-rectangle of the original texture
-        const frame = new PIXI.Rectangle(0, yOffset, fullW, visibleH);
-        const trimmedTex = new PIXI.Texture({ source: tex.source, frame });
+        // Clamp and skip redundant updates
+        const clamped = Math.max(0, Math.min(1, pct));
+        if (clamped === orbSprite._orbLastPct) return;
+        orbSprite._orbLastPct = clamped;
 
-        orbSprite.texture = trimmedTex;
+        const fullW = orbSprite._orbFillW;
+        const fullH = orbSprite._orbFillH;
+        const mask  = orbSprite._orbMask;
 
-        // Shift the sprite down so the visible portion stays at the bottom of the orb
+        // Keep the sprite anchored dead-centre; never move it.
         orbSprite.anchor.set(0.5, 0.5);
-        orbSprite.y = yOffset / 2;
+        orbSprite.y = 0;
+
+        // Redraw the mask rectangle to reveal only the bottom `pct` portion.
+        // The sprite is centred at its parent position, so the top-left of
+        // the visible area in parent-space is (x - w/2, y - h/2).
+        mask.clear();
+        if (clamped > 0) {
+            const visibleH = Math.round(fullH * clamped);
+            const yOffset  = fullH - visibleH;
+            mask.rect(
+                orbSprite.x - fullW / 2,
+                orbSprite.y - fullH / 2 + yOffset,
+                fullW,
+                visibleH,
+            );
+            mask.fill({ color: 0xffffff });
+        }
+        orbSprite.visible = clamped > 0;
     }
 
     // ------------------------------------------------------------ Tooltip
