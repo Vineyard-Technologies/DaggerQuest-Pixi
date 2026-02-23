@@ -37,8 +37,11 @@ class Character extends Entity {
     } = {}) {
         super({ x, y, spriteKey, direction, animFps });
 
-        // Characters use the bottom-third collision polygon by default
-        this.setCollisionPoly(CHARACTER_COLLISION_BOX);
+        // Fixed-size collision box (pixels) so it doesn't change with
+        // each animation frame.  Centred horizontally at the character's
+        // anchor and placed at the bottom of the sprite.
+        this.collisionWidth = 60;
+        this.collisionHeight = 30;
 
         // Movement & general
         this.speed = speed;
@@ -163,6 +166,27 @@ class Character extends Entity {
         // Override in subclasses (e.g. Player syncs gear here)
     }
 
+    /**
+     * Override Entity's getWorldCollisionPoly to return a fixed-size
+     * rectangle at the character's feet, independent of the current
+     * animation frame's texture dimensions.
+     * @returns {Array<{x:number, y:number}>|null}
+     */
+    getWorldCollisionPoly() {
+        if (!this.sprite) return null;
+
+        const hw = this.collisionWidth / 2;
+
+        // Place the box centred horizontally on x and sitting just
+        // above the character's y (anchor is at the feet).
+        return [
+            { x: this.x - hw, y: this.y - this.collisionHeight },
+            { x: this.x + hw, y: this.y - this.collisionHeight },
+            { x: this.x + hw, y: this.y },
+            { x: this.x - hw, y: this.y },
+        ];
+    }
+
     /** Update movement toward targetPosition. Call once per frame. */
     update(delta) {
         // Regenerate health and mana
@@ -221,10 +245,33 @@ class Character extends Entity {
                 push.x += bPush.x;
                 push.y += bPush.y;
 
-                // Apply push-back
+                // Check against other characters (enemies + player)
+                const others = [];
+                if (area.enemies) {
+                    for (const e of area.enemies) {
+                        if (e !== this && e.isAlive) others.push(e);
+                    }
+                }
+                if (typeof player !== 'undefined' && player && player !== this) {
+                    others.push(player);
+                }
+                for (const other of others) {
+                    const otherPoly = other.getWorldCollisionPoly();
+                    if (!otherPoly) continue;
+                    if (!aabbOverlap(myPoly, otherPoly)) continue;
+                    const mtv = satOverlap(myPoly, otherPoly);
+                    if (mtv) {
+                        push.x += mtv.x;
+                        push.y += mtv.y;
+                    }
+                }
+
+                // Apply push-back and stop moving
                 if (push.x !== 0 || push.y !== 0) {
                     this.x += push.x;
                     this.y += push.y;
+                    this.targetPosition = null;
+                    this.stopWalkAnimation();
                 }
             }
         }
