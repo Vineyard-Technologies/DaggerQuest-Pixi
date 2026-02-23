@@ -149,6 +149,7 @@ class Farm extends Area {
             ],
         });
         await guide.loadTextures();
+        guide.startIdlePingPong();
         this.container.addChild(guide.container);
         this.npcs.push(guide);
     }
