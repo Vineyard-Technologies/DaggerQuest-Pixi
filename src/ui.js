@@ -289,10 +289,10 @@ class UI {
      */
     _buildEquippedMenu(slotTex, statueTex, placeholders) {
         const slotSize = 90;    // slot display size
-        const gap = 4;          // pixels between slots
+        const gap = 0;          // pixels between slots
         const cols = 2;
         const rows = 5;
-        const margin = 10;      // padding inside the menu
+        const margin = 0;       // padding inside the menu
 
         // Slots grid
         const slotsContainer = new PIXI.Container();
@@ -307,6 +307,8 @@ class UI {
             slotContainer.y = ph.row * (slotSize + gap);
 
             // Slot background (9-patch with 14px margins)
+            let bgSprite = null;
+            let borderMask = null;
             if (slotTex) {
                 const bg = new PIXI.NineSliceSprite({
                     texture: slotTex,
@@ -318,18 +320,54 @@ class UI {
                 bg.width = slotSize;
                 bg.height = slotSize;
                 bg.tint = 0x4757FF; // rgb(71, 87, 255)
+                bgSprite = bg;
+
+                // Mask out the center fill, keeping only the 14px border
+                // (transparent fill when slot is empty)
+                borderMask = new PIXI.Graphics();
+                borderMask.rect(0, 0, slotSize, slotSize);
+                borderMask.fill({ color: 0xffffff });
+                borderMask.rect(14, 14, slotSize - 28, slotSize - 28);
+                borderMask.cut();
+                slotContainer.addChild(borderMask);
+                bg.mask = borderMask;
+
                 slotContainer.addChild(bg);
             }
 
-            // Placeholder icon (centred in slot, forced to 62×62)
+            // Placeholder icon (centred in slot, fitting within 62×62 without stretching)
+            // Exception: offhand is top-left aligned to sit flush in the corner.
             let placeholderSprite = null;
             if (ph.tex) {
                 placeholderSprite = new PIXI.Sprite(ph.tex);
-                placeholderSprite.anchor.set(0.5);
-                placeholderSprite.width = 62;
-                placeholderSprite.height = 62;
-                placeholderSprite.x = slotSize / 2;
-                placeholderSprite.y = slotSize / 2;
+                const maxIconSize = 62;
+                const borderSize = 14;
+                const phScale = Math.min(maxIconSize / ph.tex.width, maxIconSize / ph.tex.height);
+                placeholderSprite.scale.set(phScale);
+                if (ph.type === 'offhand') {
+                    placeholderSprite.anchor.set(0, 0);
+                    placeholderSprite.x = borderSize;
+                    placeholderSprite.y = borderSize;
+                } else {
+                    placeholderSprite.anchor.set(0.5);
+                    placeholderSprite.x = slotSize / 2;
+                    placeholderSprite.y = slotSize / 2;
+                }
+                // Flip second ring placeholder horizontally
+                if (ph.type === 'ring2') {
+                    placeholderSprite.scale.x *= -1;
+                }
+                // Force partially-transparent pixels fully opaque;
+                // fully transparent pixels stay transparent.
+                // A large alpha multiplier (×255) pushes any non-zero alpha to 1.0 (clamped).
+                const opaqueFilter = new PIXI.ColorMatrixFilter();
+                opaqueFilter.matrix = [
+                    1, 0, 0, 0, 0,
+                    0, 1, 0, 0, 0,
+                    0, 0, 1, 0, 0,
+                    0, 0, 0, 3, 0,
+                ];
+                placeholderSprite.filters = [opaqueFilter];
                 slotContainer.addChild(placeholderSprite);
             }
 
@@ -343,20 +381,20 @@ class UI {
             });
 
             slotsContainer.addChild(slotContainer);
-            this.equippedSlots.push({ container: slotContainer, placeholder: placeholderSprite, slotType: ph.type, iconSprite: null, item: null });
+            this.equippedSlots.push({ container: slotContainer, placeholder: placeholderSprite, slotType: ph.type, iconSprite: null, item: null, bgSprite: bgSprite, borderMask: borderMask });
         }
 
-        this.equippedMenuContainer.addChild(slotsContainer);
-
-        // Statue on the right side
+        // Statue behind the slots
         if (statueTex) {
             const statue = new PIXI.Sprite(statueTex);
             statue.anchor.set(0, 0.5);
-            statue.x = margin + cols * (slotSize + gap) - gap + 4;
+            statue.x = margin + cols * (slotSize + gap) - gap + 4 - 25;
             statue.y = margin + (rows * (slotSize + gap) - gap) / 2;
             statue.label = 'equippedStatue';
             this.equippedMenuContainer.addChild(statue);
         }
+
+        this.equippedMenuContainer.addChild(slotsContainer);
 
         // Calculate total width for slide animation
         const gridWidth = cols * (slotSize + gap) - gap;
@@ -370,8 +408,8 @@ class UI {
      */
     _buildInventoryMenu(slotTex, statueTex, cols, rows) {
         const slotSize = 90;
-        const gap = 4;
-        const margin = 10;
+        const gap = 0;
+        const margin = 0;
 
         // Statue on the left side
         let statueWidth = 0;
@@ -380,7 +418,7 @@ class UI {
             statue.anchor.set(1, 0.5);
             statue.label = 'inventoryStatue';
             statueWidth = statueTex.width + 4;
-            statue.x = margin + statueWidth;
+            statue.x = margin + statueWidth + 25;
             statue.y = margin + (rows * (slotSize + gap) - gap) / 2;
             this.inventoryMenuContainer.addChild(statue);
         }
@@ -399,6 +437,8 @@ class UI {
                 slotContainer.y = row * (slotSize + gap);
 
                 // Slot background (9-patch with 14px margins)
+                let bgSprite = null;
+                let borderMask = null;
                 if (slotTex) {
                     const bg = new PIXI.NineSliceSprite({
                         texture: slotTex,
@@ -410,6 +450,18 @@ class UI {
                     bg.width = slotSize;
                     bg.height = slotSize;
                     bg.tint = 0xFFC8C8; // rgb(255, 200, 200)
+                    bgSprite = bg;
+
+                    // Mask out the center fill, keeping only the 14px border
+                    // (transparent fill when slot is empty)
+                    borderMask = new PIXI.Graphics();
+                    borderMask.rect(0, 0, slotSize, slotSize);
+                    borderMask.fill({ color: 0xffffff });
+                    borderMask.rect(14, 14, slotSize - 28, slotSize - 28);
+                    borderMask.cut();
+                    slotContainer.addChild(borderMask);
+                    bg.mask = borderMask;
+
                     slotContainer.addChild(bg);
                 }
 
@@ -423,7 +475,7 @@ class UI {
                 });
 
                 slotsContainer.addChild(slotContainer);
-                this.inventorySlots.push({ container: slotContainer, placeholder: null, iconSprite: null, item: null });
+                this.inventorySlots.push({ container: slotContainer, placeholder: null, iconSprite: null, item: null, bgSprite: bgSprite, borderMask: borderMask });
             }
         }
 
@@ -640,6 +692,9 @@ class UI {
         entry.iconSprite = icon;
         entry.item = item;
 
+        // Show full slot fill (remove border mask)
+        if (entry.bgSprite) entry.bgSprite.mask = null;
+
         // Hide the placeholder
         if (entry.placeholder) {
             entry.placeholder.visible = false;
@@ -664,6 +719,9 @@ class UI {
             await entry.item.unloadIcon();
             entry.item = null;
         }
+
+        // Restore border mask (transparent fill when empty)
+        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
 
         // Restore the placeholder
         if (entry.placeholder) {
@@ -719,6 +777,10 @@ class UI {
         entry.container.addChild(icon);
         entry.iconSprite = icon;
         entry.item = item;
+
+        // Show full slot fill (remove border mask)
+        if (entry.bgSprite) entry.bgSprite.mask = null;
+
         return true;
     }
 
@@ -736,6 +798,8 @@ class UI {
             await entry.item.unloadIcon();
             entry.item = null;
         }
+        // Restore border mask (transparent fill when empty)
+        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
     }
 
     // ----------------------------------------- Right-click slot interactions
@@ -854,9 +918,10 @@ class UI {
         // Create a floating sprite that follows the cursor
         const dragSprite = item.createIcon();
         if (!dragSprite) return;
+        const maxIconSize = 62;
+        const scale = Math.min(maxIconSize / dragSprite.texture.width, maxIconSize / dragSprite.texture.height);
         dragSprite.anchor.set(0.5);
-        dragSprite.width = 62;
-        dragSprite.height = 62;
+        dragSprite.scale.set(scale);
         dragSprite.alpha = 0.85;
 
         const pos = e.global;
@@ -1063,6 +1128,7 @@ class UI {
             entry.iconSprite = null;
         }
         entry.item = null;
+        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
         if (entry.placeholder) entry.placeholder.visible = true;
     }
 
@@ -1074,6 +1140,7 @@ class UI {
             entry.iconSprite = null;
         }
         // item is NOT cleared – caller will use it
+        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
     }
 
     /** Remove icon sprite from an inventory slot (clears entry data). */
@@ -1084,6 +1151,8 @@ class UI {
             entry.iconSprite = null;
         }
         entry.item = null;
+        // Restore border mask (transparent fill when empty)
+        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
     }
 
     /**

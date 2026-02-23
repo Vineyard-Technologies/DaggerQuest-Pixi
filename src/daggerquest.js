@@ -21,7 +21,7 @@ let pendingLootPickup = null;
 // Initialize the game
 async function init() {
     app = new PIXI.Application();
-    // Using 'webgl' to work around a WebGPU buffer destruction bug.
+    // Using 'webgl2' to work around a WebGPU buffer destruction bug.
     // See: https://github.com/Vineyard-Technologies/DaggerQuest/issues/1
     await app.init({
         resizeTo: window,
