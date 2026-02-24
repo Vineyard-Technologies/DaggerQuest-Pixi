@@ -1,0 +1,20 @@
+{
+  "name": "daggerquest",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "spritesheets": "node scripts/makeSpritesheets.cjs",
+    "deploy:prod": "node scripts/pushToEnvironment.cjs production",
+    "deploy:test": "node scripts/pushToEnvironment.cjs test"
+  },
+  "dependencies": {
+    "pixi.js": "^8.0.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}

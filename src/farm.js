@@ -1,3 +1,8 @@
+import { Area } from './area.js';
+import { NPC } from './npc.js';
+import { Enemy } from './enemy.js';
+import { Item } from './item.js';
+
 /**
  * The Farm area – the starting zone for the player.
  * Layout matches the original Construct 3 DaggerQuest farm.json.
@@ -294,3 +299,5 @@ class Farm extends Area {
         }));
     }
 }
+
+export { Farm };

@@ -1,32 +1,17 @@
-// Game state
-let app;
-let area;
-let player;
-let ui;
-
-// Input state
-let pointerHeld = false;
-let pointerScreenX = 0;
-let pointerScreenY = 0;
-
-// Hover outline state
-let hoveredEntity = null;
-
-/**
- * When the player clicks loot that is out of pickup range, we store it here
- * so the player walks toward it and auto-picks it up once close enough.
- * This handles items sitting on top of collidable surfaces (e.g. tables)
- * where the collision polygon prevents the player from reaching normal
- * pickup range.
- */
-let pendingLootPickup = null;
+import * as PIXI from 'pixi.js';
+import state from './state.js';
+import { Farm } from './farm.js';
+import { Man, Woman } from './classes.js';
+import { UI } from './ui.js';
+import { HOVER_OUTLINE } from './outlineFilter.js';
+import './debug.js';
 
 // Initialize the game
 async function init() {
-    app = new PIXI.Application();
+    state.app = new PIXI.Application();
     // Using 'webgl2' to work around a WebGPU buffer destruction bug.
     // See: https://github.com/Vineyard-Technologies/DaggerQuest/issues/1
-    await app.init({
+    await state.app.init({
         resizeTo: window,
         antialias: true,
         preference: 'webgpu',
@@ -34,8 +19,8 @@ async function init() {
         backgroundAlpha: 1,
     });
     
-    document.body.appendChild(app.canvas);
-    app.canvas.id = 'daggerquestCanvas';
+    document.body.appendChild(state.app.canvas);
+    state.app.canvas.id = 'daggerquestCanvas';
 
     // Prevent the browser context menu so right-click can be used for UI interactions
     document.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -48,61 +33,78 @@ async function init() {
     ]);
 
     // Create the area and add its container to the stage
-    area = new Farm();
-    app.stage.addChild(area.container);
-    await area.createBackground();
-    await area.spawnObjects();
+    state.area = new Farm();
+    state.app.stage.addChild(state.area.container);
+    await state.area.createBackground();
+    await state.area.spawnObjects();
 
     // Create player
     await createPlayer(Woman);
 
     // Create HUD (health & mana orbs)
-    ui = new UI();
-    await ui.load();
-    app.stage.addChild(ui.container);
+    state.ui = new UI();
+    await state.ui.load();
+    state.app.stage.addChild(state.ui.container);
 
     // Add pointer handlers for continuous click-to-move
-    app.stage.eventMode = 'static';
-    app.stage.hitArea = app.screen;
-    app.stage.on('pointerdown', onPointerDown);
-    app.stage.on('pointermove', onPointerMove);
-    app.stage.on('pointerup', onPointerUp);
-    app.stage.on('pointerupoutside', onPointerUp);
+    state.app.stage.eventMode = 'static';
+    state.app.stage.hitArea = state.app.screen;
+    state.app.stage.on('pointerdown', onPointerDown);
+    state.app.stage.on('pointermove', onPointerMove);
+    state.app.stage.on('pointerup', onPointerUp);
+    state.app.stage.on('pointerupoutside', onPointerUp);
 
     // Start game loop
-    app.ticker.add(gameLoop);
+    state.app.ticker.add(gameLoop);
 
     // Keyboard handlers for debug: H = lose 10 health, M = lose 10 mana
     // Menu toggles: C = equipped menu, I = inventory menu
     window.addEventListener('keydown', (e) => {
-        if (!player) return;
+        if (!state.player) return;
         if (e.key === 'h' || e.key === 'H') {
-            player.currentHealth = Math.max(0, player.currentHealth - 10);
+            state.player.currentHealth = Math.max(0, state.player.currentHealth - 10);
         }
         if (e.key === 'm' || e.key === 'M') {
-            player.currentMana = Math.max(0, player.currentMana - 10);
+            state.player.currentMana = Math.max(0, state.player.currentMana - 10);
         }
         if (e.key === 'c' || e.key === 'C') {
-            ui.toggleEquippedMenu();
+            state.ui.toggleEquippedMenu();
         }
         if (e.key === 'i' || e.key === 'I') {
-            ui.toggleInventoryMenu();
+            state.ui.toggleInventoryMenu();
         }
     });
+}
+
+// Create the player character
+async function createPlayer(PlayerClass) {
+    state.player = new PlayerClass({
+        x: state.area.playerStartX,
+        y: state.area.playerStartY,
+    });
+
+    await state.player.loadTextures();
+
+    state.area.container.addChild(state.player.container);
+    await state.player.loadDefaultGear();
+    state.player.startIdlePingPong();
+
+    // Position camera on the player immediately
+    updateCamera();
 }
 
 // Update camera to follow the player, clamped to world bounds
 function updateCamera() {
     // Center the camera on the player
-    let camX = app.screen.width / 2 - player.x;
-    let camY = app.screen.height / 2 - player.y;
+    let camX = state.app.screen.width / 2 - state.player.x;
+    let camY = state.app.screen.height / 2 - state.player.y;
 
     // Clamp so we never show outside the world
-    camX = Math.min(0, Math.max(camX, app.screen.width - area.width));
-    camY = Math.min(0, Math.max(camY, app.screen.height - area.height));
+    camX = Math.min(0, Math.max(camX, state.app.screen.width - state.area.width));
+    camY = Math.min(0, Math.max(camY, state.app.screen.height - state.area.height));
 
-    area.container.x = camX;
-    area.container.y = camY;
+    state.area.container.x = camX;
+    state.area.container.y = camY;
 }
 
 /**
@@ -113,9 +115,9 @@ function updateCamera() {
  * @returns {Loot|null}
  */
 function findLootAtPosition(screenX, screenY) {
-    if (!area?.lootOnGround) return null;
+    if (!state.area?.lootOnGround) return null;
 
-    for (const loot of area.lootOnGround) {
+    for (const loot of state.area.lootOnGround) {
         if (!loot.sprite) continue;
 
         // Check the name label first (larger click target above the sprite)
@@ -147,8 +149,8 @@ function findHoverableAtPosition(screenX, screenY) {
     if (loot) return loot;
 
     // Check enemies
-    if (area?.enemies) {
-        for (const enemy of area.enemies) {
+    if (state.area?.enemies) {
+        for (const enemy of state.area.enemies) {
             if (!enemy.sprite || enemy.isAlive === false) continue;
             const b = enemy.sprite.getBounds();
             if (screenX >= b.x && screenX <= b.x + b.width &&
@@ -159,8 +161,8 @@ function findHoverableAtPosition(screenX, screenY) {
     }
 
     // Check NPCs
-    if (area?.npcs) {
-        for (const npc of area.npcs) {
+    if (state.area?.npcs) {
+        for (const npc of state.area.npcs) {
             if (!npc.sprite) continue;
             const b = npc.sprite.getBounds();
             if (screenX >= b.x && screenX <= b.x + b.width &&
@@ -178,27 +180,27 @@ function findHoverableAtPosition(screenX, screenY) {
  */
 function updateHoverOutline() {
     // Don't show hover outlines when the pointer is over UI
-    const overUI = ui && ui.hitTest(pointerScreenX, pointerScreenY);
-    const target = overUI ? null : findHoverableAtPosition(pointerScreenX, pointerScreenY);
+    const overUI = state.ui && state.ui.hitTest(state.pointerScreenX, state.pointerScreenY);
+    const target = overUI ? null : findHoverableAtPosition(state.pointerScreenX, state.pointerScreenY);
 
-    if (target === hoveredEntity) return;
+    if (target === state.hoveredEntity) return;
 
     // Remove outline from previous entity
-    if (hoveredEntity && hoveredEntity.sprite) {
-        hoveredEntity.sprite.filters = hoveredEntity.sprite.filters
-            ? hoveredEntity.sprite.filters.filter(f => f !== HOVER_OUTLINE)
+    if (state.hoveredEntity && state.hoveredEntity.sprite) {
+        state.hoveredEntity.sprite.filters = state.hoveredEntity.sprite.filters
+            ? state.hoveredEntity.sprite.filters.filter(f => f !== HOVER_OUTLINE)
             : [];
-        if (hoveredEntity.sprite.filters.length === 0) {
-            hoveredEntity.sprite.filters = null;
+        if (state.hoveredEntity.sprite.filters.length === 0) {
+            state.hoveredEntity.sprite.filters = null;
         }
     }
 
-    hoveredEntity = target;
+    state.hoveredEntity = target;
 
     // Apply outline to new entity
-    if (hoveredEntity && hoveredEntity.sprite) {
-        const existing = hoveredEntity.sprite.filters || [];
-        hoveredEntity.sprite.filters = [...existing, HOVER_OUTLINE];
+    if (state.hoveredEntity && state.hoveredEntity.sprite) {
+        const existing = state.hoveredEntity.sprite.filters || [];
+        state.hoveredEntity.sprite.filters = [...existing, HOVER_OUTLINE];
     }
 }
 
@@ -208,122 +210,122 @@ function onPointerDown(event) {
     if (event.button === 2) return;
 
     // Ignore left-clicks while dragging an item in the UI
-    if (ui && ui.isDragging) return;
+    if (state.ui && state.ui.isDragging) return;
 
     // Ignore clicks that land on the UI (menus, orbs, etc.)
-    if (ui && ui.hitTest(event.data.global.x, event.data.global.y)) return;
+    if (state.ui && state.ui.hitTest(event.data.global.x, event.data.global.y)) return;
 
     const pos = event.data.global;
-    pointerScreenX = pos.x;
-    pointerScreenY = pos.y;
+    state.pointerScreenX = pos.x;
+    state.pointerScreenY = pos.y;
 
-    const worldX = pointerScreenX - area.container.x;
-    const worldY = pointerScreenY - area.container.y;
+    const worldX = state.pointerScreenX - state.area.container.x;
+    const worldY = state.pointerScreenY - state.area.container.y;
 
     // Check if the click landed on a loot drop
-    const loot = findLootAtPosition(pointerScreenX, pointerScreenY);
+    const loot = findLootAtPosition(state.pointerScreenX, state.pointerScreenY);
     if (loot) {
-        const dx = loot.x - player.x;
-        const dy = loot.y - player.y;
+        const dx = loot.x - state.player.x;
+        const dy = loot.y - state.player.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-        if (dist <= player.pickupRange) {
+        if (dist <= state.player.pickupRange) {
             // Already in range – pick up immediately
-            pendingLootPickup = null;
-            player.pickupAndEquip(loot);
+            state.pendingLootPickup = null;
+            state.player.pickupAndEquip(loot);
             return;
         }
 
         // Out of range – walk toward the loot and pick up when close enough.
         // This handles items on top of collidable surfaces (e.g. tables).
-        pendingLootPickup = loot;
-        player.moveToward(loot.x, loot.y);
+        state.pendingLootPickup = loot;
+        state.player.moveToward(loot.x, loot.y);
         return;
     }
 
     // Clicked somewhere else – cancel any pending pickup
-    pendingLootPickup = null;
+    state.pendingLootPickup = null;
 
-    pointerHeld = true;
+    state.pointerHeld = true;
     movePlayerToPointer();
 }
 
 function onPointerMove(event) {
     const pos = event.data.global;
-    pointerScreenX = pos.x;
-    pointerScreenY = pos.y;
+    state.pointerScreenX = pos.x;
+    state.pointerScreenY = pos.y;
 }
 
 function onPointerUp() {
-    pointerHeld = false;
+    state.pointerHeld = false;
 }
 
 function movePlayerToPointer() {
-    const worldX = pointerScreenX - area.container.x;
-    const worldY = pointerScreenY - area.container.y;
-    player.moveToward(worldX, worldY);
+    const worldX = state.pointerScreenX - state.area.container.x;
+    const worldY = state.pointerScreenY - state.area.container.y;
+    state.player.moveToward(worldX, worldY);
 }
 
 // Main game loop
 function gameLoop(ticker) {
-    if (!player) return;
+    if (!state.player) return;
 
     // Update hover outline each frame
     updateHoverOutline();
 
     // Continuously update target while pointer is held
-    if (pointerHeld) {
+    if (state.pointerHeld) {
         movePlayerToPointer();
         // Cancel any walk-to-pickup if the player is now dragging to move
-        pendingLootPickup = null;
+        state.pendingLootPickup = null;
     }
 
     // In PixiJS v8, ticker is an object with deltaTime property
     const delta = ticker.deltaTime || ticker.elapsedMS / 16.67;
-    player.update(delta);
+    state.player.update(delta);
 
     // ── Pending loot pickup (walk-to-pickup) ────────────────────────
     // Runs after player.update() so collision resolution has already
     // occurred this frame and targetPosition is null if blocked.
-    if (pendingLootPickup) {
+    if (state.pendingLootPickup) {
         // Loot may have been picked up or destroyed by something else
-        if (!pendingLootPickup.sprite || !area.lootOnGround.includes(pendingLootPickup)) {
-            pendingLootPickup = null;
+        if (!state.pendingLootPickup.sprite || !state.area.lootOnGround.includes(state.pendingLootPickup)) {
+            state.pendingLootPickup = null;
         } else {
-            const dx = pendingLootPickup.x - player.x;
-            const dy = pendingLootPickup.y - player.y;
+            const dx = state.pendingLootPickup.x - state.player.x;
+            const dy = state.pendingLootPickup.y - state.player.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
 
             // Use an extended range (2×) when the player has stopped moving,
             // which typically means collision blocked further approach.
-            const stopped = !player.targetPosition;
+            const stopped = !state.player.targetPosition;
             const range = stopped
-                ? player.pickupRange * 2
-                : player.pickupRange;
+                ? state.player.pickupRange * 2
+                : state.player.pickupRange;
 
             if (dist <= range) {
-                const loot = pendingLootPickup;
-                pendingLootPickup = null;
-                player.pickupAndEquip(loot);
+                const loot = state.pendingLootPickup;
+                state.pendingLootPickup = null;
+                state.player.pickupAndEquip(loot);
             } else if (stopped) {
                 // Stopped but still too far – give up
-                pendingLootPickup = null;
+                state.pendingLootPickup = null;
             }
         }
     }
 
     // Update area entities (enemies, NPCs)
-    if (area) {
-        area.update(delta);
+    if (state.area) {
+        state.area.update(delta);
     }
 
     // Pan camera to follow player (always, so window resizes are reflected)
     updateCamera();
 
     // Update HUD orbs
-    if (ui) {
-        ui.layout(app.screen.width, app.screen.height);
-        ui.update(player, ticker.elapsedMS);
+    if (state.ui) {
+        state.ui.layout(state.app.screen.width, state.app.screen.height);
+        state.ui.update(state.player, ticker.elapsedMS);
     }
 }
 

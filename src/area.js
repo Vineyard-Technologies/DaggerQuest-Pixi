@@ -1,3 +1,6 @@
+import * as PIXI from 'pixi.js';
+import { COLLISION_POLYS, DEFAULT_BOX, polyToWorld } from './collision.js';
+
 /**
  * Shared blur filter for all shadow sprites.  Reusing a single instance
  * avoids creating a separate GPU render-pass per shadow.
@@ -195,3 +198,5 @@ class Area {
         }
     }
 }
+
+export { SHADOW_BLUR, Area };

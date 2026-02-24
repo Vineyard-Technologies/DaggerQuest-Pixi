@@ -1,3 +1,7 @@
+import * as PIXI from 'pixi.js';
+import { Area } from './area.js';
+import state from './state.js';
+
 /**
  * HUD overlay – health orb (bottom-left) and mana orb (bottom-right).
  *
@@ -777,8 +781,8 @@ class UI {
             if (entry.placeholder) entry.placeholder.visible = true;
 
             // 3. Tell the player to swap back to default gear
-            if (player) {
-                await player.unequipSlotSilent(slotType);
+            if (state.player) {
+                await state.player.unequipSlotSilent(slotType);
             }
         } finally {
             this._rightClickBusy = false;
@@ -808,8 +812,8 @@ class UI {
             await this._clearInventorySlot(entry);
 
             // 2. Equip the item on the player (handles gear swap & UI equipped icon)
-            if (player) {
-                await player.equipItem(item);
+            if (state.player) {
+                await state.player.equipItem(item);
             }
 
             // 3. If there was a previously equipped non-default item, put it
@@ -1102,13 +1106,13 @@ class UI {
      * @returns {boolean} true if successfully dropped
      */
     async _dropAsLoot(drag, screenX, screenY) {
-        if (!area) return false;
+        if (!state.area) return false;
 
         const item = drag.item;
 
         // Convert screen position to world coordinates
-        const worldX = screenX - area.container.x;
-        const worldY = screenY - area.container.y;
+        const worldX = screenX - state.area.container.x;
+        const worldY = screenY - state.area.container.y;
 
         // Clear the slot icon immediately
         if (drag.source === 'equipped') {
@@ -1120,13 +1124,13 @@ class UI {
         // Spawn loot in the world immediately
         const loot = item.createLoot(worldX, worldY);
         await loot.loadTextures();
-        area.container.addChild(loot.container);
-        loot.attachLabelsTo(area.lootLabelsContainer);
-        area.lootOnGround.push(loot);
+        state.area.container.addChild(loot.container);
+        loot.attachLabelsTo(state.area.lootLabelsContainer);
+        state.area.lootOnGround.push(loot);
 
         // Unequip gear in the background (visual only, non-blocking)
-        if (drag.source === 'equipped' && player) {
-            player.unequipSlotSilent(drag.entry.slotType);
+        if (drag.source === 'equipped' && state.player) {
+            state.player.unequipSlotSilent(drag.entry.slotType);
         }
 
         return true;
@@ -1428,8 +1432,8 @@ class UI {
      */
     _positionTooltip(screenX, screenY, tipW, tipH) {
         const margin = 14;
-        const screenW = app?.screen?.width || window.innerWidth;
-        const screenH = app?.screen?.height || window.innerHeight;
+        const screenW = state.app?.screen?.width || window.innerWidth;
+        const screenH = state.app?.screen?.height || window.innerHeight;
 
         // Default: place to the right and slightly below the pointer
         let tx = screenX + margin;
@@ -1462,3 +1466,5 @@ class UI {
         this._tooltipVisible = false;
     }
 }
+
+export { UI };

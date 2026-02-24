@@ -1,3 +1,6 @@
+import * as PIXI from 'pixi.js';
+import { Area, SHADOW_BLUR } from './area.js';
+
 /**
  * Gear is the visual representation of an equipped item on a character's body.
  * It is NOT an Entity – it is an overlay that syncs its AnimatedSprite
@@ -101,7 +104,7 @@ class Gear {
         this._character = character;
         this._spriteKey = `${character.spriteKey}_${this._spriteKeyBase}_gear`;
 
-        const manifest = await Item.fetchManifest();
+        const manifest = await Area.fetchManifest();
 
         // Load main gear textures
         await this._loadSheetTextures(manifest, this._spriteKey, this._textures);
@@ -366,3 +369,5 @@ class Gear {
         return (fallbackDir && anim[fallbackDir]) || [];
     }
 }
+
+export { GEAR_SLOT_Z_ORDER, Gear };

@@ -1,3 +1,7 @@
+import * as PIXI from 'pixi.js';
+import { Entity } from './entity.js';
+import { SHADOW_BLUR } from './area.js';
+
 /**
  * Loot is a world entity that represents a dropped item on the ground.
  * It extends Entity so it lives in the PIXI scene graph with a position,
@@ -174,3 +178,5 @@ class Loot extends Entity {
         super.destroy();
     }
 }
+
+export { Loot };

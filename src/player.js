@@ -1,3 +1,7 @@
+import { Character } from './character.js';
+import { Gear } from './gear.js';
+import state from './state.js';
+
 /**
  * The player character. Extends Character with click-to-move input
  * handling and camera tracking.
@@ -69,9 +73,9 @@ class Player extends Character {
         const item = loot.pickup();
 
         // Remove the loot from the area's tracking list
-        if (area?.lootOnGround) {
-            const idx = area.lootOnGround.indexOf(loot);
-            if (idx !== -1) area.lootOnGround.splice(idx, 1);
+        if (state.area?.lootOnGround) {
+            const idx = state.area.lootOnGround.indexOf(loot);
+            if (idx !== -1) state.area.lootOnGround.splice(idx, 1);
         }
 
         const slot = item.slot;
@@ -95,8 +99,8 @@ class Player extends Character {
         this.equippedGear[slot] = newGear;
 
         // Update the HUD equipped-slot icon
-        if (typeof ui !== 'undefined' && ui) {
-            await ui.setEquippedItem(slot, item);
+        if (state.ui) {
+            await state.ui.setEquippedItem(slot, item);
         }
     }
 
@@ -130,8 +134,8 @@ class Player extends Character {
         }
 
         // Clear the HUD equipped-slot icon and restore the placeholder
-        if (typeof ui !== 'undefined' && ui) {
-            await ui.clearEquippedItem(slot);
+        if (state.ui) {
+            await state.ui.clearEquippedItem(slot);
         }
     }
 
@@ -160,8 +164,8 @@ class Player extends Character {
         this.equippedGear[slot] = newGear;
 
         // Update the HUD equipped-slot icon
-        if (typeof ui !== 'undefined' && ui) {
-            await ui.setEquippedItem(slot, item);
+        if (state.ui) {
+            await state.ui.setEquippedItem(slot, item);
         }
     }
 
@@ -205,19 +209,4 @@ class Player extends Character {
 
 }
 
-// Create the player character
-async function createPlayer(PlayerClass) {
-    player = new PlayerClass({
-        x: area.playerStartX,
-        y: area.playerStartY,
-    });
-
-    await player.loadTextures();
-
-    area.container.addChild(player.container);
-    await player.loadDefaultGear();
-    player.startIdlePingPong();
-
-    // Position camera on the player immediately
-    updateCamera();
-}
+export { Player };

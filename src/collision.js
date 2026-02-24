@@ -401,3 +401,9 @@ function resolveBoundaryCollisions(movingPoly, boundaries) {
 
     return { x: totalPushX, y: totalPushY };
 }
+
+export {
+    COLLISION_POLYS, DEFAULT_BOX, CHARACTER_COLLISION_BOX,
+    polyToWorld, satOverlap, aabbOverlap,
+    resolveCollisions, resolveBoundaryCollisions,
+};

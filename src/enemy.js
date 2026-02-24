@@ -1,3 +1,6 @@
+import { Character } from './character.js';
+import state from './state.js';
+
 /**
  * An Enemy is a Character that is hostile to the player.
  * Enemies patrol, chase, and attack the player.
@@ -57,8 +60,8 @@ class Enemy extends Character {
         super.update(delta);
 
         // If the player exists, check aggro
-        if (typeof player !== 'undefined' && player) {
-            const dist = this.distanceTo(player);
+        if (state.player) {
+            const dist = this.distanceTo(state.player);
 
             if (dist <= this.attackRange) {
                 // Close enough to attack
@@ -69,7 +72,7 @@ class Enemy extends Character {
             } else if (dist <= this.aggroRange) {
                 // Chase the player
                 this.state = 'chase';
-                this.moveToward(player.x, player.y);
+                this.moveToward(state.player.x, state.player.y);
             } else if (this.state === 'chase') {
                 // Lost aggro, return to patrol
                 this.state = 'idle';
@@ -98,11 +101,13 @@ class Enemy extends Character {
         this.lastAttackTime = now;
 
         // Face the player
-        if (typeof player !== 'undefined' && player) {
-            const dx = player.x - this.x;
-            const dy = player.y - this.y;
+        if (state.player) {
+            const dx = state.player.x - this.x;
+            const dy = state.player.y - this.y;
             const angle = Math.atan2(dy, dx) * (180 / Math.PI);
             this.direction = this.findClosestDirection(angle);
         }
     }
 }
+
+export { Enemy };

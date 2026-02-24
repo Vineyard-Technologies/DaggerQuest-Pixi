@@ -1,3 +1,6 @@
+import { Character } from './character.js';
+import state from './state.js';
+
 /**
  * An NPC is a friendly, non-hostile Character the player can interact with.
  * NPCs can have dialog, wander in a small area, and face the player when spoken to.
@@ -40,8 +43,8 @@ class NPC extends Character {
         this.stopWalkAnimation();
 
         // Face the player
-        if (typeof player !== 'undefined' && player) {
-            this.faceEntity(player);
+        if (state.player) {
+            this.faceEntity(state.player);
         }
 
         return this.getCurrentDialog();
@@ -73,8 +76,8 @@ class NPC extends Character {
 
     /** Check if the player is within interaction range */
     isPlayerInRange() {
-        if (typeof player === 'undefined' || !player) return false;
-        return this.distanceTo(player) <= this.interactRange;
+        if (!state.player) return false;
+        return this.distanceTo(state.player) <= this.interactRange;
     }
 
     /** Pick a random wander target near the origin */
@@ -100,3 +103,5 @@ class NPC extends Character {
         }
     }
 }
+
+export { NPC };

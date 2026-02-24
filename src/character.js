@@ -1,3 +1,7 @@
+import { Entity } from './entity.js';
+import { resolveCollisions, resolveBoundaryCollisions, aabbOverlap, satOverlap } from './collision.js';
+import state from './state.js';
+
 /**
  * A Character is an Entity that can move and has walk/idle animations.
  * Includes the player, NPCs, and enemies.
@@ -256,26 +260,26 @@ class Character extends Entity {
         this.y += dy * ratio;
 
         // ── Collision resolution ─────────────────────────────────────
-        if (typeof area !== 'undefined' && area) {
+        if (state.area) {
             const myPoly = this.getWorldCollisionPoly();
             if (myPoly) {
                 // Check against static colliders
-                const push = resolveCollisions(myPoly, area.colliders);
+                const push = resolveCollisions(myPoly, state.area.colliders);
 
                 // Check against rectangular boundaries
-                const bPush = resolveBoundaryCollisions(myPoly, area.boundaries);
+                const bPush = resolveBoundaryCollisions(myPoly, state.area.boundaries);
                 push.x += bPush.x;
                 push.y += bPush.y;
 
                 // Check against other characters (enemies + player)
                 const others = [];
-                if (area.enemies) {
-                    for (const e of area.enemies) {
+                if (state.area.enemies) {
+                    for (const e of state.area.enemies) {
                         if (e !== this && e.isAlive) others.push(e);
                     }
                 }
-                if (typeof player !== 'undefined' && player && player !== this) {
-                    others.push(player);
+                if (state.player && state.player !== this) {
+                    others.push(state.player);
                 }
                 for (const other of others) {
                     const otherPoly = other.getWorldCollisionPoly();
@@ -303,3 +307,5 @@ class Character extends Entity {
         this.container.y = this.y;
     }
 }
+
+export { Character };

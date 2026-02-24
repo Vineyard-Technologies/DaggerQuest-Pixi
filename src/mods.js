@@ -186,3 +186,9 @@ function aggregateModStats(mods) {
     }
     return result;
 }
+
+export {
+    MOD_POOL, MOD_COUNT_WEIGHTS,
+    weightedRandomIndex, rollModValue, rollMods,
+    getModDefinition, formatMod, aggregateModStats,
+};

@@ -1,3 +1,5 @@
+import { Player } from './player.js';
+
 /**
  * Playable character classes. Each extends Player with a specific spriteKey.
  */
@@ -22,3 +24,5 @@ class Woman extends Player {
         };
     }
 }
+
+export { Man, Woman };

@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js';
+
 /**
  * Outline filter using WebGPU (WGSL) + WebGL (GLSL) shaders.
  * Samples pixels in a ring around the current fragment; if a transparent
@@ -158,8 +160,7 @@ const HOVER_OUTLINE = new PIXI.Filter({
         name: 'outline-filter',
     }),
     glProgram: PIXI.GlProgram.from({
-        // Use the default PIXI filter vertex shader (ci) – already
-        // loaded by pixi.min.js and available as PIXI.defaultFilterVert
+        // Use the default PIXI filter vertex shader
         vertex:   PIXI.defaultFilterVert,
         fragment: OUTLINE_FRAG_GLSL,
         name: 'outline-filter',
@@ -179,3 +180,5 @@ const HOVER_OUTLINE = new PIXI.Filter({
     },
     padding: OUTLINE_THICKNESS + 1,
 });
+
+export { HOVER_OUTLINE };

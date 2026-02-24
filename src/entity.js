@@ -1,3 +1,7 @@
+import * as PIXI from 'pixi.js';
+import { Area, SHADOW_BLUR } from './area.js';
+import { polyToWorld } from './collision.js';
+
 /**
  * Base class for all game entities (player, enemies, props, etc.)
  * Entities have a position, a container, and an optional animated sprite.
@@ -314,3 +318,5 @@ class Entity {
         return closest;
     }
 }
+
+export { Entity };

@@ -1,3 +1,9 @@
+import * as PIXI from 'pixi.js';
+import { Area } from './area.js';
+import { rollMods, aggregateModStats, formatMod } from './mods.js';
+import { Loot } from './loot.js';
+import { Gear } from './gear.js';
+
 /**
  * An Item is the data definition for an equippable/collectible object.
  * It holds metadata (name, slot, stats, mods) and provides:
@@ -186,3 +192,5 @@ class Item {
         return Area.fetchManifest();
     }
 }
+
+export { Item };
