@@ -6,7 +6,6 @@
  *   2. healthorb/manaorb        – liquid fill (tinted red / blue)
  *   3. orbcoverfront            – front frame
  *   4. healthcover/manacover   – orb cover
- *   5. healthstatue/manastatue – decorative statue (frontmost)
  *
  * The whole HUD lives in a PIXI.Container added directly to `app.stage`
  * so it stays fixed on screen regardless of camera movement.
@@ -111,11 +110,8 @@ class UI {
             manaorbTex,
             healthcoverTex,
             manacoverTex,
-            healthstatueTex,
-            manastatueTex,
             // Equipped menu textures
             charactermenuTex,
-            equippedmenustatueTex,
             headplaceholderTex,
             chestplaceholderTex,
             handsplaceholderTex,
@@ -127,10 +123,8 @@ class UI {
             ringplaceholderTex,
             // Inventory menu textures
             slotTex,
-            inventorymenustatueTex,
             // Ability bar textures
             abilityslotTex,
-            abilitybarstatueTex,
         ] = await Promise.all([
             loadTexture('orbcoverback'),
             loadTexture('orbcoverfront'),
@@ -138,11 +132,8 @@ class UI {
             loadTexture('manaorb'),
             loadTexture('healthcover'),
             loadTexture('manacover'),
-            loadTexture('healthstatue'),
-            loadTexture('manastatue'),
             // Equipped menu
             loadTexture('charactermenu'),
-            loadTexture('equippedmenustatue'),
             loadTexture('headplaceholder'),
             loadTexture('chestplaceholder'),
             loadTexture('handsplaceholder'),
@@ -154,10 +145,8 @@ class UI {
             loadTexture('ringplaceholder'),
             // Inventory menu
             loadTexture('slot'),
-            loadTexture('inventorymenustatue'),
             // Ability bar
             loadTexture('abilityslot'),
-            loadTexture('abilitybarstatue'),
         ]);
 
         // Reset default anchors on slot textures so NineSliceSprite renders from (0,0)
@@ -171,9 +160,6 @@ class UI {
             coverFrontTex: orbcoverfrontTex,
             orbTex: healthorbTex,
             coverTex: healthcoverTex,
-            statueTex: healthstatueTex,
-            statueOffsetX: 155,
-            statueOffsetY: 0,
             tint: 0xff4444,    // red
         });
 
@@ -183,16 +169,13 @@ class UI {
             coverFrontTex: orbcoverfrontTex,
             orbTex: manaorbTex,
             coverTex: manacoverTex,
-            statueTex: manastatueTex,
-            statueOffsetX: -150,
-            statueOffsetY: 0,
             tint: 0x4488ff,    // blue
         });
 
         // Store orb height for fill calculations
         if (healthorbTex) this._orbHeight = healthorbTex.height;
 
-        // ---- Equipped-items menu (2 cols × 5 rows, statue on right) ----
+        // ---- Equipped-items menu (2 cols × 5 rows) ----
         const equippedPlaceholders = [
             // Column 0 (left – armour)       Column 1 (right – accessories/weapons)
             { col: 0, row: 0, tex: headplaceholderTex,     type: 'head' },
@@ -206,13 +189,13 @@ class UI {
             { col: 1, row: 3, tex: ringplaceholderTex,     type: 'ring' },
             { col: 1, row: 4, tex: ringplaceholderTex,     type: 'ring2' },
         ];
-        this._buildEquippedMenu(charactermenuTex, equippedmenustatueTex, equippedPlaceholders);
+        this._buildEquippedMenu(charactermenuTex, equippedPlaceholders);
 
-        // ---- Inventory menu (5 cols × 5 rows, statue on left) ----
-        this._buildInventoryMenu(slotTex, inventorymenustatueTex, 5, 5);
+        // ---- Inventory menu (5 cols × 5 rows) ----
+        this._buildInventoryMenu(slotTex, 5, 5);
 
-        // ---- Ability bar (5 cols × 2 rows, statue on right) ----
-        this._buildAbilityBar(abilityslotTex, abilitybarstatueTex);
+        // ---- Ability bar (5 cols × 2 rows) ----
+        this._buildAbilityBar(abilityslotTex);
 
         // ---- Item tooltip ----
         this._buildTooltip();
@@ -227,20 +210,10 @@ class UI {
     /**
      * Assemble one orb's sprite stack inside the given container.
      */
-    _buildOrb(container, { coverBackTex, coverFrontTex, orbTex, coverTex, statueTex, statueOffsetX = 0, statueOffsetY = 0, tint }) {
-        // Back → front: statue, orbcoverback, orb, orbcoverfront, cover
+    _buildOrb(container, { coverBackTex, coverFrontTex, orbTex, coverTex, tint }) {
+        // Back → front: orbcoverback, orb, orbcoverfront, cover
 
-        // 1. Statue decoration (backmost) – offset toward the inner screen edge
-        if (statueTex) {
-            const statue = new PIXI.Sprite(statueTex);
-            statue.anchor.set(0.5);
-            statue.label = 'statue';
-            statue.x = statueOffsetX;
-            statue.y = statueOffsetY;
-            container.addChild(statue);
-        }
-
-        // 2. Orb cover back
+        // 1. Orb cover back
         if (coverBackTex) {
             const back = new PIXI.Sprite(coverBackTex);
             back.anchor.set(0.5);
@@ -285,9 +258,9 @@ class UI {
 
     /**
      * Build the equipped-items menu: 2 cols × 5 rows of charactermenu slots
-     * with placeholder icons, and the equippedmenustatue on the right.
+     * with placeholder icons.
      */
-    _buildEquippedMenu(slotTex, statueTex, placeholders) {
+    _buildEquippedMenu(slotTex, placeholders) {
         const slotSize = 90;    // slot display size
         const gap = 0;          // pixels between slots
         const cols = 2;
@@ -384,49 +357,25 @@ class UI {
             this.equippedSlots.push({ container: slotContainer, placeholder: placeholderSprite, slotType: ph.type, iconSprite: null, item: null, bgSprite: bgSprite, borderMask: borderMask });
         }
 
-        // Statue behind the slots
-        if (statueTex) {
-            const statue = new PIXI.Sprite(statueTex);
-            statue.anchor.set(0, 0.5);
-            statue.x = margin + cols * (slotSize + gap) - gap + 4 - 25;
-            statue.y = margin + (rows * (slotSize + gap) - gap) / 2;
-            statue.label = 'equippedStatue';
-            this.equippedMenuContainer.addChild(statue);
-        }
-
         this.equippedMenuContainer.addChild(slotsContainer);
 
         // Calculate total width for slide animation
         const gridWidth = cols * (slotSize + gap) - gap;
-        const statueWidth = statueTex ? statueTex.width + 4 : 0;
-        this._equippedMenuWidth = margin + gridWidth + statueWidth + margin;
+        this._equippedMenuWidth = margin + gridWidth + margin;
     }
 
     /**
-     * Build the inventory menu: cols × rows grid of slot sprites
-     * with the inventorymenustatue on the left.
+     * Build the inventory menu: cols × rows grid of slot sprites.
      */
-    _buildInventoryMenu(slotTex, statueTex, cols, rows) {
+    _buildInventoryMenu(slotTex, cols, rows) {
         const slotSize = 90;
         const gap = 0;
         const margin = 0;
 
-        // Statue on the left side
-        let statueWidth = 0;
-        if (statueTex) {
-            const statue = new PIXI.Sprite(statueTex);
-            statue.anchor.set(1, 0.5);
-            statue.label = 'inventoryStatue';
-            statueWidth = statueTex.width + 4;
-            statue.x = margin + statueWidth + 25;
-            statue.y = margin + (rows * (slotSize + gap) - gap) / 2;
-            this.inventoryMenuContainer.addChild(statue);
-        }
-
         // Slots grid
         const slotsContainer = new PIXI.Container();
         slotsContainer.label = 'inventorySlots';
-        slotsContainer.x = margin + statueWidth;
+        slotsContainer.x = margin;
         slotsContainer.y = margin;
 
         for (let row = 0; row < rows; row++) {
@@ -483,14 +432,14 @@ class UI {
 
         // Calculate total width for slide animation
         const gridWidth = cols * (slotSize + gap) - gap;
-        this._inventoryMenuWidth = margin + statueWidth + gridWidth + margin;
+        this._inventoryMenuWidth = margin + gridWidth + margin;
     }
 
     /**
      * Build the ability bar: 5 cols × 2 rows of abilityslot 9-patches
-     * with key labels, and the abilitybarstatue on the right.
+     * with key labels.
      */
-    _buildAbilityBar(slotTex, statueTex) {
+    _buildAbilityBar(slotTex) {
         const slotSize = 82;    // display size per slot
         const gap = 0;          // pixels between slots
         const cols = 5;
@@ -558,16 +507,6 @@ class UI {
             }
         }
 
-        // Statue on the right side (added first so it renders behind slots)
-        if (statueTex) {
-            const statue = new PIXI.Sprite(statueTex);
-            statue.anchor.set(0, 0.5);
-            statue.x = cols * (slotSize + gap) - gap + 4 - 42;
-            statue.y = (rows * (slotSize + gap) - gap) / 2;
-            statue.label = 'abilityBarStatue';
-            this.abilityBarContainer.addChild(statue);
-        }
-
         this.abilityBarContainer.addChild(slotsContainer);
     }
 
@@ -598,8 +537,8 @@ class UI {
         this.manaOrbContainer.x = screenW - margin - orbRadius;
         this.manaOrbContainer.y = screenH - margin - orbRadius + 5;
 
-        // Ability bar – bottom-left area, to the right of the health orb statue
-        const healthOrbRight = margin + orbRadius + 250; // clear the health orb + statue
+        // Ability bar – bottom-left area, to the right of the health orb
+        const healthOrbRight = margin + orbRadius + 250; // clear the health orb
         const abSlotsHeight = 2 * 82; // 2 rows × 82px slot size
         this.abilityBarContainer.x = healthOrbRight;
         this.abilityBarContainer.y = screenH - abSlotsHeight;

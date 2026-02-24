@@ -1,10 +1,4 @@
 {
-  "abilitybarstatue": [
-    "./abilitybarstatue/abilitybarstatue-0.json"
-  ],
-  "abilityselectorstatue": [
-    "./abilityselectorstatue/abilityselectorstatue-0.json"
-  ],
   "abilityslot": [
     "./abilityslot/abilityslot-0.json"
   ],
@@ -28,9 +22,6 @@
   ],
   "charactermenu": [
     "./charactermenu/charactermenu-0.json"
-  ],
-  "charactermenustatue": [
-    "./charactermenustatue/charactermenustatue-0.json"
   ],
   "chestplaceholder": [
     "./chestplaceholder/chestplaceholder-0.json"
@@ -71,9 +62,6 @@
   "dialog": [
     "./dialog/dialog-0.json"
   ],
-  "dialogstatue": [
-    "./dialogstatue/dialogstatue-0.json"
-  ],
   "dirt": [
     "./dirt/dirt-0.json"
   ],
@@ -85,9 +73,6 @@
   ],
   "enemyhealthframe": [
     "./enemyhealthframe/enemyhealthframe-0.json"
-  ],
-  "equippedmenustatue": [
-    "./equippedmenustatue/equippedmenustatue-0.json"
   ],
   "fader": [
     "./fader/fader-0.json"
@@ -192,12 +177,6 @@
   "healthorb": [
     "./healthorb/healthorb-0.json"
   ],
-  "healthstatue": [
-    "./healthstatue/healthstatue-0.json"
-  ],
-  "inventorymenustatue": [
-    "./inventorymenustatue/inventorymenustatue-0.json"
-  ],
   "leatherjacket_item": [
     "./leatherjacket_item/leatherjacket_item-0.json"
   ],
@@ -252,9 +231,6 @@
   ],
   "manaorb": [
     "./manaorb/manaorb-0.json"
-  ],
-  "manastatue": [
-    "./manastatue/manastatue-0.json"
   ],
   "man_ability": [
     "./man_ability/man_ability-0.json"
@@ -374,9 +350,6 @@
   "merchant": [
     "./merchant/merchant-0.json"
   ],
-  "merchantmenustatue": [
-    "./merchantmenustatue/merchantmenustatue-0.json"
-  ],
   "merchant_portrait": [
     "./merchant_portrait/merchant_portrait-0.json"
   ],
@@ -416,9 +389,6 @@
   "pillaroffatemenu": [
     "./pillaroffatemenu/pillaroffatemenu-0.json"
   ],
-  "pillaroffatestatue": [
-    "./pillaroffatestatue/pillaroffatestatue-0.json"
-  ],
   "pillaroffate_shadow": [
     "./pillaroffate_shadow/pillaroffate_shadow-0.json"
   ],
@@ -439,9 +409,6 @@
   ],
   "settingsmenu": [
     "./settingsmenu/settingsmenu-0.json"
-  ],
-  "settingsmenustatue": [
-    "./settingsmenustatue/settingsmenustatue-0.json"
   ],
   "simplegloves_item": [
     "./simplegloves_item/simplegloves_item-0.json"
