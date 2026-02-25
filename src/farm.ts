@@ -1,7 +1,8 @@
-import { Area } from './area.js';
-import { NPC } from './npc.js';
-import { Enemy } from './enemy.js';
-import { Item } from './item.js';
+import { Area } from './area';
+import { NPC } from './npc';
+import { Enemy } from './enemy';
+import { Item } from './item';
+import { GearSlot } from './types';
 
 /**
  * The Farm area – the starting zone for the player.
@@ -20,7 +21,7 @@ class Farm extends Area {
     }
 
     /** @override */
-    async spawnObjects() {
+    async spawnObjects(): Promise<void> {
         // All spawn groups run in parallel where possible
         await Promise.all([
             this._spawnBoundaries(),
@@ -35,7 +36,7 @@ class Farm extends Area {
 
     // ── Boundaries (invisible collision rectangles) ──────────────────────
 
-    async _spawnBoundaries() {
+    async _spawnBoundaries(): Promise<void> {
         this.boundaries.push(
             { x: 43,   y: 2309, width: 50,  height: 3570 }, // left wall
             { x: 4050, y: 2046, width: 50,  height: 4096 }, // right wall
@@ -45,7 +46,7 @@ class Farm extends Area {
 
     // ── Buildings & large structures ─────────────────────────────────────
 
-    async _spawnBuildings() {
+    async _spawnBuildings(): Promise<void> {
         await Promise.all([
             this.placeStaticSprite('farmhouse',        1594, 3337),
             this.placeStaticSprite('longhouse',         869, 3981),
@@ -59,8 +60,8 @@ class Farm extends Area {
 
     // ── Fences ───────────────────────────────────────────────────────────
 
-    async _spawnFences() {
-        const fences = [
+    async _spawnFences(): Promise<void> {
+        const fences: [string, number, number][] = [
             // --- diagonal right-facing fences (NW → SE divider) ---
             ['fencepatchedright',   708, 2528],
             ['fenceright',         1032, 2365],
@@ -128,7 +129,7 @@ class Farm extends Area {
 
     // ── Props & interactable objects ─────────────────────────────────────
 
-    async _spawnProps() {
+    async _spawnProps(): Promise<void> {
         await Promise.all([
             this.placeStaticSprite('cart',           3150, 3624),
             this.placeStaticSprite('table',          2065, 3661),
@@ -140,7 +141,7 @@ class Farm extends Area {
 
     // ── Guide NPC ────────────────────────────────────────────────────────
 
-    async _spawnNpcs() {
+    async _spawnNpcs(): Promise<void> {
         const guide = new NPC({
             x: 2571,
             y: 3584,
@@ -161,7 +162,7 @@ class Farm extends Area {
 
     // ── Enemies ──────────────────────────────────────────────────────────
 
-    async _spawnEnemies() {
+    async _spawnEnemies(): Promise<void> {
         const enemyDefs = [
             // Goblin Underlings
             {
@@ -228,7 +229,7 @@ class Farm extends Area {
 
     // ── Loot items on tables ─────────────────────────────────────────────
 
-    async _spawnLoot() {
+    async _spawnLoot(): Promise<void> {
         // Each loot item's sortY is set to its table's Y + 1 so it sorts
         // just after the table surface, but the player (with a higher Y
         // when walking in front) still renders in front of both.
@@ -242,7 +243,7 @@ class Farm extends Area {
                     id: 'simplesword',
                     name: 'Simple Sword',
                     description: 'The first of many',
-                    slot: 'mainhand',
+                    slot: GearSlot.MainHand,
                     baseStats: { slashDamage: 3 },
                     mods: [
                         { modId: 'flat_stab_damage', value: 2 },
@@ -255,7 +256,7 @@ class Farm extends Area {
                     id: 'simpleshield',
                     name: 'Simple Shield',
                     description: 'No respite for the scorned',
-                    slot: 'offhand',
+                    slot: GearSlot.OffHand,
                     baseStats: { armor: 5 },
                     mods: [
                         { modId: 'flat_max_health', value: 4 },
@@ -268,7 +269,7 @@ class Farm extends Area {
                     id: 'simpleshirt',
                     name: 'Simple Shirt',
                     description: 'Deep in the midst, you conceal him',
-                    slot: 'chest',
+                    slot: GearSlot.Chest,
                     baseStats: { maxHealth: 2 },
                     mods: [
                         { modId: 'flat_armor', value: 1 },
@@ -282,7 +283,7 @@ class Farm extends Area {
                     id: 'simplepants',
                     name: 'Simple Pants',
                     description: 'Whoso is simple, let him perish!',
-                    slot: 'legs',
+                    slot: GearSlot.Legs,
                     baseStats: { manaRegen: 1 },
                     mods: [],
                 }),

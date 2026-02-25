@@ -1,12 +1,32 @@
-import { Character } from './character.js';
-import state from './state.js';
+import { Character } from './character';
+import { Entity } from './entity';
+import state from './state';
 
-/**
- * An NPC is a friendly, non-hostile Character the player can interact with.
- * NPCs can have dialog, wander in a small area, and face the player when spoken to.
- */
+interface NPCOptions {
+    x: number;
+    y: number;
+    spriteKey?: string;
+    name?: string;
+    speed?: number;
+    animFps?: Record<string, number>;
+    interactRange?: number;
+    dialog?: string[];
+    wanderRadius?: number;
+}
+
 class NPC extends Character {
-    constructor({ x, y, spriteKey = 'guide', name = 'NPC', speed = 50, animFps = {}, interactRange = 100, dialog = [], wanderRadius = 0 }) {
+    readonly name: string;
+    readonly interactRange: number;
+    readonly dialog: readonly string[];
+    private dialogIndex: number;
+    isInteracting: boolean;
+    private readonly wanderOrigin: { readonly x: number; readonly y: number };
+    readonly wanderRadius: number;
+
+    constructor({
+        x, y, spriteKey = 'guide', name = 'NPC', speed = 50, animFps = {},
+        interactRange = 100, dialog = [], wanderRadius = 0,
+    }: NPCOptions) {
         super({ x, y, spriteKey, speed, animFps });
         this.name = name;
         this.interactRange = interactRange;
@@ -17,14 +37,12 @@ class NPC extends Character {
         this.wanderRadius = wanderRadius;
     }
 
-    /** Turn to face a target entity */
-    faceEntity(entity) {
+    faceEntity(entity: Entity): void {
         const dx = entity.x - this.x;
         const dy = entity.y - this.y;
         const angle = Math.atan2(dy, dx) * (180 / Math.PI);
         this.direction = this.findClosestDirection(angle);
 
-        // Refresh idle animation with the new facing direction
         if (!this.isWalking) {
             const idleFrames = this.getAnimationFrames('idle', this.direction);
             if (idleFrames.length > 0 && this.sprite) {
@@ -34,54 +52,42 @@ class NPC extends Character {
         }
     }
 
-    /** Begin an interaction with the player */
-    interact() {
+    interact(): string | null {
         if (this.dialog.length === 0) return null;
-
         this.isInteracting = true;
         this.targetPosition = null;
         this.stopWalkAnimation();
-
-        // Face the player
         if (state.player) {
             this.faceEntity(state.player);
         }
-
         return this.getCurrentDialog();
     }
 
-    /** Get the current dialog line */
-    getCurrentDialog() {
+    getCurrentDialog(): string | null {
         if (this.dialog.length === 0) return null;
-        return this.dialog[this.dialogIndex];
+        return this.dialog[this.dialogIndex] ?? null;
     }
 
-    /** Advance to the next dialog line; returns null when finished */
-    advanceDialog() {
+    advanceDialog(): string | null {
         this.dialogIndex++;
-
         if (this.dialogIndex >= this.dialog.length) {
             this.endInteraction();
             return null;
         }
-
-        return this.dialog[this.dialogIndex];
+        return this.dialog[this.dialogIndex] ?? null;
     }
 
-    /** End the interaction and reset dialog */
-    endInteraction() {
+    endInteraction(): void {
         this.isInteracting = false;
         this.dialogIndex = 0;
     }
 
-    /** Check if the player is within interaction range */
-    isPlayerInRange() {
+    isPlayerInRange(): boolean {
         if (!state.player) return false;
         return this.distanceTo(state.player) <= this.interactRange;
     }
 
-    /** Pick a random wander target near the origin */
-    pickWanderTarget() {
+    pickWanderTarget(): void {
         const angle = Math.random() * Math.PI * 2;
         const radius = Math.random() * this.wanderRadius;
         const tx = this.wanderOrigin.x + Math.cos(angle) * radius;
@@ -89,15 +95,9 @@ class NPC extends Character {
         this.moveToward(tx, ty);
     }
 
-    /** Update NPC behavior each frame */
-    update(delta) {
-        // Don't wander while interacting
+    update(delta: number): void {
         if (this.isInteracting) return;
-
-        // Run base movement
         super.update(delta);
-
-        // Occasionally wander when idle
         if (!this.targetPosition && this.wanderRadius > 0 && Math.random() < 0.002) {
             this.pickWanderTarget();
         }

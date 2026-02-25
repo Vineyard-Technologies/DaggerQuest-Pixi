@@ -1,18 +1,5 @@
 import * as PIXI from 'pixi.js';
 
-/**
- * Outline filter using WebGPU (WGSL) + WebGL (GLSL) shaders.
- * Samples pixels in a ring around the current fragment; if a transparent
- * pixel has an opaque neighbour inside the ring it is coloured with the
- * outline colour, producing a crisp silhouette outline.
- *
- * Usage:
- *   sprite.filters = [HOVER_OUTLINE];   // add outline
- *   sprite.filters = null;              // remove outline
- */
-
-// ── WGSL source (WebGPU) ─────────────────────────────────────────────
-
 const OUTLINE_WGSL = /* wgsl */`
 struct GlobalFilterUniforms {
     uInputSize:    vec4<f32>,
@@ -24,7 +11,7 @@ struct GlobalFilterUniforms {
 };
 
 struct OutlineUniforms {
-    uOutline: vec4<f32>,   // xyz = colour,  w = thickness (px)
+    uOutline: vec4<f32>,
 };
 
 @group(0) @binding(0) var<uniform> gfu: GlobalFilterUniforms;
@@ -63,8 +50,6 @@ fn mainFragment(@location(0) uv: vec2<f32>) -> @location(0) vec4<f32> {
     let thickness = outlineUniforms.uOutline.w;
     let outColor  = outlineUniforms.uOutline.xyz;
 
-    // Sample all 16 neighbours unconditionally so every textureSample
-    // call sits in uniform control flow (required by WGSL).
     let px = vec2<f32>(gfu.uInputPixel.z, gfu.uInputPixel.w);
     var maxAlpha: f32 = 0.0;
 
@@ -90,7 +75,6 @@ fn mainFragment(@location(0) uv: vec2<f32>) -> @location(0) vec4<f32> {
     maxAlpha = max(maxAlpha, max(max(max(s8.a, s9.a), max(s10.a, s11.a)),
                                  max(max(s12.a, s13.a), max(s14.a, s15.a))));
 
-    // Opaque pixel → keep original; transparent with opaque neighbour → outline
     if (color.a > 0.5) {
         return color;
     }
@@ -101,8 +85,6 @@ fn mainFragment(@location(0) uv: vec2<f32>) -> @location(0) vec4<f32> {
 }
 `;
 
-// ── GLSL source (WebGL 2 fallback) ───────────────────────────────────
-
 const OUTLINE_FRAG_GLSL = /* glsl */`
 in vec2 vTextureCoord;
 out vec4 finalColor;
@@ -110,7 +92,7 @@ out vec4 finalColor;
 uniform sampler2D uTexture;
 uniform vec4 uInputPixel;
 uniform vec4 uInputClamp;
-uniform vec4 uOutline;   // xyz = colour,  w = thickness (px)
+uniform vec4 uOutline;
 
 void main() {
     vec4 color     = texture(uTexture, vTextureCoord);
@@ -142,25 +124,18 @@ void main() {
 }
 `;
 
-// ── Filter construction ──────────────────────────────────────────────
+const OUTLINE_THICKNESS: number = 2;
+const OUTLINE_COLOR_R: number   = 1.0;
+const OUTLINE_COLOR_G: number   = 1.0;
+const OUTLINE_COLOR_B: number   = 1.0;
 
-const OUTLINE_THICKNESS = 2;   // pixels
-const OUTLINE_COLOR_R   = 1.0;
-const OUTLINE_COLOR_G   = 1.0;
-const OUTLINE_COLOR_B   = 1.0;
-
-/**
- * Shared outline filter instance.  Applied to a sprite on hover,
- * removed on un-hover.
- */
-const HOVER_OUTLINE = new PIXI.Filter({
+const HOVER_OUTLINE: PIXI.Filter = new PIXI.Filter({
     gpuProgram: PIXI.GpuProgram.from({
         vertex:   { source: OUTLINE_WGSL, entryPoint: 'mainVertex' },
         fragment: { source: OUTLINE_WGSL, entryPoint: 'mainFragment' },
         name: 'outline-filter',
     }),
     glProgram: PIXI.GlProgram.from({
-        // Use the default PIXI filter vertex shader
         vertex:   PIXI.defaultFilterVert,
         fragment: OUTLINE_FRAG_GLSL,
         name: 'outline-filter',

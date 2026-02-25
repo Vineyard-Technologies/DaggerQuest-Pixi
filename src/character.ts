@@ -1,81 +1,138 @@
-import { Entity } from './entity.js';
-import { resolveCollisions, resolveBoundaryCollisions, aabbOverlap, satOverlap } from './collision.js';
-import state from './state.js';
+import { Entity } from './entity';
+import { resolveCollisions, resolveBoundaryCollisions, aabbOverlap, satOverlap, type WorldPoint } from './collision';
+import state from './state';
+import { DEFAULT_CHARACTER_STATS, type CharacterStats, type CharacterStatKey } from './types';
 
-/**
- * A Character is an Entity that can move and has walk/idle animations.
- * Includes the player, NPCs, and enemies.
- */
-class Character extends Entity {
+export interface CharacterOptions {
+    x: number;
+    y: number;
+    spriteKey?: string | null;
+    speed?: number;
+    direction?: number;
+    animFps?: Record<string, number>;
+    level?: number;
+    experience?: number;
+    actionSpeed?: number;
+    pickupRange?: number;
+    attackRange?: number;
+    currentHealth?: number;
+    maxHealth?: number;
+    healthRegen?: number;
+    currentMana?: number;
+    maxMana?: number;
+    manaRegen?: number;
+    armor?: number;
+    slashDamage?: number;
+    smashDamage?: number;
+    stabDamage?: number;
+    coldDamage?: number;
+    fireDamage?: number;
+    lightningDamage?: number;
+    arcaneDamage?: number;
+    corruptDamage?: number;
+    holyDamage?: number;
+    physicalResistance?: number;
+    coldResistance?: number;
+    fireResistance?: number;
+    lightningResistance?: number;
+    arcaneResistance?: number;
+    corruptResistance?: number;
+    holyResistance?: number;
+    flinchResistance?: number;
+}
+
+class Character extends Entity implements CharacterStats {
+    readonly collisionWidth: number;
+    readonly collisionHeight: number;
+    speed: number;
+    targetPosition: { x: number; y: number } | null;
+    isWalking: boolean;
+    isAlive: boolean;
+    private idlePingPongForward: boolean;
+
+    level: number;
+    experience: number;
+    actionSpeed: number;
+    pickupRange: number;
+    attackRange: number;
+    currentHealth: number;
+    maxHealth: number;
+    healthRegen: number;
+    currentMana: number;
+    maxMana: number;
+    manaRegen: number;
+    armor: number;
+    slashDamage: number;
+    smashDamage: number;
+    stabDamage: number;
+    coldDamage: number;
+    fireDamage: number;
+    lightningDamage: number;
+    arcaneDamage: number;
+    corruptDamage: number;
+    holyDamage: number;
+    physicalResistance: number;
+    coldResistance: number;
+    fireResistance: number;
+    lightningResistance: number;
+    arcaneResistance: number;
+    corruptResistance: number;
+    holyResistance: number;
+    flinchResistance: number;
+
     constructor({
-        x, y, spriteKey = null, speed = 0, direction = 0, animFps = {},
-        level = 1,
-        experience = 0,
-        actionSpeed = 1,
-        pickupRange = 150,
-        attackRange = 50,
-        currentHealth = 100,
-        maxHealth = 100,
-        healthRegen = 1,
-        currentMana = 100,
-        maxMana = 100,
-        manaRegen = 1,
-        armor = 0,
-        slashDamage = 0,
-        smashDamage = 0,
-        stabDamage = 0,
-        coldDamage = 0,
-        fireDamage = 0,
-        lightningDamage = 0,
-        arcaneDamage = 0,
-        corruptDamage = 0,
-        holyDamage = 0,
-        physicalResistance = 0,
-        coldResistance = 0,
-        fireResistance = 0,
-        lightningResistance = 0,
-        arcaneResistance = 0,
-        corruptResistance = 0,
-        holyResistance = 0,
-        flinchResistance = 0,
-    } = {}) {
+        x = 0, y = 0, spriteKey = null, speed = 0, direction = 0, animFps = {},
+        level = DEFAULT_CHARACTER_STATS.level,
+        experience = DEFAULT_CHARACTER_STATS.experience,
+        actionSpeed = DEFAULT_CHARACTER_STATS.actionSpeed,
+        pickupRange = DEFAULT_CHARACTER_STATS.pickupRange,
+        attackRange = DEFAULT_CHARACTER_STATS.attackRange,
+        currentHealth = DEFAULT_CHARACTER_STATS.currentHealth,
+        maxHealth = DEFAULT_CHARACTER_STATS.maxHealth,
+        healthRegen = DEFAULT_CHARACTER_STATS.healthRegen,
+        currentMana = DEFAULT_CHARACTER_STATS.currentMana,
+        maxMana = DEFAULT_CHARACTER_STATS.maxMana,
+        manaRegen = DEFAULT_CHARACTER_STATS.manaRegen,
+        armor = DEFAULT_CHARACTER_STATS.armor,
+        slashDamage = DEFAULT_CHARACTER_STATS.slashDamage,
+        smashDamage = DEFAULT_CHARACTER_STATS.smashDamage,
+        stabDamage = DEFAULT_CHARACTER_STATS.stabDamage,
+        coldDamage = DEFAULT_CHARACTER_STATS.coldDamage,
+        fireDamage = DEFAULT_CHARACTER_STATS.fireDamage,
+        lightningDamage = DEFAULT_CHARACTER_STATS.lightningDamage,
+        arcaneDamage = DEFAULT_CHARACTER_STATS.arcaneDamage,
+        corruptDamage = DEFAULT_CHARACTER_STATS.corruptDamage,
+        holyDamage = DEFAULT_CHARACTER_STATS.holyDamage,
+        physicalResistance = DEFAULT_CHARACTER_STATS.physicalResistance,
+        coldResistance = DEFAULT_CHARACTER_STATS.coldResistance,
+        fireResistance = DEFAULT_CHARACTER_STATS.fireResistance,
+        lightningResistance = DEFAULT_CHARACTER_STATS.lightningResistance,
+        arcaneResistance = DEFAULT_CHARACTER_STATS.arcaneResistance,
+        corruptResistance = DEFAULT_CHARACTER_STATS.corruptResistance,
+        holyResistance = DEFAULT_CHARACTER_STATS.holyResistance,
+        flinchResistance = DEFAULT_CHARACTER_STATS.flinchResistance,
+    }: CharacterOptions = {} as CharacterOptions) {
         super({ x, y, spriteKey, direction, animFps });
 
-        // Fixed-size collision box (pixels) so it doesn't change with
-        // each animation frame.  Centred horizontally at the character's
-        // anchor and placed at the bottom of the sprite.
         this.collisionWidth = 60;
         this.collisionHeight = 30;
-
-        // Movement & general
         this.speed = speed;
         this.targetPosition = null;
         this.isWalking = false;
+        this.isAlive = true;
         this.idlePingPongForward = true;
-
-        // Progression
         this.level = level;
         this.experience = experience;
-
-        // Speeds & ranges
         this.actionSpeed = actionSpeed;
         this.pickupRange = pickupRange;
         this.attackRange = attackRange;
-
-        // Health
         this.currentHealth = currentHealth;
         this.maxHealth = maxHealth;
         this.healthRegen = healthRegen;
-
-        // Mana
         this.currentMana = currentMana;
         this.maxMana = maxMana;
         this.manaRegen = manaRegen;
-
-        // Defence
         this.armor = armor;
-
-        // Damage types
         this.slashDamage = slashDamage;
         this.smashDamage = smashDamage;
         this.stabDamage = stabDamage;
@@ -85,8 +142,6 @@ class Character extends Entity {
         this.arcaneDamage = arcaneDamage;
         this.corruptDamage = corruptDamage;
         this.holyDamage = holyDamage;
-
-        // Resistances
         this.physicalResistance = physicalResistance;
         this.coldResistance = coldResistance;
         this.fireResistance = fireResistance;
@@ -97,17 +152,13 @@ class Character extends Entity {
         this.flinchResistance = flinchResistance;
     }
 
-    /** Start the idle ping-pong animation */
-    startIdlePingPong() {
+    startIdlePingPong(): void {
         if (!this.sprite) return;
-
         const idleFrames = this.getAnimationFrames('idle', this.direction);
-
         if (idleFrames.length <= 1) {
             this.sprite.gotoAndStop(0);
             return;
         }
-
         this.sprite.textures = idleFrames;
         this.idlePingPongForward = true;
         this.sprite.loop = false;
@@ -119,27 +170,24 @@ class Character extends Entity {
             if (!this.isWalking) {
                 this.idlePingPongForward = !this.idlePingPongForward;
                 if (this.idlePingPongForward) {
-                    this.sprite.animationSpeed = this.getAnimFps('idle') / 60;
-                    this.sprite.gotoAndPlay(0);
+                    this.sprite!.animationSpeed = this.getAnimFps('idle') / 60;
+                    this.sprite!.gotoAndPlay(0);
                 } else {
-                    this.sprite.animationSpeed = -(this.getAnimFps('idle') / 60);
-                    this.sprite.gotoAndPlay(this.sprite.totalFrames - 1);
+                    this.sprite!.animationSpeed = -(this.getAnimFps('idle') / 60);
+                    this.sprite!.gotoAndPlay(this.sprite!.totalFrames - 1);
                 }
             }
         };
     }
 
-    /** Start the walk animation for the current direction */
-    startWalkAnimation() {
+    startWalkAnimation(): void {
         if (!this.sprite) return;
-
         const walkFrames = this.getAnimationFrames('walk', this.direction);
-
         if (walkFrames.length > 0) {
             const savedFrame = this.isWalking ? this.sprite.currentFrame : 0;
             this.sprite.textures = walkFrames;
             this.sprite.loop = true;
-            this.sprite.onComplete = null;
+            this.sprite.onComplete = undefined;
             this.sprite.animationSpeed = this.getAnimFps('walk') / 60;
             this.sprite.gotoAndPlay(savedFrame % walkFrames.length);
             this.isWalking = true;
@@ -149,62 +197,41 @@ class Character extends Entity {
         }
     }
 
-    /** Stop walking and return to idle animation */
-    stopWalkAnimation() {
+    stopWalkAnimation(): void {
         if (!this.isWalking) return;
         this.isWalking = false;
-
         const idleFrames = this.getAnimationFrames('idle', this.direction);
-
         if (idleFrames.length > 0 && this.sprite) {
             this.sprite.textures = idleFrames;
             this.startIdlePingPong();
         }
     }
 
-    /**
-     * Hook called immediately after this character's sprite textures change
-     * (direction or animation swap).  Subclasses override to sync overlays.
-     */
-    onAnimationChanged() {
+    onAnimationChanged(): void {
         // Override in subclasses (e.g. Player syncs gear here)
     }
 
-    /** Move toward a world position and start walking */
-    moveToward(worldX, worldY) {
+    moveToward(worldX: number, worldY: number): void {
         this.targetPosition = { x: worldX, y: worldY };
-
         const dx = worldX - this.x;
         const dy = worldY - this.y;
         const angle = Math.atan2(dy, dx) * (180 / Math.PI);
         const newDirection = this.findClosestDirection(angle);
-
         if (!this.isWalking || newDirection !== this.direction) {
             this.direction = newDirection;
             this.startWalkAnimation();
         }
     }
 
-    /** Check distance to a target entity */
-    distanceTo(entity) {
+    distanceTo(entity: Entity): number {
         const dx = entity.x - this.x;
         const dy = entity.y - this.y;
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    /**
-     * Override Entity's getWorldCollisionPoly to return a fixed-size
-     * rectangle at the character's feet, independent of the current
-     * animation frame's texture dimensions.
-     * @returns {Array<{x:number, y:number}>|null}
-     */
-    getWorldCollisionPoly() {
+    getWorldCollisionPoly(): WorldPoint[] | null {
         if (!this.sprite) return null;
-
         const hw = this.collisionWidth / 2;
-
-        // Place the box centred horizontally on x and sitting just
-        // above the character's y (anchor is at the feet).
         return [
             { x: this.x - hw, y: this.y - this.collisionHeight },
             { x: this.x + hw, y: this.y - this.collisionHeight },
@@ -213,10 +240,8 @@ class Character extends Entity {
         ];
     }
 
-    /** Update movement toward targetPosition. Call once per frame. */
-    update(delta) {
-        // Regenerate health and mana
-        const dt = delta / 60; // delta is in frames at 60fps, convert to seconds
+    update(delta: number): void {
+        const dt = delta / 60;
         if (this.healthRegen > 0 && this.currentHealth < this.maxHealth) {
             this.currentHealth = Math.min(this.maxHealth, this.currentHealth + this.healthRegen * dt);
         }
@@ -226,7 +251,6 @@ class Character extends Entity {
 
         if (!this.targetPosition) return;
 
-        // Safety check for NaN
         if (isNaN(this.x) || isNaN(this.y)) {
             console.error('Character position is NaN! Resetting.');
             this.x = this.container.x;
@@ -240,14 +264,12 @@ class Character extends Entity {
         const dy = this.targetPosition.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        // Check if we've reached the target
         if (distance < 5) {
             this.targetPosition = null;
             this.stopWalkAnimation();
             return;
         }
 
-        // Elliptical speed: full speed horizontal, half speed vertical
         const angle = Math.atan2(dy, dx);
         const effectiveSpeed = Math.sqrt(
             Math.pow(this.speed * Math.cos(angle), 2) +
@@ -259,27 +281,22 @@ class Character extends Entity {
         this.x += dx * ratio;
         this.y += dy * ratio;
 
-        // ── Collision resolution ─────────────────────────────────────
         if (state.area) {
             const myPoly = this.getWorldCollisionPoly();
             if (myPoly) {
-                // Check against static colliders
-                const push = resolveCollisions(myPoly, state.area.colliders);
-
-                // Check against rectangular boundaries
+                const push: { x: number; y: number } = resolveCollisions(myPoly, state.area.colliders);
                 const bPush = resolveBoundaryCollisions(myPoly, state.area.boundaries);
                 push.x += bPush.x;
                 push.y += bPush.y;
 
-                // Check against other characters (enemies + player)
-                const others = [];
+                const others: Character[] = [];
                 if (state.area.enemies) {
                     for (const e of state.area.enemies) {
-                        if (e !== this && e.isAlive) others.push(e);
+                        if (e !== (this as Character) && (e as Character).isAlive) others.push(e as Character);
                     }
                 }
-                if (state.player && state.player !== this) {
-                    others.push(state.player);
+                if (state.player && state.player !== (this as unknown)) {
+                    others.push(state.player as unknown as Character);
                 }
                 for (const other of others) {
                     const otherPoly = other.getWorldCollisionPoly();
@@ -292,7 +309,6 @@ class Character extends Entity {
                     }
                 }
 
-                // Apply push-back and stop moving
                 if (push.x !== 0 || push.y !== 0) {
                     this.x += push.x;
                     this.y += push.y;
@@ -302,7 +318,6 @@ class Character extends Entity {
             }
         }
 
-        // Sync container position
         this.container.x = this.x;
         this.container.y = this.y;
     }

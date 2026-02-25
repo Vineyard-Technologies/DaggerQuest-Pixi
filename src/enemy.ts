@@ -1,106 +1,110 @@
-import { Character } from './character.js';
-import state from './state.js';
+import { Character } from './character';
+import state from './state';
+import { EnemyState } from './types';
 
-/**
- * An Enemy is a Character that is hostile to the player.
- * Enemies patrol, chase, and attack the player.
- */
+interface EnemyOptions {
+    x: number;
+    y: number;
+    spriteKey?: string;
+    speed?: number;
+    animFps?: Record<string, number>;
+    health?: number;
+    attackRange?: number;
+    aggroRange?: number;
+    attackDamage?: number;
+    attackCooldown?: number;
+}
+
 class Enemy extends Character {
-    constructor({ x, y, spriteKey = 'enemy', speed = 100, animFps = {}, health = 50, attackRange = 60, aggroRange = 300, attackDamage = 5, attackCooldown = 1000 }) {
-        super({ x, y, spriteKey, speed, animFps });
+    health: number;
+    readonly aggroRange: number;
+    readonly attackDamage: number;
+    readonly attackCooldown: number;
+    private lastAttackTime: number;
+    state: EnemyState;
+    readonly patrolOrigin: { readonly x: number; readonly y: number };
+    readonly patrolRadius: number;
+
+    constructor({
+        x, y, spriteKey = 'enemy', speed = 100, animFps = {},
+        health = 50, attackRange = 60, aggroRange = 300,
+        attackDamage = 5, attackCooldown = 1000,
+    }: EnemyOptions) {
+        super({ x, y, spriteKey, speed, animFps, attackRange });
         this.health = health;
         this.maxHealth = health;
-        this.attackRange = attackRange;
         this.aggroRange = aggroRange;
         this.attackDamage = attackDamage;
         this.attackCooldown = attackCooldown;
         this.lastAttackTime = 0;
         this.isAlive = true;
-        this.state = 'idle'; // idle | patrol | chase | attack
+        this.state = EnemyState.Idle;
         this.patrolOrigin = { x, y };
         this.patrolRadius = 150;
     }
 
-    /** Take damage and check for death */
-    takeDamage(amount) {
+    takeDamage(amount: number): void {
         if (!this.isAlive) return;
-
         this.health -= amount;
-
         if (this.health <= 0) {
             this.health = 0;
             this.die();
         }
     }
 
-    /** Handle enemy death */
-    die() {
+    die(): void {
         this.isAlive = false;
-        this.state = 'idle';
+        this.state = EnemyState.Idle;
         this.targetPosition = null;
         this.stopWalkAnimation();
         this.destroy();
     }
 
-    /** Set a random patrol target within patrolRadius of the origin */
-    pickPatrolTarget() {
+    pickPatrolTarget(): void {
         const angle = Math.random() * Math.PI * 2;
         const radius = Math.random() * this.patrolRadius;
         const tx = this.patrolOrigin.x + Math.cos(angle) * radius;
         const ty = this.patrolOrigin.y + Math.sin(angle) * radius;
         this.moveToward(tx, ty);
-        this.state = 'patrol';
+        this.state = EnemyState.Patrol;
     }
 
-    /** Update AI behavior each frame */
-    update(delta) {
+    update(delta: number): void {
         if (!this.isAlive) return;
-
-        // Run base movement
         super.update(delta);
 
-        // If the player exists, check aggro
         if (state.player) {
             const dist = this.distanceTo(state.player);
-
             if (dist <= this.attackRange) {
-                // Close enough to attack
-                this.state = 'attack';
+                this.state = EnemyState.Attack;
                 this.targetPosition = null;
                 this.stopWalkAnimation();
                 this.tryAttack();
             } else if (dist <= this.aggroRange) {
-                // Chase the player
-                this.state = 'chase';
+                this.state = EnemyState.Chase;
                 this.moveToward(state.player.x, state.player.y);
-            } else if (this.state === 'chase') {
-                // Lost aggro, return to patrol
-                this.state = 'idle';
+            } else if (this.state === EnemyState.Chase) {
+                this.state = EnemyState.Idle;
                 this.stopWalkAnimation();
             }
         }
 
-        // Patrol when idle
-        if (this.state === 'idle' && !this.targetPosition) {
+        if (this.state === EnemyState.Idle && !this.targetPosition) {
             if (Math.random() < 0.005) {
                 this.pickPatrolTarget();
             }
         }
 
-        // Finished patrolling
-        if (this.state === 'patrol' && !this.targetPosition) {
-            this.state = 'idle';
+        if (this.state === EnemyState.Patrol && !this.targetPosition) {
+            this.state = EnemyState.Idle;
         }
     }
 
-    /** Attempt to attack the player if cooldown has elapsed */
-    tryAttack() {
+    tryAttack(): void {
         const now = performance.now();
         if (now - this.lastAttackTime < this.attackCooldown) return;
-
         this.lastAttackTime = now;
 
-        // Face the player
         if (state.player) {
             const dx = state.player.x - this.x;
             const dy = state.player.y - this.y;

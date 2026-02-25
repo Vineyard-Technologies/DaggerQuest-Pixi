@@ -1,16 +1,19 @@
 import * as PIXI from 'pixi.js';
-import state from './state.js';
-import { Farm } from './farm.js';
-import { Man, Woman } from './classes.js';
-import { UI } from './ui.js';
-import { HOVER_OUTLINE } from './outlineFilter.js';
-import './debug.js';
+import state from './state';
+import { Farm } from './farm';
+import { Man, Woman } from './classes';
+import { UI } from './ui';
+import { HOVER_OUTLINE } from './outlineFilter';
+import { Entity } from './entity';
+import type { Loot } from './loot';
+import type { Player } from './player';
+import './debug';
+
+type PlayerClass = new (opts: { x: number; y: number }) => Player;
 
 // Initialize the game
-async function init() {
+async function init(): Promise<void> {
     state.app = new PIXI.Application();
-    // Using 'webgl2' to work around a WebGPU buffer destruction bug.
-    // See: https://github.com/Vineyard-Technologies/DaggerQuest/issues/1
     await state.app.init({
         resizeTo: window,
         antialias: true,
@@ -18,35 +21,29 @@ async function init() {
         background: '#000000',
         backgroundAlpha: 1,
     });
-    
+
     document.body.appendChild(state.app.canvas);
     state.app.canvas.id = 'daggerquestCanvas';
 
-    // Prevent the browser context menu so right-click can be used for UI interactions
-    document.addEventListener('contextmenu', (e) => e.preventDefault());
+    document.addEventListener('contextmenu', (e: Event) => e.preventDefault());
 
-    // Preload fonts so PIXI.Text measurements are correct from the start
     await Promise.all([
         document.fonts.load('600 14px Cinzel'),
         document.fonts.load('600 14px Grenze'),
         document.fonts.load('italic 600 14px Grenze'),
     ]);
 
-    // Create the area and add its container to the stage
     state.area = new Farm();
     state.app.stage.addChild(state.area.container);
     await state.area.createBackground();
     await state.area.spawnObjects();
 
-    // Create player
     await createPlayer(Woman);
 
-    // Create HUD (health & mana orbs)
     state.ui = new UI();
     await state.ui.load();
     state.app.stage.addChild(state.ui.container);
 
-    // Add pointer handlers for continuous click-to-move
     state.app.stage.eventMode = 'static';
     state.app.stage.hitArea = state.app.screen;
     state.app.stage.on('pointerdown', onPointerDown);
@@ -54,12 +51,9 @@ async function init() {
     state.app.stage.on('pointerup', onPointerUp);
     state.app.stage.on('pointerupoutside', onPointerUp);
 
-    // Start game loop
     state.app.ticker.add(gameLoop);
 
-    // Keyboard handlers for debug: H = lose 10 health, M = lose 10 mana
-    // Menu toggles: C = equipped menu, I = inventory menu
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', (e: KeyboardEvent) => {
         if (!state.player) return;
         if (e.key === 'h' || e.key === 'H') {
             state.player.currentHealth = Math.max(0, state.player.currentHealth - 10);
@@ -68,59 +62,50 @@ async function init() {
             state.player.currentMana = Math.max(0, state.player.currentMana - 10);
         }
         if (e.key === 'c' || e.key === 'C') {
-            state.ui.toggleEquippedMenu();
+            state.ui!.toggleEquippedMenu();
         }
         if (e.key === 'i' || e.key === 'I') {
-            state.ui.toggleInventoryMenu();
+            state.ui!.toggleInventoryMenu();
         }
     });
 }
 
-// Create the player character
-async function createPlayer(PlayerClass) {
-    state.player = new PlayerClass({
-        x: state.area.playerStartX,
-        y: state.area.playerStartY,
+async function createPlayer(PlayerClassCtor: PlayerClass): Promise<void> {
+    state.player = new PlayerClassCtor({
+        x: state.area!.playerStartX,
+        y: state.area!.playerStartY,
     });
 
     await state.player.loadTextures();
 
-    state.area.container.addChild(state.player.container);
+    state.area!.container.addChild(state.player.container);
     await state.player.loadDefaultGear();
     state.player.startIdlePingPong();
 
-    // Position camera on the player immediately
     updateCamera();
 }
 
-// Update camera to follow the player, clamped to world bounds
-function updateCamera() {
-    // Center the camera on the player
-    let camX = state.app.screen.width / 2 - state.player.x;
-    let camY = state.app.screen.height / 2 - state.player.y;
+function updateCamera(): void {
+    const app = state.app!;
+    const player = state.player!;
+    const area = state.area!;
 
-    // Clamp so we never show outside the world
-    camX = Math.min(0, Math.max(camX, state.app.screen.width - state.area.width));
-    camY = Math.min(0, Math.max(camY, state.app.screen.height - state.area.height));
+    let camX = app.screen.width / 2 - player.x;
+    let camY = app.screen.height / 2 - player.y;
 
-    state.area.container.x = camX;
-    state.area.container.y = camY;
+    camX = Math.min(0, Math.max(camX, app.screen.width - area.width));
+    camY = Math.min(0, Math.max(camY, app.screen.height - area.height));
+
+    area.container.x = camX;
+    area.container.y = camY;
 }
 
-/**
- * Check if a screen position hits any loot on the ground.
- * Uses screen-space coordinates because getBounds() returns global bounds.
- * @param {number} screenX - Screen X (pointer position)
- * @param {number} screenY - Screen Y (pointer position)
- * @returns {Loot|null}
- */
-function findLootAtPosition(screenX, screenY) {
+function findLootAtPosition(screenX: number, screenY: number): Loot | null {
     if (!state.area?.lootOnGround) return null;
 
     for (const loot of state.area.lootOnGround) {
         if (!loot.sprite) continue;
 
-        // Check the name label first (larger click target above the sprite)
         if (loot.nameLabel) {
             const labelBounds = loot.nameLabel.getBounds();
             if (screenX >= labelBounds.x && screenX <= labelBounds.x + labelBounds.width &&
@@ -129,7 +114,6 @@ function findLootAtPosition(screenX, screenY) {
             }
         }
 
-        // Then check the sprite itself
         const bounds = loot.sprite.getBounds();
         if (screenX >= bounds.x && screenX <= bounds.x + bounds.width &&
             screenY >= bounds.y && screenY <= bounds.y + bounds.height) {
@@ -139,16 +123,10 @@ function findLootAtPosition(screenX, screenY) {
     return null;
 }
 
-/**
- * Find any hoverable entity (loot, enemy, or NPC) at screen position.
- * Returns the entity or null.
- */
-function findHoverableAtPosition(screenX, screenY) {
-    // Check loot first (smallest, on top visually)
+function findHoverableAtPosition(screenX: number, screenY: number): Entity | null {
     const loot = findLootAtPosition(screenX, screenY);
     if (loot) return loot;
 
-    // Check enemies
     if (state.area?.enemies) {
         for (const enemy of state.area.enemies) {
             if (!enemy.sprite || enemy.isAlive === false) continue;
@@ -160,7 +138,6 @@ function findHoverableAtPosition(screenX, screenY) {
         }
     }
 
-    // Check NPCs
     if (state.area?.npcs) {
         for (const npc of state.area.npcs) {
             if (!npc.sprite) continue;
@@ -175,20 +152,15 @@ function findHoverableAtPosition(screenX, screenY) {
     return null;
 }
 
-/**
- * Apply or remove the outline filter based on what the mouse is hovering.
- */
-function updateHoverOutline() {
-    // Don't show hover outlines when the pointer is over UI
+function updateHoverOutline(): void {
     const overUI = state.ui && state.ui.hitTest(state.pointerScreenX, state.pointerScreenY);
     const target = overUI ? null : findHoverableAtPosition(state.pointerScreenX, state.pointerScreenY);
 
     if (target === state.hoveredEntity) return;
 
-    // Remove outline from previous entity
     if (state.hoveredEntity && state.hoveredEntity.sprite) {
         state.hoveredEntity.sprite.filters = state.hoveredEntity.sprite.filters
-            ? state.hoveredEntity.sprite.filters.filter(f => f !== HOVER_OUTLINE)
+            ? state.hoveredEntity.sprite.filters.filter((f: PIXI.Filter) => f !== HOVER_OUTLINE)
             : [];
         if (state.hoveredEntity.sprite.filters.length === 0) {
             state.hoveredEntity.sprite.filters = null;
@@ -197,107 +169,83 @@ function updateHoverOutline() {
 
     state.hoveredEntity = target;
 
-    // Apply outline to new entity
     if (state.hoveredEntity && state.hoveredEntity.sprite) {
         const existing = state.hoveredEntity.sprite.filters || [];
         state.hoveredEntity.sprite.filters = [...existing, HOVER_OUTLINE];
     }
 }
 
-// Pointer handlers for continuous movement
-function onPointerDown(event) {
-    // Ignore right-clicks – those are used for UI slot interactions
+function onPointerDown(event: PIXI.FederatedPointerEvent): void {
     if (event.button === 2) return;
 
-    // Ignore left-clicks while dragging an item in the UI
     if (state.ui && state.ui.isDragging) return;
 
-    // Ignore clicks that land on the UI (menus, orbs, etc.)
     if (state.ui && state.ui.hitTest(event.data.global.x, event.data.global.y)) return;
 
     const pos = event.data.global;
     state.pointerScreenX = pos.x;
     state.pointerScreenY = pos.y;
 
-    const worldX = state.pointerScreenX - state.area.container.x;
-    const worldY = state.pointerScreenY - state.area.container.y;
-
-    // Check if the click landed on a loot drop
     const loot = findLootAtPosition(state.pointerScreenX, state.pointerScreenY);
     if (loot) {
-        const dx = loot.x - state.player.x;
-        const dy = loot.y - state.player.y;
+        const dx = loot.x - state.player!.x;
+        const dy = loot.y - state.player!.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-        if (dist <= state.player.pickupRange) {
-            // Already in range – pick up immediately
+        if (dist <= state.player!.pickupRange) {
             state.pendingLootPickup = null;
-            state.player.pickupAndEquip(loot);
+            state.player!.pickupAndEquip(loot);
             return;
         }
 
-        // Out of range – walk toward the loot and pick up when close enough.
-        // This handles items on top of collidable surfaces (e.g. tables).
         state.pendingLootPickup = loot;
-        state.player.moveToward(loot.x, loot.y);
+        state.player!.moveToward(loot.x, loot.y);
         return;
     }
 
-    // Clicked somewhere else – cancel any pending pickup
     state.pendingLootPickup = null;
 
     state.pointerHeld = true;
     movePlayerToPointer();
 }
 
-function onPointerMove(event) {
+function onPointerMove(event: PIXI.FederatedPointerEvent): void {
     const pos = event.data.global;
     state.pointerScreenX = pos.x;
     state.pointerScreenY = pos.y;
 }
 
-function onPointerUp() {
+function onPointerUp(): void {
     state.pointerHeld = false;
 }
 
-function movePlayerToPointer() {
-    const worldX = state.pointerScreenX - state.area.container.x;
-    const worldY = state.pointerScreenY - state.area.container.y;
-    state.player.moveToward(worldX, worldY);
+function movePlayerToPointer(): void {
+    const worldX = state.pointerScreenX - state.area!.container.x;
+    const worldY = state.pointerScreenY - state.area!.container.y;
+    state.player!.moveToward(worldX, worldY);
 }
 
-// Main game loop
-function gameLoop(ticker) {
+function gameLoop(ticker: PIXI.Ticker): void {
     if (!state.player) return;
 
-    // Update hover outline each frame
     updateHoverOutline();
 
-    // Continuously update target while pointer is held
     if (state.pointerHeld) {
         movePlayerToPointer();
-        // Cancel any walk-to-pickup if the player is now dragging to move
         state.pendingLootPickup = null;
     }
 
-    // In PixiJS v8, ticker is an object with deltaTime property
-    const delta = ticker.deltaTime || ticker.elapsedMS / 16.67;
+    const delta = ticker.deltaTime;
     state.player.update(delta);
 
-    // ── Pending loot pickup (walk-to-pickup) ────────────────────────
-    // Runs after player.update() so collision resolution has already
-    // occurred this frame and targetPosition is null if blocked.
     if (state.pendingLootPickup) {
-        // Loot may have been picked up or destroyed by something else
-        if (!state.pendingLootPickup.sprite || !state.area.lootOnGround.includes(state.pendingLootPickup)) {
+        if (!state.pendingLootPickup.sprite || !state.area!.lootOnGround.includes(state.pendingLootPickup)) {
             state.pendingLootPickup = null;
         } else {
             const dx = state.pendingLootPickup.x - state.player.x;
             const dy = state.pendingLootPickup.y - state.player.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
 
-            // Use an extended range (2×) when the player has stopped moving,
-            // which typically means collision blocked further approach.
             const stopped = !state.player.targetPosition;
             const range = stopped
                 ? state.player.pickupRange * 2
@@ -308,26 +256,21 @@ function gameLoop(ticker) {
                 state.pendingLootPickup = null;
                 state.player.pickupAndEquip(loot);
             } else if (stopped) {
-                // Stopped but still too far – give up
                 state.pendingLootPickup = null;
             }
         }
     }
 
-    // Update area entities (enemies, NPCs)
     if (state.area) {
         state.area.update(delta);
     }
 
-    // Pan camera to follow player (always, so window resizes are reflected)
     updateCamera();
 
-    // Update HUD orbs
     if (state.ui) {
-        state.ui.layout(state.app.screen.width, state.app.screen.height);
+        state.ui.layout(state.app!.screen.width, state.app!.screen.height);
         state.ui.update(state.player, ticker.elapsedMS);
     }
 }
 
-// Start the game when the page loads
 window.addEventListener('load', init);
