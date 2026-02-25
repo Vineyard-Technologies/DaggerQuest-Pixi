@@ -1,6 +1,13 @@
 import * as PIXI from 'pixi.js';
 import { fetchManifest } from './assets';
 import state from './state';
+import {
+    SLOT_SIZE, SLOT_ICON_MAX, SLOT_BORDER,
+    ABILITY_SLOT_SIZE, ABILITY_SLOT_BORDER,
+    HUD_MARGIN, ORB_RADIUS,
+    TOOLTIP_NAME_FONT_SIZE, TOOLTIP_STAT_FONT_SIZE, TOOLTIP_DESC_FONT_SIZE,
+    TOOLTIP_INNER_WIDTH, TOOLTIP_PADDING,
+} from './config';
 import { GearSlot, UISource } from './types';
 import type { Item } from './item';
 import type { Character } from './character';
@@ -135,12 +142,10 @@ class OrbHUD {
     }
 
     layout(screenW: number, screenH: number): void {
-        const margin = 20;
-        const orbRadius = 105;
-        this.healthContainer.x = margin + orbRadius;
-        this.healthContainer.y = screenH - margin - orbRadius + 5;
-        this.manaContainer.x = screenW - margin - orbRadius;
-        this.manaContainer.y = screenH - margin - orbRadius + 5;
+        this.healthContainer.x = HUD_MARGIN + ORB_RADIUS;
+        this.healthContainer.y = screenH - HUD_MARGIN - ORB_RADIUS + 5;
+        this.manaContainer.x = screenW - HUD_MARGIN - ORB_RADIUS;
+        this.manaContainer.y = screenH - HUD_MARGIN - ORB_RADIUS + 5;
     }
 
     private _buildOrb(container: PIXI.Container, { coverBackTex, coverFrontTex, orbTex, coverTex, tint }: OrbBuildOptions): void {
@@ -328,8 +333,8 @@ class EquipmentPanel {
             return;
         }
 
-        const slotSize = 90;
-        const maxIconSize = 62;
+        const slotSize = SLOT_SIZE;
+        const maxIconSize = SLOT_ICON_MAX;
         const scale = Math.min(maxIconSize / icon.texture.width, maxIconSize / icon.texture.height);
         icon.anchor.set(0.5);
         icon.scale.set(scale);
@@ -395,7 +400,7 @@ class EquipmentPanel {
         onRightClick: (slotType: GearSlot) => void,
         onDragStart: (source: UISource, key: string | number, e: PIXI.FederatedPointerEvent) => void,
     ): void {
-        const slotSize = 90;
+        const slotSize = SLOT_SIZE;
         const gap = 0;
         const cols = 2;
         const margin = 0;
@@ -416,10 +421,10 @@ class EquipmentPanel {
             if (slotTex) {
                 const bg = new PIXI.NineSliceSprite({
                     texture: slotTex,
-                    leftWidth: 14,
-                    rightWidth: 14,
-                    topHeight: 14,
-                    bottomHeight: 14,
+                    leftWidth: SLOT_BORDER,
+                    rightWidth: SLOT_BORDER,
+                    topHeight: SLOT_BORDER,
+                    bottomHeight: SLOT_BORDER,
                 });
                 bg.width = slotSize;
                 bg.height = slotSize;
@@ -429,7 +434,7 @@ class EquipmentPanel {
                 borderMask = new PIXI.Graphics();
                 borderMask.rect(0, 0, slotSize, slotSize);
                 borderMask.fill({ color: 0xffffff });
-                borderMask.rect(14, 14, slotSize - 28, slotSize - 28);
+                borderMask.rect(SLOT_BORDER, SLOT_BORDER, slotSize - SLOT_BORDER * 2, slotSize - SLOT_BORDER * 2);
                 borderMask.cut();
                 slotContainer.addChild(borderMask);
                 bg.mask = borderMask;
@@ -440,14 +445,12 @@ class EquipmentPanel {
             let placeholderSprite: PIXI.Sprite | null = null;
             if (ph.tex) {
                 placeholderSprite = new PIXI.Sprite(ph.tex);
-                const maxIconSize = 62;
-                const borderSize = 14;
-                const phScale = Math.min(maxIconSize / ph.tex.width, maxIconSize / ph.tex.height);
+                const phScale = Math.min(SLOT_ICON_MAX / ph.tex.width, SLOT_ICON_MAX / ph.tex.height);
                 placeholderSprite.scale.set(phScale);
                 if (ph.type === 'offhand') {
                     placeholderSprite.anchor.set(0, 0);
-                    placeholderSprite.x = borderSize;
-                    placeholderSprite.y = borderSize;
+                    placeholderSprite.x = SLOT_BORDER;
+                    placeholderSprite.y = SLOT_BORDER;
                 } else {
                     placeholderSprite.anchor.set(0.5);
                     placeholderSprite.x = slotSize / 2;
@@ -531,11 +534,13 @@ class InventoryPanel {
     }
 
     async addItem(item: Item): Promise<boolean> {
-        const entry = this.slots.find(s => !s.item);
-        if (!entry) {
+        const index = state.inventory.add(item);
+        if (index === -1) {
             console.warn('InventoryPanel.addItem: inventory full');
             return false;
         }
+        const entry = this.slots[index];
+        if (!entry) return false;
         return this.setSlot(entry, item);
     }
 
@@ -553,17 +558,17 @@ class InventoryPanel {
         const icon = item.createIcon();
         if (!icon) return false;
 
-        const slotSize = 90;
-        const maxIconSize = 62;
-        const scale = Math.min(maxIconSize / icon.texture.width, maxIconSize / icon.texture.height);
+        const scale = Math.min(SLOT_ICON_MAX / icon.texture.width, SLOT_ICON_MAX / icon.texture.height);
         icon.anchor.set(0.5);
         icon.scale.set(scale);
-        icon.x = slotSize / 2;
-        icon.y = slotSize / 2;
+        icon.x = SLOT_SIZE / 2;
+        icon.y = SLOT_SIZE / 2;
 
         entry.container.addChild(icon);
         entry.iconSprite = icon;
         entry.item = item;
+        const idx = this.slots.indexOf(entry);
+        if (idx !== -1) state.inventory.set(idx, item);
 
         if (entry.bgSprite) entry.bgSprite.mask = null;
 
@@ -580,6 +585,8 @@ class InventoryPanel {
             await entry.item.unloadIcon();
             entry.item = null;
         }
+        const idx = this.slots.indexOf(entry);
+        if (idx !== -1) state.inventory.set(idx, null);
         if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
     }
 
@@ -590,6 +597,8 @@ class InventoryPanel {
             entry.iconSprite = null;
         }
         entry.item = null;
+        const idx = this.slots.indexOf(entry);
+        if (idx !== -1) state.inventory.set(idx, null);
         if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
     }
 
@@ -600,7 +609,7 @@ class InventoryPanel {
         onRightClick: (index: number) => void,
         onDragStart: (source: UISource, key: string | number, e: PIXI.FederatedPointerEvent) => void,
     ): void {
-        const slotSize = 90;
+        const slotSize = SLOT_SIZE;
         const gap = 0;
         const margin = 0;
 
@@ -621,10 +630,10 @@ class InventoryPanel {
                 if (slotTex) {
                     const bg = new PIXI.NineSliceSprite({
                         texture: slotTex,
-                        leftWidth: 14,
-                        rightWidth: 14,
-                        topHeight: 14,
-                        bottomHeight: 14,
+                        leftWidth: SLOT_BORDER,
+                        rightWidth: SLOT_BORDER,
+                        topHeight: SLOT_BORDER,
+                        bottomHeight: SLOT_BORDER,
                     });
                     bg.width = slotSize;
                     bg.height = slotSize;
@@ -634,7 +643,7 @@ class InventoryPanel {
                     borderMask = new PIXI.Graphics();
                     borderMask.rect(0, 0, slotSize, slotSize);
                     borderMask.fill({ color: 0xffffff });
-                    borderMask.rect(14, 14, slotSize - 28, slotSize - 28);
+                    borderMask.rect(SLOT_BORDER, SLOT_BORDER, slotSize - SLOT_BORDER * 2, slotSize - SLOT_BORDER * 2);
                     borderMask.cut();
                     slotContainer.addChild(borderMask);
                     bg.mask = borderMask;
@@ -681,16 +690,14 @@ class AbilityBar {
     }
 
     layout(screenW: number, screenH: number): void {
-        const margin = 20;
-        const orbRadius = 105;
-        const healthOrbRight = margin + orbRadius + 250;
-        const abSlotsHeight = 2 * 82;
+        const healthOrbRight = HUD_MARGIN + ORB_RADIUS + 250;
+        const abSlotsHeight = 2 * ABILITY_SLOT_SIZE;
         this.container.x = healthOrbRight;
         this.container.y = screenH - abSlotsHeight;
     }
 
     private _buildBar(slotTex: PIXI.Texture | null): void {
-        const slotSize = 82;
+        const slotSize = ABILITY_SLOT_SIZE;
         const gap = 0;
         const cols = 5;
         const rows = 2;
@@ -715,10 +722,10 @@ class AbilityBar {
                 if (slotTex) {
                     const bg = new PIXI.NineSliceSprite({
                         texture: slotTex,
-                        leftWidth: 11,
-                        rightWidth: 11,
-                        topHeight: 11,
-                        bottomHeight: 11,
+                        leftWidth: ABILITY_SLOT_BORDER,
+                        rightWidth: ABILITY_SLOT_BORDER,
+                        topHeight: ABILITY_SLOT_BORDER,
+                        bottomHeight: ABILITY_SLOT_BORDER,
                     });
                     bg.width = slotSize;
                     bg.height = slotSize;
@@ -727,7 +734,7 @@ class AbilityBar {
                     const borderMask = new PIXI.Graphics();
                     borderMask.rect(0, 0, slotSize, slotSize);
                     borderMask.fill({ color: 0xffffff });
-                    borderMask.rect(11, 11, slotSize - 22, slotSize - 22);
+                    borderMask.rect(ABILITY_SLOT_BORDER, ABILITY_SLOT_BORDER, slotSize - ABILITY_SLOT_BORDER * 2, slotSize - ABILITY_SLOT_BORDER * 2);
                     borderMask.cut();
                     slotContainer.addChild(borderMask);
                     bg.mask = borderMask;
@@ -795,15 +802,15 @@ class TooltipManager {
 
         this._container.removeChildren();
 
-        const pad = 12;
-        const innerWidth = 220;
+        const pad = TOOLTIP_PADDING;
+        const innerWidth = TOOLTIP_INNER_WIDTH;
         let yOffset = pad;
 
         const nameText = new PIXI.Text({
             text: item.name,
             style: {
                 fontFamily: 'Cinzel, serif',
-                fontSize: 18,
+                fontSize: TOOLTIP_NAME_FONT_SIZE,
                 fontWeight: '600',
                 fill: 0xFFD700,
                 wordWrap: true,
@@ -821,7 +828,7 @@ class TooltipManager {
             text: slotLabel,
             style: {
                 fontFamily: 'Grenze, serif',
-                fontSize: 14,
+                fontSize: TOOLTIP_DESC_FONT_SIZE,
                 fontStyle: 'italic',
                 fill: 0xAAAAAA,
                 stroke: { color: 0x000000, width: 1 },
@@ -840,7 +847,7 @@ class TooltipManager {
                     text: `+${value} ${label}`,
                     style: {
                         fontFamily: 'Grenze, serif',
-                        fontSize: 15,
+                        fontSize: TOOLTIP_STAT_FONT_SIZE,
                         fontWeight: '600',
                         fill: 0xFFFFFF,
                         stroke: { color: 0x000000, width: 1 },
@@ -867,7 +874,7 @@ class TooltipManager {
                     text: modDesc,
                     style: {
                         fontFamily: 'Grenze, serif',
-                        fontSize: 15,
+                        fontSize: TOOLTIP_STAT_FONT_SIZE,
                         fontWeight: '600',
                         fill: 0x66CCFF,
                         wordWrap: true,
@@ -895,7 +902,7 @@ class TooltipManager {
                 text: item.description,
                 style: {
                     fontFamily: 'Grenze, serif',
-                    fontSize: 14,
+                    fontSize: TOOLTIP_DESC_FONT_SIZE,
                     fontStyle: 'italic',
                     fill: 0x999999,
                     wordWrap: true,
@@ -1087,8 +1094,7 @@ class DragDropController {
 
         const dragSprite = item.createIcon();
         if (!dragSprite) return;
-        const maxIconSize = 62;
-        const scale = Math.min(maxIconSize / dragSprite.texture.width, maxIconSize / dragSprite.texture.height);
+        const scale = Math.min(SLOT_ICON_MAX / dragSprite.texture.width, SLOT_ICON_MAX / dragSprite.texture.height);
         dragSprite.anchor.set(0.5);
         dragSprite.scale.set(scale);
         dragSprite.alpha = 0.85;

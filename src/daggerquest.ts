@@ -3,6 +3,7 @@ import state from './state';
 import { Farm } from './farm';
 import { Man, Woman } from './classes';
 import { UI } from './ui';
+import { bus } from './events';
 import { HOVER_OUTLINE } from './outlineFilter';
 import { Entity } from './entity';
 import type { Loot } from './loot';
@@ -43,6 +44,9 @@ async function init(): Promise<void> {
     state.ui = new UI();
     await state.ui.load();
     state.app.stage.addChild(state.ui.container);
+
+    bus.on('item-equipped',   ({ slot, item }) => state.ui!.setEquippedItem(slot, item));
+    bus.on('item-unequipped', ({ slot })       => state.ui!.clearEquippedItem(slot));
 
     state.app.stage.eventMode = 'static';
     state.app.stage.hitArea = state.app.screen;
@@ -237,6 +241,7 @@ function gameLoop(ticker: PIXI.Ticker): void {
 
     const delta = ticker.deltaTime;
     state.player.update(delta);
+    state.player.container.zIndex = state.player.y;
 
     if (state.pendingLootPickup) {
         if (!state.pendingLootPickup.sprite || !state.area!.lootOnGround.includes(state.pendingLootPickup)) {

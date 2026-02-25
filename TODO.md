@@ -20,7 +20,7 @@ Each owns its own layout, input handling, and state.
 
 ---
 
-## 2. Introduce an event bus
+## 2. ~~Introduce an event bus~~
 
 Components communicate via direct imports and the global `state` singleton. For example `Player.pickupAndEquip()` directly calls `state.ui.setEquippedItem()`, and `Player` has both `unequipSlot` and `unequipSlotSilent` solely to control whether the UI is notified.
 
@@ -31,7 +31,7 @@ Components communicate via direct imports and the global `state` singleton. For 
 
 ---
 
-## 3. Data-drive area definitions
+## 3. ~~Data-drive area definitions~~
 
 `src/farm.ts` is 224 lines of hardcoded positions, enemy stats, and dialog text. Every new area requires a similar hand-coded subclass.
 
@@ -42,7 +42,7 @@ Components communicate via direct imports and the global `state` singleton. For 
 
 ---
 
-## 4. Eliminate stat boilerplate
+## 4. ~~Eliminate stat boilerplate~~
 
 `CharacterStats` has 29 fields repeated four times: interface definition, `CharacterOptions`, constructor destructuring, and property assignments (~120 lines of duplication in `src/character.ts`).
 
@@ -53,7 +53,7 @@ Components communicate via direct imports and the global `state` singleton. For 
 
 ---
 
-## 5. Separate inventory data model from UI
+## 5. ~~Separate inventory data model from UI~~
 
 Inventory only exists as UI slot entries (`InventorySlotEntry[]`). The UI *is* the data. Serialisation, headless logic, and inventory rules would require gutting the UI.
 
@@ -63,7 +63,7 @@ Inventory only exists as UI slot entries (`InventorySlotEntry[]`). The UI *is* t
 
 ---
 
-## 6. Build a real combat / damage system
+## 6. ~~Build a real combat / damage system~~
 
 14+ damage / resistance stat types are defined, but `Enemy.takeDamage()` just does `health -= amount`.
 
@@ -73,7 +73,7 @@ Inventory only exists as UI slot entries (`InventorySlotEntry[]`). The UI *is* t
 
 ---
 
-## 7. Quick wins
+## 7. ~~Quick wins~~
 
 | What | Where | Fix |
 |------|-------|-----|
@@ -88,3 +88,12 @@ Inventory only exists as UI slot entries (`InventorySlotEntry[]`). The UI *is* t
 
 - [x] **Break up the `UI` god object** — Split the 1,286-line monolith into six focused classes (`OrbHUD`, `EquipmentPanel`, `InventoryPanel`, `AbilityBar`, `TooltipManager`, `DragDropController`) composed by a thin `UI` coordinator. Each class owns its own layout, state, and input handling. Public API unchanged.
 - [x] **Fix dependency inversion: Entity → Area** — Extracted `SHADOW_BLUR` and `fetchManifest` into `src/assets.ts`. `Entity`, `Gear`, `Loot`, `Item`, and `UI` now import from `assets.ts` instead of `area.ts`.
+- [x] **Introduce an event bus** — Added `src/events.ts` with a lightweight typed `EventBus`. `Player` now emits `item-equipped` / `item-unequipped` events instead of calling `state.ui` directly. The UI subscribes in `daggerquest.ts`. Game logic is fully decoupled from presentation.
+- [x] **Data-drive area definitions** — Added `src/data/farm.json` holding all Farm layout data and `src/areaLoader.ts` with a generic `AreaLoader` class. `src/farm.ts` is now a 13-line thin wrapper; adding a new area only requires a JSON file.
+- [x] **Eliminate stat boilerplate** — `CharacterOptions` now extends `Partial<CharacterStats>` instead of repeating 29 fields. Constructor uses `Object.assign(this, DEFAULT_CHARACTER_STATS, statOpts)`, collapsing ~90 lines of destructuring + assignment into 1.
+- [x] **Separate inventory data model from UI** — Created `src/inventory.ts` with `add` / `remove` / `set` / `swap` / `serialize` methods. `state.inventory` holds the model; `InventoryPanel` keeps it in sync and acts purely as a view.
+- [x] **Build a real combat / damage system** — Added `src/combat.ts` with `CombatResolver.resolve()`. `Enemy.tryAttack()` now deals damage through the resolver (applies armour reduction and type resistances). Extensible for player attacks and future damage sources.
+- [x] **Quick win – `sortableChildren`** — Replaced the custom insertion sort in `src/area.ts` with `container.sortableChildren = true`; each child's `zIndex` is updated per-frame.
+- [x] **Quick win – config constants** — Created `src/config.ts`; all slot sizes, orb radius, font sizes, tooltip padding, and collision dimensions are referenced from constants in `src/ui.ts` and `src/character.ts`.
+- [x] **Quick win – consolidated ticker** — `src/gear.ts` now has a single module-level shared ticker that syncs all equipped `Gear` instances, replacing 8+ per-character callbacks.
+- [x] **Quick win – remove deprecated wrappers** — Deleted the deprecated `static fetchManifest()` methods from `src/area.ts` and `src/item.ts`; all callers now import directly from `src/assets.ts`.

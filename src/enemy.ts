@@ -1,5 +1,6 @@
 import { Character } from './character';
 import state from './state';
+import { CombatResolver } from './combat';
 import { EnemyState } from './types';
 
 interface EnemyOptions {
@@ -52,6 +53,23 @@ class Enemy extends Character {
         }
     }
 
+    /** Apply this enemy's attack damage to the player using CombatResolver. */
+    tryAttack(): void {
+        const now = performance.now();
+        if (now - this.lastAttackTime < this.attackCooldown) return;
+        this.lastAttackTime = now;
+
+        if (state.player) {
+            const dx = state.player.x - this.x;
+            const dy = state.player.y - this.y;
+            const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+            this.direction = this.findClosestDirection(angle);
+
+            const finalDamage = CombatResolver.resolve(this, state.player, 'slash', this.attackDamage);
+            state.player.currentHealth = Math.max(0, state.player.currentHealth - finalDamage);
+        }
+    }
+
     die(): void {
         this.isAlive = false;
         this.state = EnemyState.Idle;
@@ -97,19 +115,6 @@ class Enemy extends Character {
 
         if (this.state === EnemyState.Patrol && !this.targetPosition) {
             this.state = EnemyState.Idle;
-        }
-    }
-
-    tryAttack(): void {
-        const now = performance.now();
-        if (now - this.lastAttackTime < this.attackCooldown) return;
-        this.lastAttackTime = now;
-
-        if (state.player) {
-            const dx = state.player.x - this.x;
-            const dy = state.player.y - this.y;
-            const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-            this.direction = this.findClosestDirection(angle);
         }
     }
 }

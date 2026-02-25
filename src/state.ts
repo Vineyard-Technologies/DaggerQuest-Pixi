@@ -4,12 +4,14 @@ import type { Player } from './player';
 import type { UI } from './ui';
 import type { Entity } from './entity';
 import type { Loot } from './loot';
+import { Inventory } from './inventory';
 
 interface GameState {
     app: PIXI.Application | null;
     area: Area | null;
     player: Player | null;
     ui: UI | null;
+    inventory: Inventory;
     pointerHeld: boolean;
     pointerScreenX: number;
     pointerScreenY: number;
@@ -22,6 +24,7 @@ const state: GameState = {
     area: null,
     player: null,
     ui: null,
+    inventory: new Inventory(25),
     pointerHeld: false,
     pointerScreenX: 0,
     pointerScreenY: 0,

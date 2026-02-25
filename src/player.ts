@@ -1,6 +1,7 @@
 import { Character, type CharacterOptions } from './character';
 import { Gear } from './gear';
 import state from './state';
+import { bus } from './events';
 import { isCharacterStatKey, type GearSlot } from './types';
 import type { Item } from './item';
 import type { Loot } from './loot';
@@ -61,9 +62,7 @@ class Player extends Character {
             await oldGear.unequip();
         }
         this.equippedGear[slot] = newGear;
-        if (state.ui) {
-            await state.ui.setEquippedItem(slot, item);
-        }
+        bus.emit('item-equipped', { slot, item });
     }
 
     async unequipSlot(slot: GearSlot): Promise<void> {
@@ -82,9 +81,7 @@ class Player extends Character {
         if (oldGear) {
             await oldGear.unequip();
         }
-        if (state.ui) {
-            await state.ui.clearEquippedItem(slot);
-        }
+        bus.emit('item-unequipped', { slot });
     }
 
     async equipItem(item: Item): Promise<void> {
@@ -100,9 +97,7 @@ class Player extends Character {
             await oldGear.unequip();
         }
         this.equippedGear[slot] = newGear;
-        if (state.ui) {
-            await state.ui.setEquippedItem(slot, item);
-        }
+        bus.emit('item-equipped', { slot, item });
     }
 
     async unequipSlotSilent(slot: GearSlot): Promise<void> {
