@@ -53,6 +53,14 @@ jobs:
           mkdir -p target-repo/public/game
           cp -r dist/* target-repo/public/game/
 
+      - name: Install target repo dependencies
+        working-directory: target-repo
+        run: npm ci
+
+      - name: Build React site
+        working-directory: target-repo
+        run: npm run build
+
       - name: Commit and push
         working-directory: target-repo
         run: |
