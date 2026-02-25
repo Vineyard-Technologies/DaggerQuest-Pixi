@@ -6,8 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:prod": "vite build --mode deploy-prod",
-    "build:test": "vite build --mode deploy-test",
     "preview": "vite preview",
     "spritesheets": "tsx scripts/makeSpritesheets.ts",
     "anchors": "tsx scripts/patchAnchors.ts"
