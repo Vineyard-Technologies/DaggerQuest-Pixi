@@ -6,15 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:prod": "vite build --mode deploy-prod",
+    "build:test": "vite build --mode deploy-test",
     "preview": "vite preview",
-    "spritesheets": "node scripts/makeSpritesheets.cjs",
-    "deploy:prod": "node scripts/pushToEnvironment.cjs production",
-    "deploy:test": "node scripts/pushToEnvironment.cjs test"
+    "spritesheets": "tsx scripts/makeSpritesheets.ts",
+    "anchors": "tsx scripts/patchAnchors.ts"
   },
   "dependencies": {
     "pixi.js": "^8.0.0"
   },
   "devDependencies": {
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vite": "^6.0.0"
   }

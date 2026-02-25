@@ -1,5 +1,5 @@
 /**
- * patchAnchors.js
+ * patchAnchors.ts
  *
  * Patches the "anchor" field in spritesheet JSON files with the correct
  * per-frame origin data from DaggerQuest objectType JSON files.
@@ -15,17 +15,51 @@
  *   e.g. man-walk_135-008
  *
  * Usage:
- *   node scripts/patchAnchors.js [daggerQuestObjectTypesDir] [spritesheetsDir]
+ *   npx tsx scripts/patchAnchors.ts [daggerQuestObjectTypesDir] [spritesheetsDir]
  *
  * Defaults:
  *   daggerQuestObjectTypesDir = ../DaggerQuest/objectTypes
  *   spritesheetsDir           = ./images/spritesheets
  */
 
-const { readdir, readFile, writeFile, stat } = require('fs/promises');
-const { join, basename, relative } = require('path');
+import { readdir, readFile, writeFile } from 'fs/promises';
+import { join, basename, dirname, relative } from 'path';
+import { fileURLToPath } from 'url';
 
-const scriptDir = __dirname;
+interface FrameOrigin {
+    originX: number;
+    originY: number;
+}
+
+interface AnimationItem {
+    name: string;
+    frames?: FrameOrigin[];
+}
+
+interface AnimationSubfolder {
+    name: string;
+    items?: AnimationItem[];
+}
+
+interface ObjectTypeData {
+    name?: string;
+    animations?: {
+        subfolders?: AnimationSubfolder[];
+        items?: AnimationItem[];
+    };
+}
+
+interface SpritesheetFrame {
+    anchor?: { x: number; y: number };
+    [key: string]: unknown;
+}
+
+interface SpritesheetData {
+    frames: Record<string, SpritesheetFrame>;
+    [key: string]: unknown;
+}
+
+const scriptDir = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(scriptDir, '..');
 
 const objectTypesDir = process.argv[2]
@@ -33,13 +67,13 @@ const objectTypesDir = process.argv[2]
 const spritesheetsDir = process.argv[3]
     || join(rootDir, 'images', 'spritesheets');
 
-async function main() {
+async function main(): Promise<void> {
     // 1. Recursively discover all objectType JSON files
     const objectTypeFiles = await findJsonFiles(objectTypesDir);
     console.log(`Found ${objectTypeFiles.length} objectType JSON file(s) in ${objectTypesDir}`);
 
     // Build an index of spritesheet folder names (lowercase → actual name)
-    const sheetFolderIndex = {};
+    const sheetFolderIndex: Record<string, string> = {};
     for (const entry of await readdir(spritesheetsDir, { withFileTypes: true })) {
         if (entry.isDirectory()) {
             sheetFolderIndex[entry.name.toLowerCase()] = entry.name;
@@ -53,11 +87,11 @@ async function main() {
 
     for (const otPath of objectTypeFiles) {
         const relPath = relative(objectTypesDir, otPath);
-        let otData;
+        let otData: ObjectTypeData;
         try {
-            otData = JSON.parse(await readFile(otPath, 'utf8'));
+            otData = JSON.parse(await readFile(otPath, 'utf8')) as ObjectTypeData;
         } catch (err) {
-            console.log(`  [!] ${relPath}: failed to parse JSON, skipping. (${err.message})`);
+            console.log(`  [!] ${relPath}: failed to parse JSON, skipping. (${(err as Error).message})`);
             continue;
         }
 
@@ -81,7 +115,7 @@ async function main() {
         }
 
         const sheetDir = join(spritesheetsDir, sheetDirName);
-        let sheetFiles;
+        let sheetFiles: string[];
         try {
             sheetFiles = (await readdir(sheetDir)).filter(f => f.endsWith('.json'));
         } catch {
@@ -98,7 +132,7 @@ async function main() {
         for (const sheetFile of sheetFiles) {
             const sheetPath = join(sheetDir, sheetFile);
             const sheetJson = await readFile(sheetPath, 'utf8');
-            const sheetData = JSON.parse(sheetJson);
+            const sheetData = JSON.parse(sheetJson) as SpritesheetData;
 
             let patchedInFile = 0;
 
@@ -113,24 +147,24 @@ async function main() {
             );
 
             for (const frameName in sheetData.frames) {
-                let animKey = null;
-                let frameIndex = null;
+                let animKey: string | null = null;
+                let frameIndex: number | null = null;
 
                 // Try directional pattern first (more specific)
                 const dirMatch = frameName.match(directionalRegex);
                 if (dirMatch) {
-                    animKey = dirMatch[1];
-                    frameIndex = parseInt(dirMatch[2]);
+                    animKey = dirMatch[1]!;
+                    frameIndex = parseInt(dirMatch[2]!);
                 } else {
                     // Try static/non-directional pattern
                     const statMatch = frameName.match(staticRegex);
                     if (statMatch) {
-                        animKey = statMatch[1];
-                        frameIndex = parseInt(statMatch[2]);
+                        animKey = statMatch[1]!;
+                        frameIndex = parseInt(statMatch[2]!);
                     }
                 }
 
-                if (animKey === null) continue;
+                if (animKey === null || frameIndex === null) continue;
 
                 // Try exact match first, then case-insensitive match
                 let origins = originsByAnim[animKey];
@@ -147,10 +181,10 @@ async function main() {
 
                 if (!origins || frameIndex >= origins.length) continue;
 
-                const { originX, originY } = origins[frameIndex];
+                const { originX, originY } = origins[frameIndex]!;
 
                 // Patch the anchor
-                sheetData.frames[frameName].anchor = { x: originX, y: originY };
+                sheetData.frames[frameName]!.anchor = { x: originX, y: originY };
                 patchedInFile++;
             }
 
@@ -178,8 +212,8 @@ async function main() {
  * Builds a map of animKey → frame origins from a DaggerQuest objectType JSON.
  * animKey is e.g. "walk_135", "idle_-22.5"
  */
-function buildOriginLookup(otData) {
-    const result = {};
+function buildOriginLookup(otData: ObjectTypeData): Record<string, FrameOrigin[]> {
+    const result: Record<string, FrameOrigin[]> = {};
 
     if (!otData.animations || !otData.animations.subfolders) return result;
 
@@ -194,8 +228,6 @@ function buildOriginLookup(otData) {
                 originY: frame.originY
             }));
         }
-
-        // Also handle items at the top level (non-subfolder)
     }
 
     // Handle top-level items if any
@@ -210,15 +242,15 @@ function buildOriginLookup(otData) {
     return result;
 }
 
-function escapeRegex(str) {
+function escapeRegex(str: string): string {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /**
  * Recursively find all .json files under a directory.
  */
-async function findJsonFiles(dir) {
-    const results = [];
+async function findJsonFiles(dir: string): Promise<string[]> {
+    const results: string[] = [];
     const entries = await readdir(dir, { withFileTypes: true });
     for (const entry of entries) {
         const fullPath = join(dir, entry.name);

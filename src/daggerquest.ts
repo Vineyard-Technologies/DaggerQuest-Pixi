@@ -8,7 +8,6 @@ import { HOVER_OUTLINE } from './outlineFilter';
 import { Entity } from './entity';
 import type { Loot } from './loot';
 import type { Player } from './player';
-import './debug';
 
 type PlayerClass = new (opts: { x: number; y: number }) => Player;
 
@@ -59,12 +58,6 @@ async function init(): Promise<void> {
 
     window.addEventListener('keydown', (e: KeyboardEvent) => {
         if (!state.player) return;
-        if (e.key === 'h' || e.key === 'H') {
-            state.player.currentHealth = Math.max(0, state.player.currentHealth - 10);
-        }
-        if (e.key === 'm' || e.key === 'M') {
-            state.player.currentMana = Math.max(0, state.player.currentMana - 10);
-        }
         if (e.key === 'c' || e.key === 'C') {
             state.ui!.toggleEquippedMenu();
         }
@@ -72,6 +65,15 @@ async function init(): Promise<void> {
             state.ui!.toggleInventoryMenu();
         }
     });
+
+    // Debug module – only loaded during development, excluded from production builds.
+    // Activate from the browser console with: debug()
+    if (import.meta.env.DEV) {
+        (window as unknown as Record<string, unknown>).debug = async () => {
+            const { initDebug } = await import('./debug');
+            initDebug();
+        };
+    }
 }
 
 async function createPlayer(PlayerClassCtor: PlayerClass): Promise<void> {
