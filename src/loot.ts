@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Entity } from './entity';
-import { SHADOW_BLUR } from './area';
+import { SHADOW_BLUR } from './assets';
 import type { Item } from './item';
 
 class Loot extends Entity {

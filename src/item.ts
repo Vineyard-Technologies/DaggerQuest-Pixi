@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { Area } from './area';
+import { fetchManifest } from './assets';
 import { rollMods, aggregateModStats, formatMod } from './mods';
 import { Loot } from './loot';
 import { Gear } from './gear';
@@ -117,8 +117,11 @@ class Item {
         return new Gear({ item: this });
     }
 
+    /**
+     * @deprecated Import `fetchManifest` from `./assets` instead.
+     */
     static async fetchManifest(): Promise<Record<string, string[]>> {
-        return Area.fetchManifest();
+        return fetchManifest();
     }
 }
 

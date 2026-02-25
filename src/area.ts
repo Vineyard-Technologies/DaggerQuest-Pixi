@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { COLLISION_POLYS, DEFAULT_BOX, polyToWorld, WorldPoint, NormPoint, Boundary } from './collision';
+import { SHADOW_BLUR, fetchManifest } from './assets';
 import type { Enemy } from './enemy';
 import type { NPC } from './npc';
 import type { Loot } from './loot';
@@ -10,8 +11,6 @@ declare module 'pixi.js' {
         sortDirty?: boolean;
     }
 }
-
-const SHADOW_BLUR = new PIXI.BlurFilter(4);
 
 interface AreaOptions {
     width: number;
@@ -41,8 +40,6 @@ class Area {
     colliders: WorldPoint[][];
     lootLabelsContainer: PIXI.Container & { sortY?: number };
     backgroundTile: PIXI.TilingSprite | null = null;
-
-    private static _manifest: Record<string, string[]> | null = null;
 
     constructor({ width, height, backgroundTexture, playerStartX, playerStartY }: AreaOptions) {
         this.width = width;
@@ -74,18 +71,18 @@ class Area {
         this.container.addChildAt(this.backgroundTile, 0);
     }
 
+    /**
+     * @deprecated Import `fetchManifest` from `./assets` instead.
+     */
     static async fetchManifest(): Promise<Record<string, string[]>> {
-        if (!Area._manifest) {
-            Area._manifest = await fetch('./images/spritesheets/manifest.json').then(r => r.json());
-        }
-        return Area._manifest!;
+        return fetchManifest();
     }
 
     async placeStaticSprite(
         spriteKey: string, x: number, y: number,
         { shadow = true, visible = true, collider = true }: PlaceStaticSpriteOptions = {},
     ): Promise<PIXI.Container | null> {
-        const manifest = await Area.fetchManifest();
+        const manifest = await fetchManifest();
         const sheets = manifest[spriteKey] || [];
         if (sheets.length === 0) {
             console.warn(`No spritesheets found for "${spriteKey}"`);
@@ -157,5 +154,5 @@ class Area {
     }
 }
 
-export { SHADOW_BLUR, Area };
+export { Area };
 export type { AreaOptions, PlaceStaticSpriteOptions };

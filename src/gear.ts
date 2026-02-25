@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { Area, SHADOW_BLUR } from './area';
+import { SHADOW_BLUR, fetchManifest } from './assets';
 import type { Character } from './character';
 import type { AnimationTextures } from './entity';
 import type { Item } from './item';
@@ -68,7 +68,7 @@ class Gear {
         this._character = character;
         this._spriteKey = `${character.spriteKey}_${this._spriteKeyBase}_gear`;
 
-        const manifest = await Area.fetchManifest();
+        const manifest = await fetchManifest();
 
         await this._loadSheetTextures(manifest, this._spriteKey, this._textures);
 

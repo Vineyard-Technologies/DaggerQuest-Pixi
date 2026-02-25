@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { Area } from './area';
+import { fetchManifest } from './assets';
 import state from './state';
 import { GearSlot, UISource } from './types';
 import type { Item } from './item';
@@ -69,114 +69,28 @@ interface OrbSprite extends PIXI.Sprite {
     _orbLastPct?: number;
 }
 
-/**
- * HUD overlay – health orb (bottom-left) and mana orb (bottom-right).
- *
- * Layer order per orb (back → front):
- *   1. orbcoverback             – rear frame (backmost)
- *   2. healthorb/manaorb        – liquid fill (tinted red / blue)
- *   3. orbcoverfront            – front frame
- *   4. healthcover/manacover   – orb cover
- *
- * The whole HUD lives in a PIXI.Container added directly to `app.stage`
- * so it stays fixed on screen regardless of camera movement.
- */
-class UI {
-    container: PIXI.Container;
-    healthOrbContainer: PIXI.Container;
-    manaOrbContainer: PIXI.Container;
-    equippedMenuContainer: PIXI.Container;
-    inventoryMenuContainer: PIXI.Container;
-    abilityBarContainer: PIXI.Container;
+/** Shared texture loader signature used across UI sub-components. */
+type TextureLoader = (key: string) => Promise<PIXI.Texture | null>;
 
-    equippedSlots: EquippedSlotEntry[];
-    inventorySlots: InventorySlotEntry[];
-    abilitySlots: AbilitySlotEntry[];
+// ── OrbHUD ─────────────────────────────────────────────────────────────────
 
-    private _equippedMenuOpen: boolean;
-    private _inventoryMenuOpen: boolean;
-    private _equippedMenuSlide: number;
-    private _inventoryMenuSlide: number;
-    private _equippedMenuWidth: number;
-    private _inventoryMenuWidth: number;
-    private _rightClickBusy: boolean;
-    private _drag: DragState | null;
-    private _healthOrbSprite: OrbSprite | null;
-    private _manaOrbSprite: OrbSprite | null;
-    private _orbHeight: number;
-    private _tooltipContainer: PIXI.Container | null;
-    private _tooltipItem: Item | null;
-    private _tooltipVisible: boolean;
-    private _onDragMoveHandler: ((e: PIXI.FederatedPointerEvent) => void) | null;
-    private _onDragEndHandler: ((e: PIXI.FederatedPointerEvent) => void) | null;
+/** Health / mana orb rendering & fill-masking. */
+class OrbHUD {
+    readonly healthContainer: PIXI.Container;
+    readonly manaContainer: PIXI.Container;
+
+    private _healthOrbSprite: OrbSprite | null = null;
+    private _manaOrbSprite: OrbSprite | null = null;
+    private _orbHeight = 0;
 
     constructor() {
-        this.container = new PIXI.Container();
-        this.container.label = 'hud';
-
-        this.healthOrbContainer = new PIXI.Container();
-        this.healthOrbContainer.label = 'healthOrb';
-        this.manaOrbContainer = new PIXI.Container();
-        this.manaOrbContainer.label = 'manaOrb';
-
-        this.container.addChild(this.healthOrbContainer);
-        this.container.addChild(this.manaOrbContainer);
-
-        this.equippedMenuContainer = new PIXI.Container();
-        this.equippedMenuContainer.label = 'equippedMenu';
-        this.container.addChild(this.equippedMenuContainer);
-
-        this.inventoryMenuContainer = new PIXI.Container();
-        this.inventoryMenuContainer.label = 'inventoryMenu';
-        this.container.addChild(this.inventoryMenuContainer);
-
-        this.abilityBarContainer = new PIXI.Container();
-        this.abilityBarContainer.label = 'abilityBar';
-        this.container.addChild(this.abilityBarContainer);
-
-        this._equippedMenuOpen = false;
-        this._inventoryMenuOpen = false;
-        this._equippedMenuSlide = 0;
-        this._inventoryMenuSlide = 0;
-        this._equippedMenuWidth = 0;
-        this._inventoryMenuWidth = 0;
-
-        this.equippedSlots = [];
-        this.inventorySlots = [];
-        this.abilitySlots = [];
-
-        this._rightClickBusy = false;
-        this._drag = null;
-
-        this._healthOrbSprite = null;
-        this._manaOrbSprite = null;
-        this._orbHeight = 0;
-
-        this._tooltipContainer = null;
-        this._tooltipItem = null;
-        this._tooltipVisible = false;
-
-        this._onDragMoveHandler = null;
-        this._onDragEndHandler = null;
+        this.healthContainer = new PIXI.Container();
+        this.healthContainer.label = 'healthOrb';
+        this.manaContainer = new PIXI.Container();
+        this.manaContainer.label = 'manaOrb';
     }
 
-    // ------------------------------------------------------------------ Load
-
-    async load(): Promise<void> {
-        const manifest = await Area.fetchManifest();
-
-        const loadTexture = async (key: string): Promise<PIXI.Texture | null> => {
-            const sheets = manifest[key] || [];
-            for (const sheetPath of sheets) {
-                const fullPath = `./images/spritesheets/${sheetPath.replace('./', '')}`;
-                const spritesheet: PIXI.Spritesheet = await PIXI.Assets.load(fullPath);
-                const names = Object.keys(spritesheet.textures);
-                if (names.length > 0) return spritesheet.textures[names[0]!]!;
-            }
-            console.warn(`UI: no texture found for "${key}"`);
-            return null;
-        };
-
+    async load(loadTexture: TextureLoader): Promise<void> {
         const [
             orbcoverbackTex,
             orbcoverfrontTex,
@@ -184,18 +98,6 @@ class UI {
             manaorbTex,
             healthcoverTex,
             manacoverTex,
-            charactermenuTex,
-            headplaceholderTex,
-            chestplaceholderTex,
-            handsplaceholderTex,
-            legsplaceholderTex,
-            feetplaceholderTex,
-            mainhandplaceholderTex,
-            offhandplaceholderTex,
-            neckplaceholderTex,
-            ringplaceholderTex,
-            slotTex,
-            abilityslotTex,
         ] = await Promise.all([
             loadTexture('orbcoverback'),
             loadTexture('orbcoverfront'),
@@ -203,25 +105,9 @@ class UI {
             loadTexture('manaorb'),
             loadTexture('healthcover'),
             loadTexture('manacover'),
-            loadTexture('charactermenu'),
-            loadTexture('headplaceholder'),
-            loadTexture('chestplaceholder'),
-            loadTexture('handsplaceholder'),
-            loadTexture('legsplaceholder'),
-            loadTexture('feetplaceholder'),
-            loadTexture('mainhandplaceholder'),
-            loadTexture('offhandplaceholder'),
-            loadTexture('neckplaceholder'),
-            loadTexture('ringplaceholder'),
-            loadTexture('slot'),
-            loadTexture('abilityslot'),
         ]);
 
-        if (charactermenuTex) (charactermenuTex as { defaultAnchor: { x: number; y: number } }).defaultAnchor = { x: 0, y: 0 };
-        if (slotTex) (slotTex as { defaultAnchor: { x: number; y: number } }).defaultAnchor = { x: 0, y: 0 };
-        if (abilityslotTex) (abilityslotTex as { defaultAnchor: { x: number; y: number } }).defaultAnchor = { x: 0, y: 0 };
-
-        this._buildOrb(this.healthOrbContainer, {
+        this._buildOrb(this.healthContainer, {
             coverBackTex: orbcoverbackTex,
             coverFrontTex: orbcoverfrontTex,
             orbTex: healthorbTex,
@@ -229,7 +115,7 @@ class UI {
             tint: 0xff4444,
         });
 
-        this._buildOrb(this.manaOrbContainer, {
+        this._buildOrb(this.manaContainer, {
             coverBackTex: orbcoverbackTex,
             coverFrontTex: orbcoverfrontTex,
             orbTex: manaorbTex,
@@ -238,32 +124,24 @@ class UI {
         });
 
         if (healthorbTex) this._orbHeight = healthorbTex.height;
-
-        const equippedPlaceholders: EquippedPlaceholderDef[] = [
-            { col: 0, row: 0, tex: headplaceholderTex,     type: GearSlot.Head },
-            { col: 0, row: 1, tex: chestplaceholderTex,    type: GearSlot.Chest },
-            { col: 0, row: 2, tex: handsplaceholderTex,    type: GearSlot.Hands },
-            { col: 0, row: 3, tex: legsplaceholderTex,     type: GearSlot.Legs },
-            { col: 0, row: 4, tex: feetplaceholderTex,     type: GearSlot.Feet },
-            { col: 1, row: 0, tex: mainhandplaceholderTex, type: GearSlot.MainHand },
-            { col: 1, row: 1, tex: offhandplaceholderTex,  type: GearSlot.OffHand },
-            { col: 1, row: 2, tex: neckplaceholderTex,     type: GearSlot.Neck },
-            { col: 1, row: 3, tex: ringplaceholderTex,     type: GearSlot.Ring },
-            { col: 1, row: 4, tex: ringplaceholderTex,     type: GearSlot.Ring2 },
-        ];
-        this._buildEquippedMenu(charactermenuTex, equippedPlaceholders);
-
-        this._buildInventoryMenu(slotTex, 5, 5);
-
-        this._buildAbilityBar(abilityslotTex);
-
-        this._buildTooltip();
-        this._wireSlotHoverEvents();
-
-        this.layout(window.innerWidth, window.innerHeight);
     }
 
-    // ---------------------------------------------------------- Build helpers
+    update(character: Character): void {
+        if (!character) return;
+        const healthPct = Math.max(0, Math.min(1, character.currentHealth / character.maxHealth));
+        const manaPct = Math.max(0, Math.min(1, character.currentMana / character.maxMana));
+        this._setOrbFill(this._healthOrbSprite, healthPct);
+        this._setOrbFill(this._manaOrbSprite, manaPct);
+    }
+
+    layout(screenW: number, screenH: number): void {
+        const margin = 20;
+        const orbRadius = 105;
+        this.healthContainer.x = margin + orbRadius;
+        this.healthContainer.y = screenH - margin - orbRadius + 5;
+        this.manaContainer.x = screenW - margin - orbRadius;
+        this.manaContainer.y = screenH - margin - orbRadius + 5;
+    }
 
     private _buildOrb(container: PIXI.Container, { coverBackTex, coverFrontTex, orbTex, coverTex, tint }: OrbBuildOptions): void {
         if (coverBackTex) {
@@ -280,7 +158,7 @@ class UI {
             if (tint != null) orb.tint = tint;
             container.addChild(orb);
 
-            if (container === this.healthOrbContainer) {
+            if (container === this.healthContainer) {
                 this._healthOrbSprite = orb;
             } else {
                 this._manaOrbSprite = orb;
@@ -302,7 +180,221 @@ class UI {
         }
     }
 
-    private _buildEquippedMenu(slotTex: PIXI.Texture | null, placeholders: EquippedPlaceholderDef[]): void {
+    private _setOrbFill(orbSprite: OrbSprite | null, pct: number): void {
+        if (!orbSprite) return;
+
+        if (orbSprite._orbFillH === undefined) {
+            const tex = orbSprite.texture;
+            orbSprite._orbFillW = tex.source.width;
+            orbSprite._orbFillH = tex.source.height;
+
+            const mask = new PIXI.Graphics();
+            mask.label = 'orbMask';
+            orbSprite.parent!.addChild(mask);
+            orbSprite.mask = mask;
+            orbSprite._orbMask = mask;
+            orbSprite._orbLastPct = -1;
+        }
+
+        const clamped = Math.max(0, Math.min(1, pct));
+        if (clamped === orbSprite._orbLastPct) return;
+        orbSprite._orbLastPct = clamped;
+
+        const fullW = orbSprite._orbFillW!;
+        const fullH = orbSprite._orbFillH!;
+        const mask = orbSprite._orbMask!;
+
+        orbSprite.anchor.set(0.5, 0.5);
+        orbSprite.y = 0;
+
+        mask.clear();
+        if (clamped > 0) {
+            const visibleH = Math.round(fullH * clamped);
+            const yOffset = fullH - visibleH;
+            mask.rect(
+                orbSprite.x - fullW / 2,
+                orbSprite.y - fullH / 2 + yOffset,
+                fullW,
+                visibleH,
+            );
+            mask.fill({ color: 0xffffff });
+        }
+        orbSprite.visible = clamped > 0;
+    }
+}
+
+// ── EquipmentPanel ─────────────────────────────────────────────────────────
+
+/** Equipped-gear slot grid (left-side slide-out). */
+class EquipmentPanel {
+    readonly container: PIXI.Container;
+    readonly slots: EquippedSlotEntry[] = [];
+
+    private _menuOpen = false;
+    private _menuSlide = 0;
+    private _menuWidth = 0;
+
+    constructor() {
+        this.container = new PIXI.Container();
+        this.container.label = 'equippedMenu';
+    }
+
+    async load(
+        loadTexture: TextureLoader,
+        onRightClick: (slotType: GearSlot) => void,
+        onDragStart: (source: UISource, key: string | number, e: PIXI.FederatedPointerEvent) => void,
+    ): Promise<void> {
+        const [
+            charactermenuTex,
+            headplaceholderTex,
+            chestplaceholderTex,
+            handsplaceholderTex,
+            legsplaceholderTex,
+            feetplaceholderTex,
+            mainhandplaceholderTex,
+            offhandplaceholderTex,
+            neckplaceholderTex,
+            ringplaceholderTex,
+        ] = await Promise.all([
+            loadTexture('charactermenu'),
+            loadTexture('headplaceholder'),
+            loadTexture('chestplaceholder'),
+            loadTexture('handsplaceholder'),
+            loadTexture('legsplaceholder'),
+            loadTexture('feetplaceholder'),
+            loadTexture('mainhandplaceholder'),
+            loadTexture('offhandplaceholder'),
+            loadTexture('neckplaceholder'),
+            loadTexture('ringplaceholder'),
+        ]);
+
+        if (charactermenuTex) (charactermenuTex as { defaultAnchor: { x: number; y: number } }).defaultAnchor = { x: 0, y: 0 };
+
+        const placeholders: EquippedPlaceholderDef[] = [
+            { col: 0, row: 0, tex: headplaceholderTex,     type: GearSlot.Head },
+            { col: 0, row: 1, tex: chestplaceholderTex,    type: GearSlot.Chest },
+            { col: 0, row: 2, tex: handsplaceholderTex,    type: GearSlot.Hands },
+            { col: 0, row: 3, tex: legsplaceholderTex,     type: GearSlot.Legs },
+            { col: 0, row: 4, tex: feetplaceholderTex,     type: GearSlot.Feet },
+            { col: 1, row: 0, tex: mainhandplaceholderTex, type: GearSlot.MainHand },
+            { col: 1, row: 1, tex: offhandplaceholderTex,  type: GearSlot.OffHand },
+            { col: 1, row: 2, tex: neckplaceholderTex,     type: GearSlot.Neck },
+            { col: 1, row: 3, tex: ringplaceholderTex,     type: GearSlot.Ring },
+            { col: 1, row: 4, tex: ringplaceholderTex,     type: GearSlot.Ring2 },
+        ];
+
+        this._buildMenu(charactermenuTex, placeholders, onRightClick, onDragStart);
+    }
+
+    toggle(): void {
+        this._menuOpen = !this._menuOpen;
+    }
+
+    update(deltaMs: number): void {
+        const slideSpeed = 8;
+        const dt = deltaMs / 1000;
+        const target = this._menuOpen ? 1 : 0;
+        this._menuSlide += (target - this._menuSlide) * Math.min(1, slideSpeed * dt);
+        if (Math.abs(this._menuSlide - target) < 0.001) this._menuSlide = target;
+    }
+
+    layout(_screenW: number, _screenH: number): void {
+        const eqOffX = -this._menuWidth * (1 - this._menuSlide);
+        this.container.x = eqOffX;
+        this.container.y = 0;
+    }
+
+    async setItem(slot: GearSlot, item: Item): Promise<void> {
+        const entry = this.slots.find(s => s.slotType === slot);
+        if (!entry) {
+            console.warn(`EquipmentPanel.setItem: no slot found for "${slot}"`);
+            return;
+        }
+
+        if (entry.iconSprite) {
+            entry.container.removeChild(entry.iconSprite);
+            entry.iconSprite.destroy();
+            entry.iconSprite = null;
+        }
+
+        if (entry.item) {
+            await entry.item.unloadIcon();
+        }
+
+        await item.loadIcon();
+        const icon = item.createIcon();
+        if (!icon) {
+            console.warn(`EquipmentPanel.setItem: could not create icon for "${item.id}"`);
+            return;
+        }
+
+        const slotSize = 90;
+        const maxIconSize = 62;
+        const scale = Math.min(maxIconSize / icon.texture.width, maxIconSize / icon.texture.height);
+        icon.anchor.set(0.5);
+        icon.scale.set(scale);
+        icon.x = slotSize / 2;
+        icon.y = slotSize / 2;
+
+        entry.container.addChild(icon);
+        entry.iconSprite = icon;
+        entry.item = item;
+
+        if (entry.bgSprite) entry.bgSprite.mask = null;
+
+        if (entry.placeholder) {
+            entry.placeholder.visible = false;
+        }
+    }
+
+    async clearItem(slot: GearSlot): Promise<void> {
+        const entry = this.slots.find(s => s.slotType === slot);
+        if (!entry) return;
+
+        if (entry.iconSprite) {
+            entry.container.removeChild(entry.iconSprite);
+            entry.iconSprite.destroy();
+            entry.iconSprite = null;
+        }
+
+        if (entry.item) {
+            await entry.item.unloadIcon();
+            entry.item = null;
+        }
+
+        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
+
+        if (entry.placeholder) {
+            entry.placeholder.visible = true;
+        }
+    }
+
+    detachIcon(entry: EquippedSlotEntry): void {
+        if (entry.iconSprite) {
+            entry.container.removeChild(entry.iconSprite);
+            entry.iconSprite.destroy();
+            entry.iconSprite = null;
+        }
+        entry.item = null;
+        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
+        if (entry.placeholder) entry.placeholder.visible = true;
+    }
+
+    detachIconKeepData(entry: EquippedSlotEntry): void {
+        if (entry.iconSprite) {
+            entry.container.removeChild(entry.iconSprite);
+            entry.iconSprite.destroy();
+            entry.iconSprite = null;
+        }
+        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
+    }
+
+    private _buildMenu(
+        slotTex: PIXI.Texture | null,
+        placeholders: EquippedPlaceholderDef[],
+        onRightClick: (slotType: GearSlot) => void,
+        onDragStart: (source: UISource, key: string | number, e: PIXI.FederatedPointerEvent) => void,
+    ): void {
         const slotSize = 90;
         const gap = 0;
         const cols = 2;
@@ -378,22 +470,136 @@ class UI {
             slotContainer.eventMode = 'static';
             slotContainer.cursor = 'pointer';
             const slotType = ph.type;
-            slotContainer.on('rightclick', () => this._onEquippedSlotRightClick(slotType));
+            slotContainer.on('rightclick', () => onRightClick(slotType));
             slotContainer.on('pointerdown', (e: PIXI.FederatedPointerEvent) => {
-                if (e.button === 0) this._onDragStart(UISource.Equipped, slotType, e);
+                if (e.button === 0) onDragStart(UISource.Equipped, slotType, e);
             });
 
             slotsContainer.addChild(slotContainer);
-            this.equippedSlots.push({ container: slotContainer, placeholder: placeholderSprite, slotType: ph.type, iconSprite: null, item: null, bgSprite, borderMask });
+            this.slots.push({ container: slotContainer, placeholder: placeholderSprite, slotType: ph.type, iconSprite: null, item: null, bgSprite, borderMask });
         }
 
-        this.equippedMenuContainer.addChild(slotsContainer);
+        this.container.addChild(slotsContainer);
 
         const gridWidth = cols * (slotSize + gap) - gap;
-        this._equippedMenuWidth = margin + gridWidth + margin;
+        this._menuWidth = margin + gridWidth + margin;
+    }
+}
+
+// ── InventoryPanel ─────────────────────────────────────────────────────────
+
+/** Inventory grid (right-side slide-out). */
+class InventoryPanel {
+    readonly container: PIXI.Container;
+    readonly slots: InventorySlotEntry[] = [];
+
+    private _menuOpen = false;
+    private _menuSlide = 0;
+    private _menuWidth = 0;
+
+    constructor() {
+        this.container = new PIXI.Container();
+        this.container.label = 'inventoryMenu';
     }
 
-    private _buildInventoryMenu(slotTex: PIXI.Texture | null, cols: number, rows: number): void {
+    async load(
+        loadTexture: TextureLoader,
+        onRightClick: (index: number) => void,
+        onDragStart: (source: UISource, key: string | number, e: PIXI.FederatedPointerEvent) => void,
+    ): Promise<void> {
+        const slotTex = await loadTexture('slot');
+        if (slotTex) (slotTex as { defaultAnchor: { x: number; y: number } }).defaultAnchor = { x: 0, y: 0 };
+        this._buildGrid(slotTex, 5, 5, onRightClick, onDragStart);
+    }
+
+    toggle(): void {
+        this._menuOpen = !this._menuOpen;
+    }
+
+    update(deltaMs: number): void {
+        const slideSpeed = 8;
+        const dt = deltaMs / 1000;
+        const target = this._menuOpen ? 1 : 0;
+        this._menuSlide += (target - this._menuSlide) * Math.min(1, slideSpeed * dt);
+        if (Math.abs(this._menuSlide - target) < 0.001) this._menuSlide = target;
+    }
+
+    layout(screenW: number, _screenH: number): void {
+        const invOffX = screenW - this._menuWidth * this._menuSlide;
+        this.container.x = invOffX;
+        this.container.y = 0;
+    }
+
+    async addItem(item: Item): Promise<boolean> {
+        const entry = this.slots.find(s => !s.item);
+        if (!entry) {
+            console.warn('InventoryPanel.addItem: inventory full');
+            return false;
+        }
+        return this.setSlot(entry, item);
+    }
+
+    async setSlot(entry: InventorySlotEntry, item: Item): Promise<boolean> {
+        if (entry.iconSprite) {
+            entry.container.removeChild(entry.iconSprite);
+            entry.iconSprite.destroy();
+            entry.iconSprite = null;
+        }
+        if (entry.item) {
+            await entry.item.unloadIcon();
+        }
+
+        await item.loadIcon();
+        const icon = item.createIcon();
+        if (!icon) return false;
+
+        const slotSize = 90;
+        const maxIconSize = 62;
+        const scale = Math.min(maxIconSize / icon.texture.width, maxIconSize / icon.texture.height);
+        icon.anchor.set(0.5);
+        icon.scale.set(scale);
+        icon.x = slotSize / 2;
+        icon.y = slotSize / 2;
+
+        entry.container.addChild(icon);
+        entry.iconSprite = icon;
+        entry.item = item;
+
+        if (entry.bgSprite) entry.bgSprite.mask = null;
+
+        return true;
+    }
+
+    async clearSlot(entry: InventorySlotEntry): Promise<void> {
+        if (entry.iconSprite) {
+            entry.container.removeChild(entry.iconSprite);
+            entry.iconSprite.destroy();
+            entry.iconSprite = null;
+        }
+        if (entry.item) {
+            await entry.item.unloadIcon();
+            entry.item = null;
+        }
+        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
+    }
+
+    detachIcon(entry: InventorySlotEntry): void {
+        if (entry.iconSprite) {
+            entry.container.removeChild(entry.iconSprite);
+            entry.iconSprite.destroy();
+            entry.iconSprite = null;
+        }
+        entry.item = null;
+        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
+    }
+
+    private _buildGrid(
+        slotTex: PIXI.Texture | null,
+        cols: number,
+        rows: number,
+        onRightClick: (index: number) => void,
+        onDragStart: (source: UISource, key: string | number, e: PIXI.FederatedPointerEvent) => void,
+    ): void {
         const slotSize = 90;
         const gap = 0;
         const margin = 0;
@@ -439,23 +645,51 @@ class UI {
                 slotContainer.eventMode = 'static';
                 slotContainer.cursor = 'pointer';
                 const invIndex = row * cols + col;
-                slotContainer.on('rightclick', () => this._onInventorySlotRightClick(invIndex));
+                slotContainer.on('rightclick', () => onRightClick(invIndex));
                 slotContainer.on('pointerdown', (e: PIXI.FederatedPointerEvent) => {
-                    if (e.button === 0) this._onDragStart(UISource.Inventory, invIndex, e);
+                    if (e.button === 0) onDragStart(UISource.Inventory, invIndex, e);
                 });
 
                 slotsContainer.addChild(slotContainer);
-                this.inventorySlots.push({ container: slotContainer, placeholder: null, iconSprite: null, item: null, bgSprite, borderMask });
+                this.slots.push({ container: slotContainer, placeholder: null, iconSprite: null, item: null, bgSprite, borderMask });
             }
         }
 
-        this.inventoryMenuContainer.addChild(slotsContainer);
+        this.container.addChild(slotsContainer);
 
         const gridWidth = cols * (slotSize + gap) - gap;
-        this._inventoryMenuWidth = margin + gridWidth + margin;
+        this._menuWidth = margin + gridWidth + margin;
+    }
+}
+
+// ── AbilityBar ─────────────────────────────────────────────────────────────
+
+/** Bottom-centre ability slot grid. */
+class AbilityBar {
+    readonly container: PIXI.Container;
+    readonly slots: AbilitySlotEntry[] = [];
+
+    constructor() {
+        this.container = new PIXI.Container();
+        this.container.label = 'abilityBar';
     }
 
-    private _buildAbilityBar(slotTex: PIXI.Texture | null): void {
+    async load(loadTexture: TextureLoader): Promise<void> {
+        const abilityslotTex = await loadTexture('abilityslot');
+        if (abilityslotTex) (abilityslotTex as { defaultAnchor: { x: number; y: number } }).defaultAnchor = { x: 0, y: 0 };
+        this._buildBar(abilityslotTex);
+    }
+
+    layout(screenW: number, screenH: number): void {
+        const margin = 20;
+        const orbRadius = 105;
+        const healthOrbRight = margin + orbRadius + 250;
+        const abSlotsHeight = 2 * 82;
+        this.container.x = healthOrbRight;
+        this.container.y = screenH - abSlotsHeight;
+    }
+
+    private _buildBar(slotTex: PIXI.Texture | null): void {
         const slotSize = 82;
         const gap = 0;
         const cols = 5;
@@ -515,611 +749,51 @@ class UI {
                 slotContainer.addChild(label);
 
                 slotsContainer.addChild(slotContainer);
-                this.abilitySlots.push({ container: slotContainer, row, col, key: keys[row]![col]! });
+                this.slots.push({ container: slotContainer, row, col, key: keys[row]![col]! });
             }
         }
 
-        this.abilityBarContainer.addChild(slotsContainer);
+        this.container.addChild(slotsContainer);
+    }
+}
+
+// ── TooltipManager ─────────────────────────────────────────────────────────
+
+/** Builds, positions, and shows / hides item tooltips. */
+class TooltipManager {
+    private _container: PIXI.Container | null = null;
+    private _item: Item | null = null;
+    private _visible = false;
+
+    build(parent: PIXI.Container): void {
+        this._container = new PIXI.Container();
+        this._container.label = 'itemTooltip';
+        this._container.visible = false;
+        this._container.eventMode = 'none';
+        parent.addChild(this._container);
     }
 
-    toggleEquippedMenu(): void {
-        this._equippedMenuOpen = !this._equippedMenuOpen;
-    }
-
-    toggleInventoryMenu(): void {
-        this._inventoryMenuOpen = !this._inventoryMenuOpen;
-    }
-
-    layout(screenW: number, screenH: number): void {
-        const margin = 20;
-        const orbRadius = 105;
-
-        this.healthOrbContainer.x = margin + orbRadius;
-        this.healthOrbContainer.y = screenH - margin - orbRadius + 5;
-
-        this.manaOrbContainer.x = screenW - margin - orbRadius;
-        this.manaOrbContainer.y = screenH - margin - orbRadius + 5;
-
-        const healthOrbRight = margin + orbRadius + 250;
-        const abSlotsHeight = 2 * 82;
-        this.abilityBarContainer.x = healthOrbRight;
-        this.abilityBarContainer.y = screenH - abSlotsHeight;
-
-        const eqOffX = -this._equippedMenuWidth * (1 - this._equippedMenuSlide);
-        this.equippedMenuContainer.x = eqOffX;
-        this.equippedMenuContainer.y = 0;
-
-        const invOffX = screenW - this._inventoryMenuWidth * this._inventoryMenuSlide;
-        this.inventoryMenuContainer.x = invOffX;
-        this.inventoryMenuContainer.y = 0;
-    }
-
-    // --------------------------------------------------------------- Update
-
-    update(character: Character, deltaMs: number = 16.67): void {
-        if (!character) return;
-
-        const healthPct = Math.max(0, Math.min(1, character.currentHealth / character.maxHealth));
-        const manaPct = Math.max(0, Math.min(1, character.currentMana / character.maxMana));
-
-        this._setOrbFill(this._healthOrbSprite, healthPct);
-        this._setOrbFill(this._manaOrbSprite, manaPct);
-
-        const slideSpeed = 8;
-        const dt = deltaMs / 1000;
-        const eqTarget = this._equippedMenuOpen ? 1 : 0;
-        this._equippedMenuSlide += (eqTarget - this._equippedMenuSlide) * Math.min(1, slideSpeed * dt);
-        if (Math.abs(this._equippedMenuSlide - eqTarget) < 0.001) this._equippedMenuSlide = eqTarget;
-
-        const invTarget = this._inventoryMenuOpen ? 1 : 0;
-        this._inventoryMenuSlide += (invTarget - this._inventoryMenuSlide) * Math.min(1, slideSpeed * dt);
-        if (Math.abs(this._inventoryMenuSlide - invTarget) < 0.001) this._inventoryMenuSlide = invTarget;
-    }
-
-    // ------------------------------------------------- Equipped slot icons
-
-    async setEquippedItem(slot: GearSlot, item: Item): Promise<void> {
-        const entry = this.equippedSlots.find(s => s.slotType === slot);
-        if (!entry) {
-            console.warn(`UI.setEquippedItem: no slot found for "${slot}"`);
-            return;
+    wireSlotHoverEvents(
+        equippedSlots: EquippedSlotEntry[],
+        inventorySlots: InventorySlotEntry[],
+        isDragging: () => boolean,
+    ): void {
+        for (const entry of equippedSlots) {
+            entry.container.on('pointerover', (e: PIXI.FederatedPointerEvent) => this._onSlotHover(entry, e, isDragging));
+            entry.container.on('pointerout', () => this.hide());
         }
-
-        if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
-            entry.iconSprite = null;
-        }
-
-        if (entry.item) {
-            await entry.item.unloadIcon();
-        }
-
-        await item.loadIcon();
-        const icon = item.createIcon();
-        if (!icon) {
-            console.warn(`UI.setEquippedItem: could not create icon for "${item.id}"`);
-            return;
-        }
-
-        const slotSize = 90;
-        const maxIconSize = 62;
-        const scale = Math.min(maxIconSize / icon.texture.width, maxIconSize / icon.texture.height);
-        icon.anchor.set(0.5);
-        icon.scale.set(scale);
-        icon.x = slotSize / 2;
-        icon.y = slotSize / 2;
-
-        entry.container.addChild(icon);
-        entry.iconSprite = icon;
-        entry.item = item;
-
-        if (entry.bgSprite) entry.bgSprite.mask = null;
-
-        if (entry.placeholder) {
-            entry.placeholder.visible = false;
+        for (const entry of inventorySlots) {
+            entry.container.on('pointerover', (e: PIXI.FederatedPointerEvent) => this._onSlotHover(entry, e, isDragging));
+            entry.container.on('pointerout', () => this.hide());
         }
     }
 
-    async clearEquippedItem(slot: GearSlot): Promise<void> {
-        const entry = this.equippedSlots.find(s => s.slotType === slot);
-        if (!entry) return;
-
-        if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
-            entry.iconSprite = null;
-        }
-
-        if (entry.item) {
-            await entry.item.unloadIcon();
-            entry.item = null;
-        }
-
-        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
-
-        if (entry.placeholder) {
-            entry.placeholder.visible = true;
-        }
-    }
-
-    // ------------------------------------------------ Inventory slot icons
-
-    async setInventoryItem(item: Item): Promise<boolean> {
-        const entry = this.inventorySlots.find(s => !s.item);
-        if (!entry) {
-            console.warn('UI.setInventoryItem: inventory full');
-            return false;
-        }
-        return this._setInventorySlot(entry, item);
-    }
-
-    private async _setInventorySlot(entry: InventorySlotEntry, item: Item): Promise<boolean> {
-        if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
-            entry.iconSprite = null;
-        }
-        if (entry.item) {
-            await entry.item.unloadIcon();
-        }
-
-        await item.loadIcon();
-        const icon = item.createIcon();
-        if (!icon) return false;
-
-        const slotSize = 90;
-        const maxIconSize = 62;
-        const scale = Math.min(maxIconSize / icon.texture.width, maxIconSize / icon.texture.height);
-        icon.anchor.set(0.5);
-        icon.scale.set(scale);
-        icon.x = slotSize / 2;
-        icon.y = slotSize / 2;
-
-        entry.container.addChild(icon);
-        entry.iconSprite = icon;
-        entry.item = item;
-
-        if (entry.bgSprite) entry.bgSprite.mask = null;
-
-        return true;
-    }
-
-    private async _clearInventorySlot(entry: InventorySlotEntry): Promise<void> {
-        if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
-            entry.iconSprite = null;
-        }
-        if (entry.item) {
-            await entry.item.unloadIcon();
-            entry.item = null;
-        }
-        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
-    }
-
-    // ----------------------------------------- Right-click slot interactions
-
-    private async _onEquippedSlotRightClick(slotType: GearSlot): Promise<void> {
-        if (this._rightClickBusy) return;
-        const entry = this.equippedSlots.find(s => s.slotType === slotType);
-        if (!entry || !entry.item) return;
-
-        const freeInvSlot = this.inventorySlots.find(s => !s.item);
-        if (!freeInvSlot) {
-            console.warn('Inventory full – cannot unequip');
-            return;
-        }
-
-        this._rightClickBusy = true;
-        try {
-            const item = entry.item;
-
-            await this._setInventorySlot(freeInvSlot, item);
-
-            if (entry.iconSprite) {
-                entry.container.removeChild(entry.iconSprite);
-                entry.iconSprite.destroy();
-                entry.iconSprite = null;
-            }
-            entry.item = null;
-            if (entry.placeholder) entry.placeholder.visible = true;
-
-            if (state.player) {
-                await state.player.unequipSlotSilent(slotType);
-            }
-        } finally {
-            this._rightClickBusy = false;
-        }
-    }
-
-    private async _onInventorySlotRightClick(index: number): Promise<void> {
-        if (this._rightClickBusy) return;
-        const entry = this.inventorySlots[index];
-        if (!entry || !entry.item) return;
-
-        this._rightClickBusy = true;
-        try {
-            const item = entry.item;
-            const slot = item.slot;
-
-            const eqEntry = this.equippedSlots.find(s => s.slotType === slot);
-            const previousItem = eqEntry?.item || null;
-
-            await this._clearInventorySlot(entry);
-
-            if (state.player) {
-                await state.player.equipItem(item);
-            }
-
-            if (previousItem) {
-                await this._setInventorySlot(entry, previousItem);
-            }
-        } finally {
-            this._rightClickBusy = false;
-        }
-    }
-
-    // --------------------------------------------------- Drag-and-drop
-
-    private _onDragStart(source: UISource, key: string | number, e: PIXI.FederatedPointerEvent): void {
-        if (this._drag) return;
-
-        let entry: EquippedSlotEntry | InventorySlotEntry | undefined;
-        let item: Item | null | undefined;
-        if (source === UISource.Equipped) {
-            entry = this.equippedSlots.find(s => s.slotType === key);
-            item = entry?.item;
-        } else {
-            entry = this.inventorySlots[key as number];
-            item = entry?.item;
-        }
-        if (!entry || !item) return;
-
-        e.stopPropagation();
-
-        this._hideTooltip();
-
-        if ((entry as EquippedSlotEntry | InventorySlotEntry).iconSprite) {
-            (entry as EquippedSlotEntry | InventorySlotEntry).iconSprite!.visible = false;
-        }
-
-        const dragSprite = item.createIcon();
-        if (!dragSprite) return;
-        const maxIconSize = 62;
-        const scale = Math.min(maxIconSize / dragSprite.texture.width, maxIconSize / dragSprite.texture.height);
-        dragSprite.anchor.set(0.5);
-        dragSprite.scale.set(scale);
-        dragSprite.alpha = 0.85;
-
-        const pos = e.global;
-        dragSprite.x = pos.x;
-        dragSprite.y = pos.y;
-
-        this.container.addChild(dragSprite);
-
-        this._drag = { source, key, entry, sprite: dragSprite, item };
-
-        const stage = this.container.parent!;
-        this._onDragMoveHandler = (ev: PIXI.FederatedPointerEvent) => this._onDragMove(ev);
-        this._onDragEndHandler = (ev: PIXI.FederatedPointerEvent) => this._onDragEnd(ev);
-        stage.on('pointermove', this._onDragMoveHandler);
-        stage.on('pointerup', this._onDragEndHandler);
-        stage.on('pointerupoutside', this._onDragEndHandler);
-    }
-
-    private _onDragMove(e: PIXI.FederatedPointerEvent): void {
-        if (!this._drag) return;
-        const pos = e.global;
-        this._drag.sprite.x = pos.x;
-        this._drag.sprite.y = pos.y;
-    }
-
-    private async _onDragEnd(e: PIXI.FederatedPointerEvent): Promise<void> {
-        if (!this._drag) return;
-        const drag = this._drag;
-        this._drag = null;
-
-        const stage = this.container.parent!;
-        if (this._onDragMoveHandler) stage.off('pointermove', this._onDragMoveHandler);
-        if (this._onDragEndHandler) {
-            stage.off('pointerup', this._onDragEndHandler);
-            stage.off('pointerupoutside', this._onDragEndHandler);
-        }
-
-        this.container.removeChild(drag.sprite);
-        drag.sprite.destroy();
-
-        const pos = e.global;
-        const target = this._hitTestSlot(pos.x, pos.y);
-
-        let handled = false;
-
-        if (target) {
-            handled = await this._tryDrop(drag, target);
-        }
-
-        if (!handled && !this.hitTest(pos.x, pos.y)) {
-            handled = await this._dropAsLoot(drag, pos.x, pos.y);
-        }
-
-        if (!handled) {
-            if (drag.entry.iconSprite) {
-                drag.entry.iconSprite.visible = true;
-            }
-        }
-    }
-
-    private _hitTestSlot(screenX: number, screenY: number): HitTestResult | null {
-        for (const entry of this.equippedSlots) {
-            const bounds = entry.container.getBounds();
-            if (screenX >= bounds.x && screenX <= bounds.x + bounds.width &&
-                screenY >= bounds.y && screenY <= bounds.y + bounds.height) {
-                return { type: UISource.Equipped, entry };
-            }
-        }
-        for (let i = 0; i < this.inventorySlots.length; i++) {
-            const entry = this.inventorySlots[i]!;
-            const bounds = entry.container.getBounds();
-            if (screenX >= bounds.x && screenX <= bounds.x + bounds.width &&
-                screenY >= bounds.y && screenY <= bounds.y + bounds.height) {
-                return { type: UISource.Inventory, entry, index: i };
-            }
-        }
-        return null;
-    }
-
-    private async _tryDrop(drag: DragState, target: HitTestResult): Promise<boolean> {
-        const srcEntry = drag.entry;
-        const srcItem = drag.item;
-        const dstEntry = target.entry;
-        const player = state.player;
-
-        if (srcEntry === dstEntry) {
-            return false;
-        }
-
-        // ── Drag from EQUIPPED → INVENTORY ──
-        if (drag.source === UISource.Equipped && target.type === UISource.Inventory) {
-            const src = srcEntry as EquippedSlotEntry;
-            const dst = target.entry;
-            const dstItem = dst.item;
-
-            if (dstItem && dstItem.slot === srcItem.slot) {
-                await this._clearInventorySlot(dst);
-                this._detachEquippedIcon(src);
-
-                await this.setEquippedItem(src.slotType, dstItem);
-                if (player) await player.equipItem(dstItem);
-
-                await this._setInventorySlot(dst, srcItem);
-                return true;
-            }
-
-            if (!dstItem) {
-                this._detachEquippedIcon(src);
-                await this._setInventorySlot(dst, srcItem);
-                if (player) await player.unequipSlotSilent(src.slotType);
-                return true;
-            }
-
-            return false;
-        }
-
-        // ── Drag from INVENTORY → EQUIPPED ──
-        if (drag.source === UISource.Inventory && target.type === UISource.Equipped) {
-            const src = srcEntry as InventorySlotEntry;
-            const dst = target.entry;
-            if (srcItem.slot !== dst.slotType) return false;
-
-            const dstItem = dst.item;
-
-            this._detachInventoryIcon(src);
-
-            if (dstItem) {
-                this._detachEquippedIconKeepData(dst);
-                await this._setInventorySlot(src, dstItem);
-            }
-
-            if (player) await player.equipItem(srcItem);
-            return true;
-        }
-
-        // ── Drag from INVENTORY → INVENTORY ──
-        if (drag.source === UISource.Inventory && target.type === UISource.Inventory) {
-            const src = srcEntry as InventorySlotEntry;
-            const dst = target.entry;
-            const dstItem = dst.item;
-
-            this._detachInventoryIcon(src);
-            if (dstItem) {
-                this._detachInventoryIcon(dst);
-                await this._setInventorySlot(src, dstItem);
-            }
-            await this._setInventorySlot(dst, srcItem);
-            return true;
-        }
-
-        // ── Drag from EQUIPPED → EQUIPPED ──
-        if (drag.source === UISource.Equipped && target.type === UISource.Equipped) {
-            const src = srcEntry as EquippedSlotEntry;
-            const dst = target.entry;
-            const dstItem = dst.item;
-            if (src.slotType !== dst.slotType) return false;
-
-            this._detachEquippedIcon(src);
-            if (dstItem) {
-                this._detachEquippedIconKeepData(dst);
-                await this.setEquippedItem(src.slotType, dstItem);
-                if (player) await player.equipItem(dstItem);
-            }
-            await this.setEquippedItem(dst.slotType, srcItem);
-            if (player) await player.equipItem(srcItem);
-            return true;
-        }
-
-        return false;
-    }
-
-    private _detachEquippedIcon(entry: EquippedSlotEntry): void {
-        if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
-            entry.iconSprite = null;
-        }
-        entry.item = null;
-        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
-        if (entry.placeholder) entry.placeholder.visible = true;
-    }
-
-    private _detachEquippedIconKeepData(entry: EquippedSlotEntry): void {
-        if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
-            entry.iconSprite = null;
-        }
-        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
-    }
-
-    private _detachInventoryIcon(entry: InventorySlotEntry): void {
-        if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
-            entry.iconSprite = null;
-        }
-        entry.item = null;
-        if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
-    }
-
-    private async _dropAsLoot(drag: DragState, screenX: number, screenY: number): Promise<boolean> {
-        if (!state.area) return false;
-
-        const item = drag.item;
-
-        const worldX = screenX - state.area.container.x;
-        const worldY = screenY - state.area.container.y;
-
-        if (drag.source === UISource.Equipped) {
-            this._detachEquippedIcon(drag.entry as EquippedSlotEntry);
-        } else {
-            this._detachInventoryIcon(drag.entry as InventorySlotEntry);
-        }
-
-        const loot = item.createLoot(worldX, worldY);
-        await loot.loadTextures();
-        state.area.container.addChild(loot.container);
-        loot.attachLabelsTo(state.area.lootLabelsContainer);
-        state.area.lootOnGround.push(loot);
-
-        if (drag.source === UISource.Equipped && state.player) {
-            state.player.unequipSlotSilent((drag.entry as EquippedSlotEntry).slotType);
-        }
-
-        return true;
-    }
-
-    get isDragging(): boolean {
-        return this._drag !== null;
-    }
-
-    hitTest(screenX: number, screenY: number): boolean {
-        const containers = [
-            this.equippedMenuContainer,
-            this.inventoryMenuContainer,
-            this.healthOrbContainer,
-            this.manaOrbContainer,
-            this.abilityBarContainer,
-        ];
-        for (const c of containers) {
-            if (!c.visible) continue;
-            const b = c.getBounds();
-            if (screenX >= b.x && screenX <= b.x + b.width &&
-                screenY >= b.y && screenY <= b.y + b.height) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private _setOrbFill(orbSprite: OrbSprite | null, pct: number): void {
-        if (!orbSprite) return;
-
-        if (orbSprite._orbFillH === undefined) {
-            const tex = orbSprite.texture;
-            orbSprite._orbFillW = tex.source.width;
-            orbSprite._orbFillH = tex.source.height;
-
-            const mask = new PIXI.Graphics();
-            mask.label = 'orbMask';
-            orbSprite.parent!.addChild(mask);
-            orbSprite.mask = mask;
-            orbSprite._orbMask = mask;
-            orbSprite._orbLastPct = -1;
-        }
-
-        const clamped = Math.max(0, Math.min(1, pct));
-        if (clamped === orbSprite._orbLastPct) return;
-        orbSprite._orbLastPct = clamped;
-
-        const fullW = orbSprite._orbFillW!;
-        const fullH = orbSprite._orbFillH!;
-        const mask = orbSprite._orbMask!;
-
-        orbSprite.anchor.set(0.5, 0.5);
-        orbSprite.y = 0;
-
-        mask.clear();
-        if (clamped > 0) {
-            const visibleH = Math.round(fullH * clamped);
-            const yOffset = fullH - visibleH;
-            mask.rect(
-                orbSprite.x - fullW / 2,
-                orbSprite.y - fullH / 2 + yOffset,
-                fullW,
-                visibleH,
-            );
-            mask.fill({ color: 0xffffff });
-        }
-        orbSprite.visible = clamped > 0;
-    }
-
-    // ------------------------------------------------------------ Tooltip
-
-    private _buildTooltip(): void {
-        this._tooltipContainer = new PIXI.Container();
-        this._tooltipContainer.label = 'itemTooltip';
-        this._tooltipContainer.visible = false;
-        this._tooltipContainer.eventMode = 'none';
-        this.container.addChild(this._tooltipContainer);
-    }
-
-    private _wireSlotHoverEvents(): void {
-        for (const entry of this.equippedSlots) {
-            entry.container.on('pointerover', (e: PIXI.FederatedPointerEvent) => this._onSlotHover(entry, e));
-            entry.container.on('pointerout', () => this._hideTooltip());
-        }
-        for (const entry of this.inventorySlots) {
-            entry.container.on('pointerover', (e: PIXI.FederatedPointerEvent) => this._onSlotHover(entry, e));
-            entry.container.on('pointerout', () => this._hideTooltip());
-        }
-    }
-
-    private _onSlotHover(entry: EquippedSlotEntry | InventorySlotEntry, e: PIXI.FederatedPointerEvent): void {
-        if (!entry.item) {
-            this._hideTooltip();
-            return;
-        }
-        if (this._drag) return;
-
-        this._showTooltip(entry.item, e.global.x, e.global.y);
-    }
-
-    private _showTooltip(item: Item, screenX: number, screenY: number): void {
-        if (!this._tooltipContainer) return;
-        this._tooltipItem = item;
-        this._tooltipVisible = true;
-
-        this._tooltipContainer.removeChildren();
+    show(item: Item, screenX: number, screenY: number): void {
+        if (!this._container) return;
+        this._item = item;
+        this._visible = true;
+
+        this._container.removeChildren();
 
         const pad = 12;
         const innerWidth = 220;
@@ -1139,7 +813,7 @@ class UI {
         });
         nameText.x = pad;
         nameText.y = yOffset;
-        this._tooltipContainer.addChild(nameText);
+        this._container.addChild(nameText);
         yOffset += nameText.height + 4;
 
         const slotLabel = item.slot.charAt(0).toUpperCase() + item.slot.slice(1);
@@ -1155,7 +829,7 @@ class UI {
         });
         slotText.x = pad;
         slotText.y = yOffset;
-        this._tooltipContainer.addChild(slotText);
+        this._container.addChild(slotText);
         yOffset += slotText.height + 6;
 
         const baseEntries = Object.entries(item.baseStats);
@@ -1174,7 +848,7 @@ class UI {
                 });
                 statText.x = pad;
                 statText.y = yOffset;
-                this._tooltipContainer.addChild(statText);
+                this._container.addChild(statText);
                 yOffset += statText.height + 2;
             }
             yOffset += 4;
@@ -1185,7 +859,7 @@ class UI {
             sepLine.moveTo(pad, yOffset);
             sepLine.lineTo(pad + innerWidth, yOffset);
             sepLine.stroke({ width: 1, color: 0x5566AA, alpha: 0.6 });
-            this._tooltipContainer.addChild(sepLine);
+            this._container.addChild(sepLine);
             yOffset += 6;
 
             for (const modDesc of item.modDescriptions) {
@@ -1203,7 +877,7 @@ class UI {
                 });
                 modText.x = pad;
                 modText.y = yOffset;
-                this._tooltipContainer.addChild(modText);
+                this._container.addChild(modText);
                 yOffset += modText.height + 2;
             }
             yOffset += 2;
@@ -1214,7 +888,7 @@ class UI {
             sepLine2.moveTo(pad, yOffset);
             sepLine2.lineTo(pad + innerWidth, yOffset);
             sepLine2.stroke({ width: 1, color: 0x5566AA, alpha: 0.4 });
-            this._tooltipContainer.addChild(sepLine2);
+            this._container.addChild(sepLine2);
             yOffset += 6;
 
             const descText = new PIXI.Text({
@@ -1231,7 +905,7 @@ class UI {
             });
             descText.x = pad;
             descText.y = yOffset;
-            this._tooltipContainer.addChild(descText);
+            this._container.addChild(descText);
             yOffset += descText.height + 2;
         }
 
@@ -1245,10 +919,32 @@ class UI {
         bg.roundRect(0, 0, totalWidth, totalHeight, 6);
         bg.stroke({ width: 1.5, color: 0x4455AA, alpha: 0.7 });
 
-        this._tooltipContainer.addChildAt(bg, 0);
+        this._container.addChildAt(bg, 0);
 
         this._positionTooltip(screenX, screenY, totalWidth, totalHeight);
-        this._tooltipContainer.visible = true;
+        this._container.visible = true;
+    }
+
+    hide(): void {
+        if (this._container) {
+            this._container.visible = false;
+        }
+        this._item = null;
+        this._visible = false;
+    }
+
+    private _onSlotHover(
+        entry: EquippedSlotEntry | InventorySlotEntry,
+        e: PIXI.FederatedPointerEvent,
+        isDragging: () => boolean,
+    ): void {
+        if (!entry.item) {
+            this.hide();
+            return;
+        }
+        if (isDragging()) return;
+
+        this.show(entry.item, e.global.x, e.global.y);
     }
 
     private _positionTooltip(screenX: number, screenY: number, tipW: number, tipH: number): void {
@@ -1268,16 +964,480 @@ class UI {
         if (tx < 0) tx = 4;
         if (ty < 0) ty = 4;
 
-        this._tooltipContainer!.x = tx;
-        this._tooltipContainer!.y = ty;
+        this._container!.x = tx;
+        this._container!.y = ty;
+    }
+}
+
+// ── DragDropController ─────────────────────────────────────────────────────
+
+/** Drag-and-drop + right-click item-movement logic. */
+class DragDropController {
+    private _drag: DragState | null = null;
+    private _rightClickBusy = false;
+    private _onDragMoveHandler: ((e: PIXI.FederatedPointerEvent) => void) | null = null;
+    private _onDragEndHandler: ((e: PIXI.FederatedPointerEvent) => void) | null = null;
+
+    private _equipment: EquipmentPanel;
+    private _inventory: InventoryPanel;
+    private _tooltip: TooltipManager;
+    private _hudContainer: PIXI.Container;
+
+    constructor(
+        equipment: EquipmentPanel,
+        inventory: InventoryPanel,
+        tooltip: TooltipManager,
+        hudContainer: PIXI.Container,
+    ) {
+        this._equipment = equipment;
+        this._inventory = inventory;
+        this._tooltip = tooltip;
+        this._hudContainer = hudContainer;
     }
 
-    private _hideTooltip(): void {
-        if (this._tooltipContainer) {
-            this._tooltipContainer.visible = false;
+    get isDragging(): boolean {
+        return this._drag !== null;
+    }
+
+    // ─── Right-click interactions ─────────────────────────────────────
+
+    async onEquippedSlotRightClick(slotType: GearSlot): Promise<void> {
+        if (this._rightClickBusy) return;
+        const entry = this._equipment.slots.find(s => s.slotType === slotType);
+        if (!entry || !entry.item) return;
+
+        const freeInvSlot = this._inventory.slots.find(s => !s.item);
+        if (!freeInvSlot) {
+            console.warn('Inventory full – cannot unequip');
+            return;
         }
-        this._tooltipItem = null;
-        this._tooltipVisible = false;
+
+        this._rightClickBusy = true;
+        try {
+            const item = entry.item;
+
+            await this._inventory.setSlot(freeInvSlot, item);
+
+            if (entry.iconSprite) {
+                entry.container.removeChild(entry.iconSprite);
+                entry.iconSprite.destroy();
+                entry.iconSprite = null;
+            }
+            entry.item = null;
+            if (entry.placeholder) entry.placeholder.visible = true;
+
+            if (state.player) {
+                await state.player.unequipSlotSilent(slotType);
+            }
+        } finally {
+            this._rightClickBusy = false;
+        }
+    }
+
+    async onInventorySlotRightClick(index: number): Promise<void> {
+        if (this._rightClickBusy) return;
+        const entry = this._inventory.slots[index];
+        if (!entry || !entry.item) return;
+
+        this._rightClickBusy = true;
+        try {
+            const item = entry.item;
+            const slot = item.slot;
+
+            const eqEntry = this._equipment.slots.find(s => s.slotType === slot);
+            const previousItem = eqEntry?.item || null;
+
+            await this._inventory.clearSlot(entry);
+
+            if (state.player) {
+                await state.player.equipItem(item);
+            }
+
+            if (previousItem) {
+                await this._inventory.setSlot(entry, previousItem);
+            }
+        } finally {
+            this._rightClickBusy = false;
+        }
+    }
+
+    // ─── Drag-and-drop ────────────────────────────────────────────────
+
+    onDragStart(source: UISource, key: string | number, e: PIXI.FederatedPointerEvent): void {
+        if (this._drag) return;
+
+        let entry: EquippedSlotEntry | InventorySlotEntry | undefined;
+        let item: Item | null | undefined;
+        if (source === UISource.Equipped) {
+            entry = this._equipment.slots.find(s => s.slotType === key);
+            item = entry?.item;
+        } else {
+            entry = this._inventory.slots[key as number];
+            item = entry?.item;
+        }
+        if (!entry || !item) return;
+
+        e.stopPropagation();
+
+        this._tooltip.hide();
+
+        if ((entry as EquippedSlotEntry | InventorySlotEntry).iconSprite) {
+            (entry as EquippedSlotEntry | InventorySlotEntry).iconSprite!.visible = false;
+        }
+
+        const dragSprite = item.createIcon();
+        if (!dragSprite) return;
+        const maxIconSize = 62;
+        const scale = Math.min(maxIconSize / dragSprite.texture.width, maxIconSize / dragSprite.texture.height);
+        dragSprite.anchor.set(0.5);
+        dragSprite.scale.set(scale);
+        dragSprite.alpha = 0.85;
+
+        const pos = e.global;
+        dragSprite.x = pos.x;
+        dragSprite.y = pos.y;
+
+        this._hudContainer.addChild(dragSprite);
+
+        this._drag = { source, key, entry, sprite: dragSprite, item };
+
+        const stage = this._hudContainer.parent!;
+        this._onDragMoveHandler = (ev: PIXI.FederatedPointerEvent) => this._onDragMove(ev);
+        this._onDragEndHandler = (ev: PIXI.FederatedPointerEvent) => this._onDragEnd(ev);
+        stage.on('pointermove', this._onDragMoveHandler);
+        stage.on('pointerup', this._onDragEndHandler);
+        stage.on('pointerupoutside', this._onDragEndHandler);
+    }
+
+    private _onDragMove(e: PIXI.FederatedPointerEvent): void {
+        if (!this._drag) return;
+        const pos = e.global;
+        this._drag.sprite.x = pos.x;
+        this._drag.sprite.y = pos.y;
+    }
+
+    private async _onDragEnd(e: PIXI.FederatedPointerEvent): Promise<void> {
+        if (!this._drag) return;
+        const drag = this._drag;
+        this._drag = null;
+
+        const stage = this._hudContainer.parent!;
+        if (this._onDragMoveHandler) stage.off('pointermove', this._onDragMoveHandler);
+        if (this._onDragEndHandler) {
+            stage.off('pointerup', this._onDragEndHandler);
+            stage.off('pointerupoutside', this._onDragEndHandler);
+        }
+
+        this._hudContainer.removeChild(drag.sprite);
+        drag.sprite.destroy();
+
+        const pos = e.global;
+        const target = this._hitTestSlot(pos.x, pos.y);
+
+        let handled = false;
+
+        if (target) {
+            handled = await this._tryDrop(drag, target);
+        }
+
+        if (!handled && !this._hitTestAnyContainer(pos.x, pos.y)) {
+            handled = await this._dropAsLoot(drag, pos.x, pos.y);
+        }
+
+        if (!handled) {
+            if (drag.entry.iconSprite) {
+                drag.entry.iconSprite.visible = true;
+            }
+        }
+    }
+
+    private _hitTestSlot(screenX: number, screenY: number): HitTestResult | null {
+        for (const entry of this._equipment.slots) {
+            const bounds = entry.container.getBounds();
+            if (screenX >= bounds.x && screenX <= bounds.x + bounds.width &&
+                screenY >= bounds.y && screenY <= bounds.y + bounds.height) {
+                return { type: UISource.Equipped, entry };
+            }
+        }
+        for (let i = 0; i < this._inventory.slots.length; i++) {
+            const entry = this._inventory.slots[i]!;
+            const bounds = entry.container.getBounds();
+            if (screenX >= bounds.x && screenX <= bounds.x + bounds.width &&
+                screenY >= bounds.y && screenY <= bounds.y + bounds.height) {
+                return { type: UISource.Inventory, entry, index: i };
+            }
+        }
+        return null;
+    }
+
+    /** Check whether a screen position overlaps any HUD container. */
+    _hitTestAnyContainer(screenX: number, screenY: number): boolean {
+        for (const c of this._hudContainer.children) {
+            if (!c.visible) continue;
+            const b = c.getBounds();
+            if (screenX >= b.x && screenX <= b.x + b.width &&
+                screenY >= b.y && screenY <= b.y + b.height) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private async _tryDrop(drag: DragState, target: HitTestResult): Promise<boolean> {
+        const srcEntry = drag.entry;
+        const srcItem = drag.item;
+        const dstEntry = target.entry;
+        const player = state.player;
+
+        if (srcEntry === dstEntry) {
+            return false;
+        }
+
+        // ── Drag from EQUIPPED → INVENTORY ──
+        if (drag.source === UISource.Equipped && target.type === UISource.Inventory) {
+            const src = srcEntry as EquippedSlotEntry;
+            const dst = target.entry;
+            const dstItem = dst.item;
+
+            if (dstItem && dstItem.slot === srcItem.slot) {
+                await this._inventory.clearSlot(dst);
+                this._equipment.detachIcon(src);
+
+                await this._equipment.setItem(src.slotType, dstItem);
+                if (player) await player.equipItem(dstItem);
+
+                await this._inventory.setSlot(dst, srcItem);
+                return true;
+            }
+
+            if (!dstItem) {
+                this._equipment.detachIcon(src);
+                await this._inventory.setSlot(dst, srcItem);
+                if (player) await player.unequipSlotSilent(src.slotType);
+                return true;
+            }
+
+            return false;
+        }
+
+        // ── Drag from INVENTORY → EQUIPPED ──
+        if (drag.source === UISource.Inventory && target.type === UISource.Equipped) {
+            const src = srcEntry as InventorySlotEntry;
+            const dst = target.entry;
+            if (srcItem.slot !== dst.slotType) return false;
+
+            const dstItem = dst.item;
+
+            this._inventory.detachIcon(src);
+
+            if (dstItem) {
+                this._equipment.detachIconKeepData(dst);
+                await this._inventory.setSlot(src, dstItem);
+            }
+
+            if (player) await player.equipItem(srcItem);
+            return true;
+        }
+
+        // ── Drag from INVENTORY → INVENTORY ──
+        if (drag.source === UISource.Inventory && target.type === UISource.Inventory) {
+            const src = srcEntry as InventorySlotEntry;
+            const dst = target.entry;
+            const dstItem = dst.item;
+
+            this._inventory.detachIcon(src);
+            if (dstItem) {
+                this._inventory.detachIcon(dst);
+                await this._inventory.setSlot(src, dstItem);
+            }
+            await this._inventory.setSlot(dst, srcItem);
+            return true;
+        }
+
+        // ── Drag from EQUIPPED → EQUIPPED ──
+        if (drag.source === UISource.Equipped && target.type === UISource.Equipped) {
+            const src = srcEntry as EquippedSlotEntry;
+            const dst = target.entry;
+            const dstItem = dst.item;
+            if (src.slotType !== dst.slotType) return false;
+
+            this._equipment.detachIcon(src);
+            if (dstItem) {
+                this._equipment.detachIconKeepData(dst);
+                await this._equipment.setItem(src.slotType, dstItem);
+                if (player) await player.equipItem(dstItem);
+            }
+            await this._equipment.setItem(dst.slotType, srcItem);
+            if (player) await player.equipItem(srcItem);
+            return true;
+        }
+
+        return false;
+    }
+
+    private async _dropAsLoot(drag: DragState, screenX: number, screenY: number): Promise<boolean> {
+        if (!state.area) return false;
+
+        const item = drag.item;
+
+        const worldX = screenX - state.area.container.x;
+        const worldY = screenY - state.area.container.y;
+
+        if (drag.source === UISource.Equipped) {
+            this._equipment.detachIcon(drag.entry as EquippedSlotEntry);
+        } else {
+            this._inventory.detachIcon(drag.entry as InventorySlotEntry);
+        }
+
+        const loot = item.createLoot(worldX, worldY);
+        await loot.loadTextures();
+        state.area.container.addChild(loot.container);
+        loot.attachLabelsTo(state.area.lootLabelsContainer);
+        state.area.lootOnGround.push(loot);
+
+        if (drag.source === UISource.Equipped && state.player) {
+            state.player.unequipSlotSilent((drag.entry as EquippedSlotEntry).slotType);
+        }
+
+        return true;
+    }
+}
+
+// ── UI (coordinator) ───────────────────────────────────────────────────────
+
+/**
+ * HUD overlay – composes OrbHUD, EquipmentPanel, InventoryPanel,
+ * AbilityBar, TooltipManager, and DragDropController.
+ *
+ * The whole HUD lives in a PIXI.Container added directly to `app.stage`
+ * so it stays fixed on screen regardless of camera movement.
+ */
+class UI {
+    container: PIXI.Container;
+
+    readonly orbs: OrbHUD;
+    readonly equipment: EquipmentPanel;
+    readonly inventory: InventoryPanel;
+    readonly abilityBar: AbilityBar;
+    readonly tooltip: TooltipManager;
+    readonly dragDrop: DragDropController;
+
+    // Backward-compatible accessors (used by external files)
+    get healthOrbContainer(): PIXI.Container { return this.orbs.healthContainer; }
+    get manaOrbContainer(): PIXI.Container { return this.orbs.manaContainer; }
+    get equippedMenuContainer(): PIXI.Container { return this.equipment.container; }
+    get inventoryMenuContainer(): PIXI.Container { return this.inventory.container; }
+    get abilityBarContainer(): PIXI.Container { return this.abilityBar.container; }
+    get equippedSlots(): EquippedSlotEntry[] { return this.equipment.slots; }
+    get inventorySlots(): InventorySlotEntry[] { return this.inventory.slots; }
+    get abilitySlots(): AbilitySlotEntry[] { return this.abilityBar.slots; }
+
+    constructor() {
+        this.container = new PIXI.Container();
+        this.container.label = 'hud';
+
+        this.orbs = new OrbHUD();
+        this.equipment = new EquipmentPanel();
+        this.inventory = new InventoryPanel();
+        this.abilityBar = new AbilityBar();
+        this.tooltip = new TooltipManager();
+        this.dragDrop = new DragDropController(this.equipment, this.inventory, this.tooltip, this.container);
+
+        this.container.addChild(this.orbs.healthContainer);
+        this.container.addChild(this.orbs.manaContainer);
+        this.container.addChild(this.equipment.container);
+        this.container.addChild(this.inventory.container);
+        this.container.addChild(this.abilityBar.container);
+    }
+
+    // ------------------------------------------------------------------ Load
+
+    async load(): Promise<void> {
+        const manifest = await fetchManifest();
+
+        const loadTexture: TextureLoader = async (key: string): Promise<PIXI.Texture | null> => {
+            const sheets = manifest[key] || [];
+            for (const sheetPath of sheets) {
+                const fullPath = `./images/spritesheets/${sheetPath.replace('./', '')}`;
+                const spritesheet: PIXI.Spritesheet = await PIXI.Assets.load(fullPath);
+                const names = Object.keys(spritesheet.textures);
+                if (names.length > 0) return spritesheet.textures[names[0]!]!;
+            }
+            console.warn(`UI: no texture found for "${key}"`);
+            return null;
+        };
+
+        await Promise.all([
+            this.orbs.load(loadTexture),
+            this.equipment.load(
+                loadTexture,
+                (slotType) => this.dragDrop.onEquippedSlotRightClick(slotType),
+                (source, key, e) => this.dragDrop.onDragStart(source, key, e),
+            ),
+            this.inventory.load(
+                loadTexture,
+                (index) => this.dragDrop.onInventorySlotRightClick(index),
+                (source, key, e) => this.dragDrop.onDragStart(source, key, e),
+            ),
+            this.abilityBar.load(loadTexture),
+        ]);
+
+        this.tooltip.build(this.container);
+        this.tooltip.wireSlotHoverEvents(
+            this.equipment.slots,
+            this.inventory.slots,
+            () => this.dragDrop.isDragging,
+        );
+
+        this.layout(window.innerWidth, window.innerHeight);
+    }
+
+    // ------------------------------------------------------------ Layout
+
+    layout(screenW: number, screenH: number): void {
+        this.orbs.layout(screenW, screenH);
+        this.equipment.layout(screenW, screenH);
+        this.inventory.layout(screenW, screenH);
+        this.abilityBar.layout(screenW, screenH);
+    }
+
+    // --------------------------------------------------------------- Update
+
+    update(character: Character, deltaMs: number = 16.67): void {
+        if (!character) return;
+        this.orbs.update(character);
+        this.equipment.update(deltaMs);
+        this.inventory.update(deltaMs);
+    }
+
+    // ─── Delegated public API ─────────────────────────────────────────
+
+    toggleEquippedMenu(): void { this.equipment.toggle(); }
+    toggleInventoryMenu(): void { this.inventory.toggle(); }
+
+    async setEquippedItem(slot: GearSlot, item: Item): Promise<void> { return this.equipment.setItem(slot, item); }
+    async clearEquippedItem(slot: GearSlot): Promise<void> { return this.equipment.clearItem(slot); }
+    async setInventoryItem(item: Item): Promise<boolean> { return this.inventory.addItem(item); }
+
+    get isDragging(): boolean { return this.dragDrop.isDragging; }
+
+    hitTest(screenX: number, screenY: number): boolean {
+        const containers = [
+            this.equipment.container,
+            this.inventory.container,
+            this.orbs.healthContainer,
+            this.orbs.manaContainer,
+            this.abilityBar.container,
+        ];
+        for (const c of containers) {
+            if (!c.visible) continue;
+            const b = c.getBounds();
+            if (screenX >= b.x && screenX <= b.x + b.width &&
+                screenY >= b.y && screenY <= b.y + b.height) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

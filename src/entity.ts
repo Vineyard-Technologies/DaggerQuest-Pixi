@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { Area, SHADOW_BLUR } from './area';
+import { SHADOW_BLUR, fetchManifest } from './assets';
 import { polyToWorld, NormPoint, WorldPoint } from './collision';
 import { isDefined } from './types';
 
@@ -60,7 +60,7 @@ class Entity {
         }
 
         const animationTextures: AnimationTextures = {};
-        const manifest = await Area.fetchManifest();
+        const manifest = await fetchManifest();
         const sheets = manifest[this.spriteKey] || [];
 
         if (sheets.length === 0) {
