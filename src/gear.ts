@@ -27,6 +27,31 @@ interface GearCharacter extends Character {
     equippedGear?: Record<string, Gear>;
 }
 
+// ── Shared gear syncer (single ticker for all equipped gear) ──────────────
+
+const _equippedGear = new Set<Gear>();
+let _syncerTickerFn: ((ticker: PIXI.Ticker) => void) | null = null;
+
+function _ensureSyncerRunning(): void {
+    if (_syncerTickerFn) return;
+    _syncerTickerFn = () => { for (const g of _equippedGear) g.syncNow(); };
+    PIXI.Ticker.shared.add(_syncerTickerFn);
+}
+
+function _registerGear(gear: Gear): void {
+    _equippedGear.add(gear);
+    _ensureSyncerRunning();
+}
+
+function _unregisterGear(gear: Gear): void {
+    _equippedGear.delete(gear);
+    if (_equippedGear.size === 0 && _syncerTickerFn) {
+        PIXI.Ticker.shared.remove(_syncerTickerFn);
+        _syncerTickerFn = null;
+    }
+}
+
+
 class Gear {
     readonly item: Item | null;
     readonly slot: GearSlot | null;
@@ -40,7 +65,6 @@ class Gear {
     private _character: GearCharacter | null;
     private _spriteKey: string | null;
     private _assetPaths: string[];
-    private _tickerFn: ((ticker: PIXI.Ticker) => void) | null;
     private _currentAnimName: string | null;
     private _currentDirection: number | null;
 
@@ -56,7 +80,6 @@ class Gear {
         this._character = null;
         this._spriteKey = null;
         this._assetPaths = [];
-        this._tickerFn = null;
         this._currentAnimName = null;
         this._currentDirection = null;
     }
@@ -77,15 +100,11 @@ class Gear {
 
         this._createSprites();
 
-        this._tickerFn = () => this._sync();
-        PIXI.Ticker.shared.add(this._tickerFn);
+        _registerGear(this);
     }
 
     async unequip(): Promise<void> {
-        if (this._tickerFn) {
-            PIXI.Ticker.shared.remove(this._tickerFn);
-            this._tickerFn = null;
-        }
+        _unregisterGear(this);
         if (this.sprite) {
             if (this.sprite.parent) this.sprite.parent.removeChild(this.sprite);
             this.sprite.destroy();

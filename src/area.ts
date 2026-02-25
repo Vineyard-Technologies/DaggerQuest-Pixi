@@ -5,10 +5,10 @@ import type { Enemy } from './enemy';
 import type { NPC } from './npc';
 import type { Loot } from './loot';
 
-// Module augmentation: pixi.js Container doesn't expose sortDirty publicly
+// Module augmentation: extend Container with sortY (used when placing loot)
 declare module 'pixi.js' {
     interface Container {
-        sortDirty?: boolean;
+        sortY?: number;
     }
 }
 
@@ -48,6 +48,7 @@ class Area {
         this.playerStartX = playerStartX;
         this.playerStartY = playerStartY;
         this.container = new PIXI.Container();
+        this.container.sortableChildren = true;
         this.lootOnGround = [];
         this.enemies = [];
         this.npcs = [];
@@ -55,7 +56,7 @@ class Area {
         this.colliders = [];
         this.lootLabelsContainer = new PIXI.Container() as PIXI.Container & { sortY?: number };
         this.lootLabelsContainer.label = 'lootLabels';
-        this.lootLabelsContainer.sortY = Infinity;
+        this.lootLabelsContainer.zIndex = Infinity;
         this.container.addChild(this.lootLabelsContainer);
     }
 
@@ -68,14 +69,8 @@ class Area {
         this.backgroundTile.scale.y = 0.5;
         this.backgroundTile.x = 0;
         this.backgroundTile.y = 0;
-        this.container.addChildAt(this.backgroundTile, 0);
-    }
-
-    /**
-     * @deprecated Import `fetchManifest` from `./assets` instead.
-     */
-    static async fetchManifest(): Promise<Record<string, string[]>> {
-        return fetchManifest();
+        this.backgroundTile.zIndex = -Infinity;
+        this.container.addChild(this.backgroundTile);
     }
 
     async placeStaticSprite(
@@ -128,28 +123,22 @@ class Area {
         }
 
         container.visible = visible;
+        container.zIndex = y;
         this.container.addChild(container);
         return container;
     }
 
     update(delta: number): void {
-        for (const enemy of this.enemies) { enemy.update(delta); }
-        for (const npc of this.npcs) { npc.update(delta); }
-
-        const children = this.container.children as (PIXI.Container & { sortY?: number })[];
-        if (children.length > 1) {
-            const start = this.backgroundTile ? 1 : 0;
-            for (let i = start + 1; i < children.length; i++) {
-                const child = children[i]!;
-                const yVal = child.sortY ?? child.y;
-                let j = i - 1;
-                while (j >= start && ((children[j]!.sortY ?? children[j]!.y) > yVal)) {
-                    children[j + 1] = children[j]!;
-                    j--;
-                }
-                children[j + 1] = child;
-            }
-            (this.container as PIXI.Container).sortDirty = true;
+        for (const enemy of this.enemies) {
+            enemy.update(delta);
+            enemy.container.zIndex = enemy.y;
+        }
+        for (const npc of this.npcs) {
+            npc.update(delta);
+            npc.container.zIndex = npc.y;
+        }
+        for (const loot of this.lootOnGround) {
+            loot.container.zIndex = loot.container.sortY ?? loot.y;
         }
     }
 }

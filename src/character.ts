@@ -1,44 +1,16 @@
 import { Entity } from './entity';
 import { resolveCollisions, resolveBoundaryCollisions, aabbOverlap, satOverlap, type WorldPoint } from './collision';
 import state from './state';
+import { CHARACTER_COLLISION_WIDTH, CHARACTER_COLLISION_HEIGHT } from './config';
 import { DEFAULT_CHARACTER_STATS, type CharacterStats, type CharacterStatKey } from './types';
 
-export interface CharacterOptions {
+export interface CharacterOptions extends Partial<CharacterStats> {
     x: number;
     y: number;
     spriteKey?: string | null;
     speed?: number;
     direction?: number;
     animFps?: Record<string, number>;
-    level?: number;
-    experience?: number;
-    actionSpeed?: number;
-    pickupRange?: number;
-    attackRange?: number;
-    currentHealth?: number;
-    maxHealth?: number;
-    healthRegen?: number;
-    currentMana?: number;
-    maxMana?: number;
-    manaRegen?: number;
-    armor?: number;
-    slashDamage?: number;
-    smashDamage?: number;
-    stabDamage?: number;
-    coldDamage?: number;
-    fireDamage?: number;
-    lightningDamage?: number;
-    arcaneDamage?: number;
-    corruptDamage?: number;
-    holyDamage?: number;
-    physicalResistance?: number;
-    coldResistance?: number;
-    fireResistance?: number;
-    lightningResistance?: number;
-    arcaneResistance?: number;
-    corruptResistance?: number;
-    holyResistance?: number;
-    flinchResistance?: number;
 }
 
 class Character extends Entity implements CharacterStats {
@@ -50,106 +22,50 @@ class Character extends Entity implements CharacterStats {
     isAlive: boolean;
     private idlePingPongForward: boolean;
 
-    level: number;
-    experience: number;
-    actionSpeed: number;
-    pickupRange: number;
-    attackRange: number;
-    currentHealth: number;
-    maxHealth: number;
-    healthRegen: number;
-    currentMana: number;
-    maxMana: number;
-    manaRegen: number;
-    armor: number;
-    slashDamage: number;
-    smashDamage: number;
-    stabDamage: number;
-    coldDamage: number;
-    fireDamage: number;
-    lightningDamage: number;
-    arcaneDamage: number;
-    corruptDamage: number;
-    holyDamage: number;
-    physicalResistance: number;
-    coldResistance: number;
-    fireResistance: number;
-    lightningResistance: number;
-    arcaneResistance: number;
-    corruptResistance: number;
-    holyResistance: number;
-    flinchResistance: number;
+    level!: number;
+    experience!: number;
+    actionSpeed!: number;
+    pickupRange!: number;
+    attackRange!: number;
+    currentHealth!: number;
+    maxHealth!: number;
+    healthRegen!: number;
+    currentMana!: number;
+    maxMana!: number;
+    manaRegen!: number;
+    armor!: number;
+    slashDamage!: number;
+    smashDamage!: number;
+    stabDamage!: number;
+    coldDamage!: number;
+    fireDamage!: number;
+    lightningDamage!: number;
+    arcaneDamage!: number;
+    corruptDamage!: number;
+    holyDamage!: number;
+    physicalResistance!: number;
+    coldResistance!: number;
+    fireResistance!: number;
+    lightningResistance!: number;
+    arcaneResistance!: number;
+    corruptResistance!: number;
+    holyResistance!: number;
+    flinchResistance!: number;
 
     constructor({
         x = 0, y = 0, spriteKey = null, speed = 0, direction = 0, animFps = {},
-        level = DEFAULT_CHARACTER_STATS.level,
-        experience = DEFAULT_CHARACTER_STATS.experience,
-        actionSpeed = DEFAULT_CHARACTER_STATS.actionSpeed,
-        pickupRange = DEFAULT_CHARACTER_STATS.pickupRange,
-        attackRange = DEFAULT_CHARACTER_STATS.attackRange,
-        currentHealth = DEFAULT_CHARACTER_STATS.currentHealth,
-        maxHealth = DEFAULT_CHARACTER_STATS.maxHealth,
-        healthRegen = DEFAULT_CHARACTER_STATS.healthRegen,
-        currentMana = DEFAULT_CHARACTER_STATS.currentMana,
-        maxMana = DEFAULT_CHARACTER_STATS.maxMana,
-        manaRegen = DEFAULT_CHARACTER_STATS.manaRegen,
-        armor = DEFAULT_CHARACTER_STATS.armor,
-        slashDamage = DEFAULT_CHARACTER_STATS.slashDamage,
-        smashDamage = DEFAULT_CHARACTER_STATS.smashDamage,
-        stabDamage = DEFAULT_CHARACTER_STATS.stabDamage,
-        coldDamage = DEFAULT_CHARACTER_STATS.coldDamage,
-        fireDamage = DEFAULT_CHARACTER_STATS.fireDamage,
-        lightningDamage = DEFAULT_CHARACTER_STATS.lightningDamage,
-        arcaneDamage = DEFAULT_CHARACTER_STATS.arcaneDamage,
-        corruptDamage = DEFAULT_CHARACTER_STATS.corruptDamage,
-        holyDamage = DEFAULT_CHARACTER_STATS.holyDamage,
-        physicalResistance = DEFAULT_CHARACTER_STATS.physicalResistance,
-        coldResistance = DEFAULT_CHARACTER_STATS.coldResistance,
-        fireResistance = DEFAULT_CHARACTER_STATS.fireResistance,
-        lightningResistance = DEFAULT_CHARACTER_STATS.lightningResistance,
-        arcaneResistance = DEFAULT_CHARACTER_STATS.arcaneResistance,
-        corruptResistance = DEFAULT_CHARACTER_STATS.corruptResistance,
-        holyResistance = DEFAULT_CHARACTER_STATS.holyResistance,
-        flinchResistance = DEFAULT_CHARACTER_STATS.flinchResistance,
+        ...statOpts
     }: CharacterOptions = {} as CharacterOptions) {
         super({ x, y, spriteKey, direction, animFps });
 
-        this.collisionWidth = 60;
-        this.collisionHeight = 30;
+        this.collisionWidth = CHARACTER_COLLISION_WIDTH;
+        this.collisionHeight = CHARACTER_COLLISION_HEIGHT;
         this.speed = speed;
         this.targetPosition = null;
         this.isWalking = false;
         this.isAlive = true;
         this.idlePingPongForward = true;
-        this.level = level;
-        this.experience = experience;
-        this.actionSpeed = actionSpeed;
-        this.pickupRange = pickupRange;
-        this.attackRange = attackRange;
-        this.currentHealth = currentHealth;
-        this.maxHealth = maxHealth;
-        this.healthRegen = healthRegen;
-        this.currentMana = currentMana;
-        this.maxMana = maxMana;
-        this.manaRegen = manaRegen;
-        this.armor = armor;
-        this.slashDamage = slashDamage;
-        this.smashDamage = smashDamage;
-        this.stabDamage = stabDamage;
-        this.coldDamage = coldDamage;
-        this.fireDamage = fireDamage;
-        this.lightningDamage = lightningDamage;
-        this.arcaneDamage = arcaneDamage;
-        this.corruptDamage = corruptDamage;
-        this.holyDamage = holyDamage;
-        this.physicalResistance = physicalResistance;
-        this.coldResistance = coldResistance;
-        this.fireResistance = fireResistance;
-        this.lightningResistance = lightningResistance;
-        this.arcaneResistance = arcaneResistance;
-        this.corruptResistance = corruptResistance;
-        this.holyResistance = holyResistance;
-        this.flinchResistance = flinchResistance;
+        Object.assign(this, DEFAULT_CHARACTER_STATS, statOpts);
     }
 
     startIdlePingPong(): void {

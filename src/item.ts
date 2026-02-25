@@ -69,7 +69,7 @@ class Item {
     async loadIcon(): Promise<PIXI.Texture | null> {
         if (this._iconTexture) return this._iconTexture;
 
-        const manifest = await Item.fetchManifest();
+        const manifest = await fetchManifest();
         const sheets = manifest[this.iconSpriteKey] || [];
 
         if (sheets.length === 0) {
@@ -115,13 +115,6 @@ class Item {
 
     createGear(): Gear {
         return new Gear({ item: this });
-    }
-
-    /**
-     * @deprecated Import `fetchManifest` from `./assets` instead.
-     */
-    static async fetchManifest(): Promise<Record<string, string[]>> {
-        return fetchManifest();
     }
 }
 
