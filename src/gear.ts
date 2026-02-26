@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { SHADOW_BLUR, fetchManifest } from './assets';
+import { SHADOW_BLUR, fetchManifest, assetPath } from './assets';
 import type { Character } from './character';
 import type { AnimationTextures } from './entity';
 import type { Item } from './item';
@@ -138,7 +138,7 @@ class Gear {
         const pattern = new RegExp(`${key}-(\\w+)_([\\-\\d.]+)-(\\d+)`);
 
         for (const sheetPath of sheets) {
-            const fullPath = `./images/spritesheets/${sheetPath.replace('./', '')}`;
+            const fullPath = assetPath(`images/spritesheets/${sheetPath.replace('./', '')}`);
             this._assetPaths.push(fullPath);
             const spritesheet: PIXI.Spritesheet = await PIXI.Assets.load(fullPath);
 

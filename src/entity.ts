@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { SHADOW_BLUR, fetchManifest } from './assets';
+import { SHADOW_BLUR, fetchManifest, assetPath } from './assets';
 import { polyToWorld, NormPoint, WorldPoint } from './collision';
 import { isDefined } from './types';
 
@@ -70,7 +70,7 @@ class Entity {
 
         const spritesheets: PIXI.Spritesheet[] = [];
         for (const sheetPath of sheets) {
-            const fullPath = `./images/spritesheets/${sheetPath.replace('./', '')}`;
+            const fullPath = assetPath(`images/spritesheets/${sheetPath.replace('./', '')}`);
             const spritesheet = await PIXI.Assets.load(fullPath);
             spritesheets.push(spritesheet);
         }
@@ -115,7 +115,7 @@ class Entity {
             const shadowKeyPattern = new RegExp(`${shadowKey}-(\\w+)_([\\-\\d.]+)-(\\d+)`);
 
             for (const sheetPath of shadowSheets) {
-                const fullPath = `./images/spritesheets/${sheetPath.replace('./', '')}`;
+                const fullPath = assetPath(`images/spritesheets/${sheetPath.replace('./', '')}`);
                 const spritesheet = await PIXI.Assets.load(fullPath);
                 for (const frameName in spritesheet.textures) {
                     const match = frameName.match(shadowKeyPattern);

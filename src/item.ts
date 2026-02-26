@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { fetchManifest } from './assets';
+import { fetchManifest, assetPath } from './assets';
 import { rollMods, aggregateModStats, formatMod } from './mods';
 import { Loot } from './loot';
 import { Gear } from './gear';
@@ -78,7 +78,7 @@ class Item {
         }
 
         for (const sheetPath of sheets) {
-            const fullPath = `./images/spritesheets/${sheetPath.replace('./', '')}`;
+            const fullPath = assetPath(`images/spritesheets/${sheetPath.replace('./', '')}`);
             this._iconAssetPaths.push(fullPath);
             const spritesheet: PIXI.Spritesheet = await PIXI.Assets.load(fullPath);
 

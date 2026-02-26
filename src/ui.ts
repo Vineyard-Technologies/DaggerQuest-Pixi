@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { fetchManifest } from './assets';
+import { fetchManifest, assetPath } from './assets';
 import state from './state';
 import {
     SLOT_SIZE, SLOT_ICON_MAX, SLOT_BORDER,
@@ -1364,7 +1364,7 @@ class UI {
         const loadTexture: TextureLoader = async (key: string): Promise<PIXI.Texture | null> => {
             const sheets = manifest[key] || [];
             for (const sheetPath of sheets) {
-                const fullPath = `./images/spritesheets/${sheetPath.replace('./', '')}`;
+                const fullPath = assetPath(`images/spritesheets/${sheetPath.replace('./', '')}`);
                 const spritesheet: PIXI.Spritesheet = await PIXI.Assets.load(fullPath);
                 const names = Object.keys(spritesheet.textures);
                 if (names.length > 0) return spritesheet.textures[names[0]!]!;
