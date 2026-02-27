@@ -1,14 +1,26 @@
 name: Deploy Game
 
 on:
+  push:
+    tags:
+      - '*'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout DaggerQuest
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -20,36 +32,25 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build for deployment
-        run: npm run build -- --base /game/
-
-      - name: Checkout target repo
-        uses: actions/checkout@v4
-        with:
-          repository: Vineyard-Technologies/DaggerQuest.com
-          token: ${{ secrets.DEPLOY_TOKEN }}
-          path: target-repo
-
-      - name: Deploy game files
-        run: |
-          rm -rf target-repo/public/game
-          mkdir -p target-repo/public/game
-          cp -r dist/* target-repo/public/game/
-
-      - name: Install target repo dependencies
-        working-directory: target-repo
-        run: npm ci
-
-      - name: Build React site
-        working-directory: target-repo
+      - name: Build
         run: npm run build
 
-      - name: Commit and push
-        working-directory: target-repo
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git diff --cached --quiet && echo "No changes to deploy" && exit 0
-          git commit -m "Deploy game from DaggerQuest@${GITHUB_SHA::7}"
-          git push
+      - name: Add CNAME
+        run: echo "app.daggerquest.com" > dist/CNAME
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
