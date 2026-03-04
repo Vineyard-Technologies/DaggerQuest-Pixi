@@ -11,8 +11,43 @@ import type { Player } from './player';
 
 type PlayerClass = new (opts: { x: number; y: number }) => Player;
 
+// Ensure the game is only playable when embedded in an iframe on DaggerQuest.com.
+// Block direct access (top-level browsing) and embedding on unauthorized sites.
+function enforceFrameOrigin(): void {
+    // Skip enforcement for local development.
+    const { hostname } = window.location;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') return;
+
+    const allowedOrigins = ['https://daggerquest.com', 'https://www.daggerquest.com'];
+
+    // If running as the top-level page (not in an iframe), redirect to DaggerQuest.com.
+    if (window.self === window.top) {
+        window.location.replace('https://daggerquest.com');
+        throw new Error('DaggerQuest must be played at DaggerQuest.com');
+    }
+
+    // If in an iframe, verify the parent origin is allowed.
+    // Use postMessage handshake: the parent must respond to prove its origin.
+    let verified = false;
+    window.addEventListener('message', (event: MessageEvent) => {
+        if (allowedOrigins.includes(event.origin) && event.data === 'daggerquest-origin-ok') {
+            verified = true;
+        }
+    });
+    window.parent.postMessage('daggerquest-origin-check', '*');
+    // Give the parent a short window to respond before blocking.
+    setTimeout(() => {
+        if (!verified) {
+            state.app?.destroy(true, { children: true });
+            window.location.replace('https://daggerquest.com');
+        }
+    }, 2000);
+}
+
 // Initialize the game
 async function init(): Promise<void> {
+    enforceFrameOrigin();
+
     state.app = new PIXI.Application();
     await state.app.init({
         resizeTo: window,
