@@ -103,12 +103,28 @@ async function init(): Promise<void> {
     });
 
     // Debug module – only loaded during development, excluded from production builds.
-    // Activate from the browser console with: debug()
+    // Activate/deactivate with F5, or from the browser console with debug() / exitdebug()
     if (import.meta.env.DEV) {
         (window as unknown as Record<string, unknown>).debug = async () => {
             const { initDebug } = await import('./debug');
             initDebug();
         };
+        (window as unknown as Record<string, unknown>).exitdebug = async () => {
+            const { exitDebug } = await import('./debug');
+            exitDebug();
+        };
+        window.addEventListener('keydown', async (e: KeyboardEvent) => {
+            if (e.key === 'F5') {
+                e.preventDefault();
+                if (window.DEBUG?.active) {
+                    const { exitDebug } = await import('./debug');
+                    exitDebug();
+                } else {
+                    const { initDebug } = await import('./debug');
+                    initDebug();
+                }
+            }
+        });
     }
 }
 
@@ -357,6 +373,7 @@ function gameLoop(ticker: PIXI.Ticker): void {
     }
 
     const delta = ticker.deltaTime;
+    state.sessionUptimeMs += ticker.deltaMS;
     state.player.update(delta);
     state.player.container.zIndex = state.player.y;
 

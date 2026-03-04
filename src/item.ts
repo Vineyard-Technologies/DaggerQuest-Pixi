@@ -102,8 +102,14 @@ class Item {
     }
 
     async unloadIcon(): Promise<void> {
-        for (const path of this._iconAssetPaths) {
-            await PIXI.Assets.unload(path);
+        // Defer asset unloads to next frame so WebGPU command buffers
+        // referencing these textures have finished executing.
+        const paths = [...this._iconAssetPaths];
+        if (paths.length > 0) {
+            await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+            for (const path of paths) {
+                await PIXI.Assets.unload(path);
+            }
         }
         this._iconTexture = null;
         this._iconAssetPaths = [];

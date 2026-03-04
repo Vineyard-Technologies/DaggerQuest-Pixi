@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { Entity } from './entity';
 import { SHADOW_BLUR } from './assets';
+import { safeDestroy } from './safeDestroy';
 import type { Item } from './item';
 
 class Loot extends Entity {
@@ -127,8 +128,7 @@ class Loot extends Entity {
 
     destroy(): void {
         if (this._labelWrapper) {
-            if (this._labelWrapper.parent) this._labelWrapper.parent.removeChild(this._labelWrapper);
-            this._labelWrapper.destroy({ children: true });
+            safeDestroy(this._labelWrapper, { children: true });
             this._labelWrapper = null;
             this._nameLabelBg = null;
             this.nameLabel = null;

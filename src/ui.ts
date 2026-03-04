@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { fetchManifest, assetPath } from './assets';
+import { safeDestroy } from './safeDestroy';
 import state from './state';
 import {
     SLOT_SIZE, SLOT_ICON_MAX, SLOT_BORDER,
@@ -317,8 +318,7 @@ class EquipmentPanel {
         }
 
         if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
+            safeDestroy(entry.iconSprite);
             entry.iconSprite = null;
         }
 
@@ -357,8 +357,7 @@ class EquipmentPanel {
         if (!entry) return;
 
         if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
+            safeDestroy(entry.iconSprite);
             entry.iconSprite = null;
         }
 
@@ -376,8 +375,7 @@ class EquipmentPanel {
 
     detachIcon(entry: EquippedSlotEntry): void {
         if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
+            safeDestroy(entry.iconSprite);
             entry.iconSprite = null;
         }
         entry.item = null;
@@ -387,8 +385,7 @@ class EquipmentPanel {
 
     detachIconKeepData(entry: EquippedSlotEntry): void {
         if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
+            safeDestroy(entry.iconSprite);
             entry.iconSprite = null;
         }
         if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
@@ -546,8 +543,7 @@ class InventoryPanel {
 
     async setSlot(entry: InventorySlotEntry, item: Item): Promise<boolean> {
         if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
+            safeDestroy(entry.iconSprite);
             entry.iconSprite = null;
         }
         if (entry.item) {
@@ -577,8 +573,7 @@ class InventoryPanel {
 
     async clearSlot(entry: InventorySlotEntry): Promise<void> {
         if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
+            safeDestroy(entry.iconSprite);
             entry.iconSprite = null;
         }
         if (entry.item) {
@@ -592,8 +587,7 @@ class InventoryPanel {
 
     detachIcon(entry: InventorySlotEntry): void {
         if (entry.iconSprite) {
-            entry.container.removeChild(entry.iconSprite);
-            entry.iconSprite.destroy();
+            safeDestroy(entry.iconSprite);
             entry.iconSprite = null;
         }
         entry.item = null;
@@ -1026,11 +1020,11 @@ class DragDropController {
             await this._inventory.setSlot(freeInvSlot, item);
 
             if (entry.iconSprite) {
-                entry.container.removeChild(entry.iconSprite);
-                entry.iconSprite.destroy();
+                safeDestroy(entry.iconSprite);
                 entry.iconSprite = null;
             }
             entry.item = null;
+            if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
             if (entry.placeholder) entry.placeholder.visible = true;
 
             if (state.player) {
@@ -1134,8 +1128,7 @@ class DragDropController {
             stage.off('pointerupoutside', this._onDragEndHandler);
         }
 
-        this._hudContainer.removeChild(drag.sprite);
-        drag.sprite.destroy();
+        safeDestroy(drag.sprite);
 
         const pos = e.global;
         const target = this._hitTestSlot(pos.x, pos.y);

@@ -44,77 +44,86 @@ class Player extends Character {
         }
     }
 
-    async pickupAndEquip(loot: Loot): Promise<void> {
+    pickupAndEquip(loot: Loot): void {
         const item = loot.pickup();
         if (state.area?.lootOnGround) {
             const idx = state.area.lootOnGround.indexOf(loot);
             if (idx !== -1) state.area.lootOnGround.splice(idx, 1);
         }
         const slot = item.slot;
-        const newGear = item.createGear();
-        await newGear.equip(this);
         const oldGear = this.equippedGear[slot];
         if (oldGear && oldGear.item) {
             this._removeItemStats(oldGear.item);
         }
         this._applyItemStats(item);
-        if (oldGear) {
-            await oldGear.unequip();
-        }
+
+        // Gear visuals are fire-and-forget so the UI stays instantaneous.
+        const newGear = item.createGear();
         this.equippedGear[slot] = newGear;
+        newGear.equip(this).then(() => {
+            if (oldGear) oldGear.unequip();
+        });
+
         bus.emit('item-equipped', { slot, item });
     }
 
-    async unequipSlot(slot: GearSlot): Promise<void> {
+    unequipSlot(slot: GearSlot): void {
         const oldGear = this.equippedGear[slot] || null;
         if (oldGear && oldGear.item) {
             this._removeItemStats(oldGear.item);
         }
+
+        // Gear visuals are fire-and-forget so the UI stays instantaneous.
         const base = this.defaultGearSlots[slot];
         if (base) {
             const defaultGear = new Gear({ slot, spriteKeyBase: base, isDefault: true });
-            await defaultGear.equip(this);
             this.equippedGear[slot] = defaultGear;
+            defaultGear.equip(this).then(() => {
+                if (oldGear) oldGear.unequip();
+            });
         } else {
             delete this.equippedGear[slot];
+            if (oldGear) oldGear.unequip();
         }
-        if (oldGear) {
-            await oldGear.unequip();
-        }
+
         bus.emit('item-unequipped', { slot });
     }
 
-    async equipItem(item: Item): Promise<void> {
+    equipItem(item: Item): void {
         const slot = item.slot;
-        const newGear = item.createGear();
-        await newGear.equip(this);
         const oldGear = this.equippedGear[slot];
         if (oldGear && oldGear.item) {
             this._removeItemStats(oldGear.item);
         }
         this._applyItemStats(item);
-        if (oldGear) {
-            await oldGear.unequip();
-        }
+
+        // Gear visuals are fire-and-forget so the UI stays instantaneous.
+        const newGear = item.createGear();
         this.equippedGear[slot] = newGear;
+        newGear.equip(this).then(() => {
+            if (oldGear) oldGear.unequip();
+        });
+
         bus.emit('item-equipped', { slot, item });
     }
 
-    async unequipSlotSilent(slot: GearSlot): Promise<void> {
+    unequipSlotSilent(slot: GearSlot): void {
         const oldGear = this.equippedGear[slot] || null;
         if (oldGear && oldGear.item) {
             this._removeItemStats(oldGear.item);
         }
+
+        // Gear visuals are fire-and-forget so the UI stays instantaneous.
         const base = this.defaultGearSlots[slot];
         if (base) {
             const defaultGear = new Gear({ slot, spriteKeyBase: base, isDefault: true });
-            await defaultGear.equip(this);
             this.equippedGear[slot] = defaultGear;
+            defaultGear.equip(this).then(() => {
+                if (oldGear) oldGear.unequip();
+            });
         } else {
             delete this.equippedGear[slot];
-        }
-        if (oldGear) {
-            await oldGear.unequip();
+            if (oldGear) oldGear.unequip();
         }
     }
 

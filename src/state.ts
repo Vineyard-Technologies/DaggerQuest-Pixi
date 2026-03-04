@@ -19,6 +19,7 @@ interface GameState {
     hoveredEntity: Entity | null;
     pendingLootPickup: Loot | null;
     pendingNpcInteraction: NPC | null;
+    sessionUptimeMs: number;
 }
 
 const state: GameState = {
@@ -33,6 +34,7 @@ const state: GameState = {
     hoveredEntity: null,
     pendingLootPickup: null,
     pendingNpcInteraction: null,
+    sessionUptimeMs: 0,
 } satisfies GameState;
 
 export default state;

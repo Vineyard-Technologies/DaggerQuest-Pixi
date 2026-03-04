@@ -8,12 +8,17 @@
  * Activate from the browser console:
  *   debug()
  *
+ * Deactivate without restarting:
+ *   F5 key (toggles debug on/off)
+ *   – or – exitdebug() from the browser console
+ *
  * Features:
  *   F1  – Toggle collision polygon visualization
  *   F2  – Toggle noclip (walk through everything)
  *   F3  – Toggle teleport mode (Shift+Click to teleport)
  *   +/- – Increase / decrease game speed
  *   F4  – Reset game speed to 1×
+ *   F5  – Toggle debug mode on/off
  *   H   – Reduce player health by 10
  *   M   – Reduce player mana by 10
  */
@@ -38,10 +43,68 @@ interface DebugState {
     speedIndex: number;
     overlay: PIXI.Text | null;
     collisionGraphics: PIXI.Graphics | null;
+    tickerCallback: (() => void) | null;
+}
+
+function formatUptime(ms: number): string {
+    const totalSec = Math.floor(ms / 1000);
+    const h = Math.floor(totalSec / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = totalSec % 60;
+    const parts: string[] = [];
+    if (h > 0) parts.push(h + 'h');
+    parts.push(String(m).padStart(h > 0 ? 2 : 1, '0') + 'm');
+    parts.push(String(s).padStart(2, '0') + 's');
+    return parts.join(' ');
+}
+
+function exitDebug(): void {
+    if (!window.DEBUG?.active) {
+        console.log('Debug mode is not active.');
+        return;
+    }
+
+    const app = state.app!;
+
+    // Reset game speed
+    app.ticker.speed = 1;
+    PIXI.Ticker.shared.speed = 1;
+
+    // Remove overlay text
+    if (window.DEBUG.overlay) {
+        window.DEBUG.overlay.destroy();
+        window.DEBUG.overlay = null;
+    }
+
+    // Remove ticker callback
+    if (window.DEBUG.tickerCallback) {
+        app.ticker.remove(window.DEBUG.tickerCallback);
+        window.DEBUG.tickerCallback = null;
+    }
+
+    // Remove collision graphics
+    if (window.DEBUG.collisionGraphics) {
+        window.DEBUG.collisionGraphics.clear();
+        window.DEBUG.collisionGraphics.destroy();
+        window.DEBUG.collisionGraphics = null;
+    }
+
+    // Reset all debug flags
+    window.DEBUG.active = false;
+    window.DEBUG.showCollision = false;
+    window.DEBUG.noclip = false;
+    window.DEBUG.teleportMode = false;
+    window.DEBUG.gameSpeed = 1;
+    window.DEBUG.speedIndex = 2;
+
+    console.log(
+        '%c[DaggerQuest] Debug mode deactivated.',
+        'color: #ff8800; font-weight: bold; font-size: 14px;',
+    );
 }
 
 function initDebug(): void {
-    if (window.DEBUG) {
+    if (window.DEBUG?.active) {
         console.log('Debug mode is already active.');
         return;
     }
@@ -58,6 +121,7 @@ function initDebug(): void {
         speedIndex: 2, // starts at 1×
         overlay: null,
         collisionGraphics: null,
+        tickerCallback: null,
     };
     const app = state.app!;
     const area = state.area!;
@@ -105,7 +169,7 @@ function initDebug(): void {
 
     // ── Debug tick ──────────────────────────────────────────────────
 
-    app.ticker.add(() => {
+    const debugTicker = () => {
         if (!window.DEBUG.active) return;
 
         const player = state.player;
@@ -113,6 +177,7 @@ function initDebug(): void {
         // ── Overlay text ────────────────────────────────────────────
         const lines = ['[DEBUG]'];
         lines.push('FPS: ' + Math.round(app.ticker.FPS));
+        lines.push('Uptime: ' + formatUptime(state.sessionUptimeMs));
         if (player) {
             lines.push('Pos: ' + Math.round(player.x) + ', ' + Math.round(player.y));
         }
@@ -125,7 +190,7 @@ function initDebug(): void {
         lines.push('');
         lines.push('F1 collision | F2 noclip');
         lines.push('F3 teleport  | F4 reset speed');
-        lines.push('+/- speed');
+        lines.push('+/- speed    | F5 toggle debug');
 
         debugText.text = lines.join('\n');
 
@@ -190,7 +255,10 @@ function initDebug(): void {
                 if (np) drawPoly(np, 0x00ffff, 0.15, 0x00ffff, 0.7, 1.5);
             }
         }
-    });
+    };
+
+    app.ticker.add(debugTicker);
+    window.DEBUG.tickerCallback = debugTicker;
 
     // ── Keyboard shortcuts ──────────────────────────────────────────
 
@@ -256,6 +324,8 @@ function initDebug(): void {
         if (!window.DEBUG.active || !window.DEBUG.teleportMode || !state.player) return;
         if (!(event.data?.originalEvent as unknown as MouseEvent)?.shiftKey) return;
 
+        event.stopPropagation();
+
         const pos = event.data.global;
         const worldX = pos.x - state.area!.container.x;
         const worldY = pos.y - state.area!.container.y;
@@ -276,4 +346,4 @@ function initDebug(): void {
     );
 }
 
-export { initDebug };
+export { initDebug, exitDebug };

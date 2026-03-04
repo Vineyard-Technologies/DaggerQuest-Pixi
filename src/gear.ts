@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { SHADOW_BLUR, fetchManifest, assetPath } from './assets';
+import { safeDestroy } from './safeDestroy';
 import type { Character } from './character';
 import type { AnimationTextures } from './entity';
 import type { Item } from './item';
@@ -106,17 +107,21 @@ class Gear {
     async unequip(): Promise<void> {
         _unregisterGear(this);
         if (this.sprite) {
-            if (this.sprite.parent) this.sprite.parent.removeChild(this.sprite);
-            this.sprite.destroy();
+            safeDestroy(this.sprite);
             this.sprite = null;
         }
         if (this.shadowSprite) {
-            if (this.shadowSprite.parent) this.shadowSprite.parent.removeChild(this.shadowSprite);
-            this.shadowSprite.destroy();
+            safeDestroy(this.shadowSprite);
             this.shadowSprite = null;
         }
-        for (const path of this._assetPaths) {
-            await PIXI.Assets.unload(path);
+        // Defer asset unloads to next frame so WebGPU command buffers
+        // referencing these textures have finished executing.
+        const paths = [...this._assetPaths];
+        if (paths.length > 0) {
+            await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+            for (const path of paths) {
+                await PIXI.Assets.unload(path);
+            }
         }
         this._textures = {};
         this._shadowTextures = {};

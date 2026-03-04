@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { Character } from './character';
 import { Entity } from './entity';
+import { safeDestroy } from './safeDestroy';
 import state from './state';
 
 interface NPCOptions {
@@ -164,10 +165,7 @@ class NPC extends Character {
     hideDialog(): void {
         this._stopScrollTicker();
         if (this._dialogWrapper) {
-            if (this._dialogWrapper.parent) {
-                this._dialogWrapper.parent.removeChild(this._dialogWrapper);
-            }
-            this._dialogWrapper.destroy({ children: true });
+            safeDestroy(this._dialogWrapper, { children: true });
             this._dialogWrapper = null;
             this._dialogText = null;
             this._dialogBg = null;
