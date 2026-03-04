@@ -4,6 +4,7 @@ import type { Player } from './player';
 import type { UI } from './ui';
 import type { Entity } from './entity';
 import type { Loot } from './loot';
+import type { NPC } from './npc';
 import { Inventory } from './inventory';
 
 interface GameState {
@@ -17,6 +18,7 @@ interface GameState {
     pointerScreenY: number;
     hoveredEntity: Entity | null;
     pendingLootPickup: Loot | null;
+    pendingNpcInteraction: NPC | null;
 }
 
 const state: GameState = {
@@ -30,6 +32,7 @@ const state: GameState = {
     pointerScreenY: 0,
     hoveredEntity: null,
     pendingLootPickup: null,
+    pendingNpcInteraction: null,
 } satisfies GameState;
 
 export default state;

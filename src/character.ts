@@ -139,6 +139,21 @@ class Character extends Entity implements CharacterStats {
         }
     }
 
+    faceEntity(entity: Entity): void {
+        const dx = entity.x - this.x;
+        const dy = entity.y - this.y;
+        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+        this.direction = this.findClosestDirection(angle);
+
+        if (!this.isWalking) {
+            const idleFrames = this.getAnimationFrames('idle', this.direction);
+            if (idleFrames.length > 0 && this.sprite) {
+                this.sprite.textures = idleFrames;
+                this.startIdlePingPong();
+            }
+        }
+    }
+
     distanceTo(entity: Entity): number {
         const dx = entity.x - this.x;
         const dy = entity.y - this.y;

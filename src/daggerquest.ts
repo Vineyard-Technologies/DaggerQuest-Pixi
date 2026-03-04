@@ -7,6 +7,7 @@ import { bus } from './events';
 import { HOVER_OUTLINE } from './outlineFilter';
 import { Entity } from './entity';
 import type { Loot } from './loot';
+import { NPC } from './npc';
 import type { Player } from './player';
 
 type PlayerClass = new (opts: { x: number; y: number }) => Player;
@@ -182,6 +183,15 @@ function findHoverableAtPosition(screenX: number, screenY: number): Entity | nul
     if (state.area?.npcs) {
         for (const npc of state.area.npcs) {
             if (!npc.sprite) continue;
+
+            const dialogBounds = npc.getDialogBounds();
+            if (dialogBounds) {
+                if (screenX >= dialogBounds.x && screenX <= dialogBounds.x + dialogBounds.width &&
+                    screenY >= dialogBounds.y && screenY <= dialogBounds.y + dialogBounds.height) {
+                    return npc;
+                }
+            }
+
             const b = npc.sprite.getBounds();
             if (screenX >= b.x && screenX <= b.x + b.width &&
                 screenY >= b.y && screenY <= b.y + b.height) {
@@ -229,6 +239,7 @@ function onPointerDown(event: PIXI.FederatedPointerEvent): void {
 
     const loot = findLootAtPosition(state.pointerScreenX, state.pointerScreenY);
     if (loot) {
+        endActiveNpcInteraction();
         const dx = loot.x - state.player!.x;
         const dy = loot.y - state.player!.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -244,7 +255,33 @@ function onPointerDown(event: PIXI.FederatedPointerEvent): void {
         return;
     }
 
+    const clickedNpc = findNpcAtPosition(state.pointerScreenX, state.pointerScreenY);
+    if (clickedNpc) {
+        state.pendingLootPickup = null;
+
+        if (clickedNpc.isInteracting) {
+            const next = clickedNpc.advanceDialog();
+            if (next) {
+                clickedNpc.showDialog(next);
+            }
+            return;
+        }
+
+        endActiveNpcInteraction();
+
+        const dist = state.player!.distanceTo(clickedNpc);
+        if (dist <= clickedNpc.interactRange) {
+            startNpcInteraction(clickedNpc);
+            return;
+        }
+
+        state.pendingNpcInteraction = clickedNpc;
+        state.player!.moveToward(clickedNpc.x, clickedNpc.y);
+        return;
+    }
+
     state.pendingLootPickup = null;
+    endActiveNpcInteraction();
 
     state.pointerHeld = true;
     movePlayerToPointer();
@@ -258,6 +295,48 @@ function onPointerMove(event: PIXI.FederatedPointerEvent): void {
 
 function onPointerUp(): void {
     state.pointerHeld = false;
+}
+
+function findNpcAtPosition(screenX: number, screenY: number): NPC | null {
+    if (!state.area?.npcs) return null;
+    for (const npc of state.area.npcs) {
+        if (!npc.sprite) continue;
+
+        const dialogBounds = npc.getDialogBounds();
+        if (dialogBounds) {
+            if (screenX >= dialogBounds.x && screenX <= dialogBounds.x + dialogBounds.width &&
+                screenY >= dialogBounds.y && screenY <= dialogBounds.y + dialogBounds.height) {
+                return npc;
+            }
+        }
+
+        const b = npc.sprite.getBounds();
+        if (screenX >= b.x && screenX <= b.x + b.width &&
+            screenY >= b.y && screenY <= b.y + b.height) {
+            return npc;
+        }
+    }
+    return null;
+}
+
+function startNpcInteraction(npc: NPC): void {
+    const text = npc.interact();
+    if (text) {
+        npc.showDialog(text);
+        state.player!.targetPosition = null;
+        state.player!.stopWalkAnimation();
+        state.player!.faceEntity(npc);
+    }
+}
+
+function endActiveNpcInteraction(): void {
+    state.pendingNpcInteraction = null;
+    if (!state.area?.npcs) return;
+    for (const npc of state.area.npcs) {
+        if (npc.isInteracting) {
+            npc.endInteraction();
+        }
+    }
 }
 
 function movePlayerToPointer(): void {
@@ -274,6 +353,7 @@ function gameLoop(ticker: PIXI.Ticker): void {
     if (state.pointerHeld) {
         movePlayerToPointer();
         state.pendingLootPickup = null;
+        state.pendingNpcInteraction = null;
     }
 
     const delta = ticker.deltaTime;
@@ -300,6 +380,17 @@ function gameLoop(ticker: PIXI.Ticker): void {
             } else if (stopped) {
                 state.pendingLootPickup = null;
             }
+        }
+    }
+
+    if (state.pendingNpcInteraction) {
+        const npc = state.pendingNpcInteraction;
+        const dist = state.player.distanceTo(npc);
+        if (dist <= npc.interactRange) {
+            state.pendingNpcInteraction = null;
+            startNpcInteraction(npc);
+        } else if (!state.player.targetPosition) {
+            state.pendingNpcInteraction = null;
         }
     }
 
