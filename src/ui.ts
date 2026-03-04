@@ -1004,6 +1004,7 @@ class DragDropController {
 
     async onEquippedSlotRightClick(slotType: GearSlot): Promise<void> {
         if (this._rightClickBusy) return;
+        if (state.player && !state.player.isAlive) return;
         const entry = this._equipment.slots.find(s => s.slotType === slotType);
         if (!entry || !entry.item) return;
 
@@ -1037,6 +1038,7 @@ class DragDropController {
 
     async onInventorySlotRightClick(index: number): Promise<void> {
         if (this._rightClickBusy) return;
+        if (state.player && !state.player.isAlive) return;
         const entry = this._inventory.slots[index];
         if (!entry || !entry.item) return;
 
@@ -1066,6 +1068,7 @@ class DragDropController {
 
     onDragStart(source: UISource, key: string | number, e: PIXI.FederatedPointerEvent): void {
         if (this._drag) return;
+        if (state.player && !state.player.isAlive) return;
 
         let entry: EquippedSlotEntry | InventorySlotEntry | undefined;
         let item: Item | null | undefined;
@@ -1331,6 +1334,9 @@ class UI {
     get inventorySlots(): InventorySlotEntry[] { return this.inventory.slots; }
     get abilitySlots(): AbilitySlotEntry[] { return this.abilityBar.slots; }
 
+    private _deathOverlay: PIXI.Container | null = null;
+    private _deathFadeTicker: ((ticker: PIXI.Ticker) => void) | null = null;
+
     constructor() {
         this.container = new PIXI.Container();
         this.container.label = 'hud';
@@ -1398,6 +1404,7 @@ class UI {
         this.equipment.layout(screenW, screenH);
         this.inventory.layout(screenW, screenH);
         this.abilityBar.layout(screenW, screenH);
+        this._layoutDeathOverlay(screenW, screenH);
     }
 
     // --------------------------------------------------------------- Update
@@ -1419,6 +1426,83 @@ class UI {
     async setInventoryItem(item: Item): Promise<boolean> { return this.inventory.addItem(item); }
 
     get isDragging(): boolean { return this.dragDrop.isDragging; }
+
+    showDeathScreen(): void {
+        if (this._deathOverlay) return;
+
+        // Grayscale filter on the whole stage (everything behind the HUD)
+        const grayscale = new PIXI.ColorMatrixFilter();
+        grayscale.desaturate();
+        grayscale.enabled = true;
+
+        // Semi-transparent dark overlay
+        const overlay = new PIXI.Container();
+        overlay.label = 'deathOverlay';
+
+        const bg = new PIXI.Graphics();
+        overlay.addChild(bg);
+
+        const text = new PIXI.Text({
+            text: 'you have\nbeen slain',
+            style: {
+                fontFamily: 'Cinzel',
+                fontWeight: '600',
+                fontSize: 72,
+                fill: 0xcc2222,
+                align: 'center',
+                lineHeight: 90,
+                stroke: { color: 0x000000, width: 4 },
+            },
+        });
+        text.anchor.set(0.5);
+        overlay.addChild(text);
+
+        this.container.addChild(overlay);
+        this._deathOverlay = overlay;
+
+        // Start fully transparent, fade in
+        overlay.alpha = 0;
+        let saturation = 1;
+
+        const stage = state.app?.stage;
+        const areaContainer = state.area?.container;
+
+        this._deathFadeTicker = (ticker: PIXI.Ticker) => {
+            const dt = ticker.deltaTime / 60;
+            overlay.alpha = Math.min(1, overlay.alpha + dt * 0.8);
+            saturation = Math.max(0, saturation - dt * 0.8);
+
+            // Apply desaturation to the area container
+            if (areaContainer) {
+                const filter = new PIXI.ColorMatrixFilter();
+                filter.saturate(saturation - 1, false);
+                areaContainer.filters = [filter];
+            }
+
+            if (overlay.alpha >= 1 && saturation <= 0) {
+                PIXI.Ticker.shared.remove(this._deathFadeTicker!);
+                this._deathFadeTicker = null;
+            }
+
+            this._layoutDeathOverlay(
+                state.app?.screen.width ?? window.innerWidth,
+                state.app?.screen.height ?? window.innerHeight,
+            );
+        };
+
+        PIXI.Ticker.shared.add(this._deathFadeTicker);
+    }
+
+    private _layoutDeathOverlay(screenW: number, screenH: number): void {
+        if (!this._deathOverlay) return;
+        const bg = this._deathOverlay.children[0] as PIXI.Graphics;
+        const text = this._deathOverlay.children[1] as PIXI.Text;
+        bg.clear();
+        bg.rect(0, 0, screenW, screenH);
+        bg.fill({ color: 0x000000, alpha: 0.5 });
+        text.x = screenW / 2;
+        text.y = screenH / 2;
+    }
 
     hitTest(screenX: number, screenY: number): boolean {
         const containers = [

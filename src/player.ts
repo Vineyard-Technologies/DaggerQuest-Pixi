@@ -45,6 +45,7 @@ class Player extends Character {
     }
 
     pickupAndEquip(loot: Loot): void {
+        if (!this.isAlive) return;
         const item = loot.pickup();
         if (state.area?.lootOnGround) {
             const idx = state.area.lootOnGround.indexOf(loot);
@@ -68,6 +69,7 @@ class Player extends Character {
     }
 
     unequipSlot(slot: GearSlot): void {
+        if (!this.isAlive) return;
         const oldGear = this.equippedGear[slot] || null;
         if (oldGear && oldGear.item) {
             this._removeItemStats(oldGear.item);
@@ -90,6 +92,7 @@ class Player extends Character {
     }
 
     equipItem(item: Item): void {
+        if (!this.isAlive) return;
         const slot = item.slot;
         const oldGear = this.equippedGear[slot];
         if (oldGear && oldGear.item) {
@@ -108,6 +111,7 @@ class Player extends Character {
     }
 
     unequipSlotSilent(slot: GearSlot): void {
+        if (!this.isAlive) return;
         const oldGear = this.equippedGear[slot] || null;
         if (oldGear && oldGear.item) {
             this._removeItemStats(oldGear.item);

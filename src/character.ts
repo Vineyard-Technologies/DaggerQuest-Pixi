@@ -1,6 +1,7 @@
 import { Entity } from './entity';
 import { resolveCollisions, resolveBoundaryCollisions, aabbOverlap, satOverlap, type WorldPoint } from './collision';
 import state from './state';
+import { bus } from './events';
 import { CHARACTER_COLLISION_WIDTH, CHARACTER_COLLISION_HEIGHT } from './config';
 import { DEFAULT_CHARACTER_STATS, type CharacterStats, type CharacterStatKey } from './types';
 
@@ -128,6 +129,7 @@ class Character extends Entity implements CharacterStats {
     }
 
     moveToward(worldX: number, worldY: number): void {
+        if (!this.isAlive) return;
         this.targetPosition = { x: worldX, y: worldY };
         const dx = worldX - this.x;
         const dy = worldY - this.y;
@@ -171,7 +173,33 @@ class Character extends Entity implements CharacterStats {
         ];
     }
 
+    startDieAnimation(): void {
+        if (!this.sprite) return;
+        this.isWalking = false;
+        const dieFrames = this.getAnimationFrames('die', this.direction);
+        if (dieFrames.length === 0) return;
+        this.sprite.textures = dieFrames;
+        this.sprite.loop = false;
+        this.sprite.onComplete = undefined;
+        this.sprite.animationSpeed = this.getAnimFps('die') / 60;
+        this.sprite.gotoAndPlay(0);
+        this.onAnimationChanged();
+    }
+
+    die(): void {
+        if (!this.isAlive) return;
+        this.isAlive = false;
+        this.targetPosition = null;
+        this.stopWalkAnimation();
+        this.startDieAnimation();
+        if (this === state.player) {
+            bus.emit('player-died', undefined as never);
+        }
+    }
+
     update(delta: number): void {
+        if (!this.isAlive) return;
+
         const dt = delta / 60;
         if (this.healthRegen > 0 && this.currentHealth < this.maxHealth) {
             this.currentHealth = Math.min(this.maxHealth, this.currentHealth + this.healthRegen * dt);

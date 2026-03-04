@@ -82,6 +82,7 @@ async function init(): Promise<void> {
 
     bus.on('item-equipped',   ({ slot, item }) => state.ui!.setEquippedItem(slot, item));
     bus.on('item-unequipped', ({ slot })       => state.ui!.clearEquippedItem(slot));
+    bus.on('player-died',     ()               => { endActiveNpcInteraction(); state.ui!.showDeathScreen(); });
 
     state.app.stage.eventMode = 'static';
     state.app.stage.hitArea = state.app.screen;
@@ -249,6 +250,8 @@ function onPointerDown(event: PIXI.FederatedPointerEvent): void {
 
     if (state.ui && state.ui.hitTest(event.data.global.x, event.data.global.y)) return;
 
+    if (!state.player || !state.player.isAlive) return;
+
     const pos = event.data.global;
     state.pointerScreenX = pos.x;
     state.pointerScreenY = pos.y;
@@ -300,7 +303,9 @@ function onPointerDown(event: PIXI.FederatedPointerEvent): void {
     endActiveNpcInteraction();
 
     state.pointerHeld = true;
-    movePlayerToPointer();
+    if (state.player && state.player.isAlive) {
+        movePlayerToPointer();
+    }
 }
 
 function onPointerMove(event: PIXI.FederatedPointerEvent): void {
@@ -366,7 +371,7 @@ function gameLoop(ticker: PIXI.Ticker): void {
 
     updateHoverOutline();
 
-    if (state.pointerHeld) {
+    if (state.pointerHeld && state.player.isAlive) {
         movePlayerToPointer();
         state.pendingLootPickup = null;
         state.pendingNpcInteraction = null;

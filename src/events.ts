@@ -14,6 +14,7 @@ import type { GearSlot } from './types';
 export interface GameEventMap {
     'item-equipped':   { slot: GearSlot; item: Item };
     'item-unequipped': { slot: GearSlot };
+    'player-died':     void;
 }
 
 export type GameEventName = keyof GameEventMap;

@@ -59,7 +59,7 @@ class Enemy extends Character {
         if (now - this.lastAttackTime < this.attackCooldown) return;
         this.lastAttackTime = now;
 
-        if (state.player) {
+        if (state.player && state.player.isAlive) {
             const dx = state.player.x - this.x;
             const dy = state.player.y - this.y;
             const angle = Math.atan2(dy, dx) * (180 / Math.PI);
@@ -67,6 +67,9 @@ class Enemy extends Character {
 
             const finalDamage = CombatResolver.resolve(this, state.player, 'slash', this.attackDamage);
             state.player.currentHealth = Math.max(0, state.player.currentHealth - finalDamage);
+            if (state.player.currentHealth <= 0) {
+                state.player.die();
+            }
         }
     }
 
@@ -91,7 +94,7 @@ class Enemy extends Character {
         if (!this.isAlive) return;
         super.update(delta);
 
-        if (state.player) {
+        if (state.player && state.player.isAlive) {
             const dist = this.distanceTo(state.player);
             if (dist <= this.attackRange) {
                 this.state = EnemyState.Attack;

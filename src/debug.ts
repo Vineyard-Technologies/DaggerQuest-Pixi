@@ -308,7 +308,10 @@ function initDebug(): void {
 
             case 'h':
             case 'H':
-                if (state.player) state.player.currentHealth = Math.max(0, state.player.currentHealth - 10);
+                if (state.player) {
+                    state.player.currentHealth = Math.max(0, state.player.currentHealth - 10);
+                    if (state.player.currentHealth <= 0) state.player.die();
+                }
                 break;
 
             case 'm':
