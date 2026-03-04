@@ -1,10 +1,9 @@
 import * as PIXI from 'pixi.js';
-import { SHADOW_BLUR, fetchManifest, assetPath } from './assets';
+import { SHADOW_BLUR, fetchManifest } from './assets';
 import { polyToWorld, NormPoint, WorldPoint } from './collision';
-import { isDefined } from './types';
-
-/** Animation textures: { animName: { direction: Texture[] } } */
-export type AnimationTextures = Record<string, Record<number, PIXI.Texture[]>>;
+import { loadSheetTextures } from './textureLoader';
+export type { AnimationTextures } from './textureLoader';
+import type { AnimationTextures } from './textureLoader';
 
 interface EntityOptions {
     x: number;
@@ -59,45 +58,15 @@ class Entity {
             return;
         }
 
-        const animationTextures: AnimationTextures = {};
         const manifest = await fetchManifest();
-        const sheets = manifest[this.spriteKey] || [];
+        const { textures } = await loadSheetTextures(manifest, this.spriteKey);
 
-        if (sheets.length === 0) {
+        if (Object.keys(textures).length === 0) {
             console.error(`No ${this.spriteKey} spritesheets found in manifest!`);
             return;
         }
 
-        const spritesheets: PIXI.Spritesheet[] = [];
-        for (const sheetPath of sheets) {
-            const fullPath = assetPath(`images/spritesheets/${sheetPath.replace('./', '')}`);
-            const spritesheet = await PIXI.Assets.load(fullPath);
-            spritesheets.push(spritesheet);
-        }
-
-        const keyPattern = new RegExp(`${this.spriteKey}-(\\w+)_([\\-\\d.]+)-(\\d+)`);
-        for (const spritesheet of spritesheets) {
-            for (const frameName in spritesheet.textures) {
-                const match = frameName.match(keyPattern);
-                if (match) {
-                    const animName = match[1]!;
-                    const direction = parseFloat(match[2]!);
-                    const frameNum = parseInt(match[3]!);
-                    if (!animationTextures[animName]) animationTextures[animName] = {};
-                    if (!animationTextures[animName]![direction]) animationTextures[animName]![direction] = [];
-                    animationTextures[animName]![direction]![frameNum] = spritesheet.textures[frameName]!;
-                }
-            }
-        }
-
-        for (const animName in animationTextures) {
-            for (const direction in animationTextures[animName]) {
-                animationTextures[animName]![Number(direction)] =
-                    animationTextures[animName]![Number(direction)]!.filter(isDefined);
-            }
-        }
-
-        this.textures = animationTextures;
+        this.textures = textures;
 
         this._textureMap = new Map();
         for (const animName in this.textures) {
@@ -107,37 +76,9 @@ class Entity {
             }
         }
 
-        const shadowKey = `${this.spriteKey}_shadow`;
-        const shadowSheets = manifest[shadowKey] || [];
-
-        if (shadowSheets.length > 0) {
-            const shadowAnimationTextures: AnimationTextures = {};
-            const shadowKeyPattern = new RegExp(`${shadowKey}-(\\w+)_([\\-\\d.]+)-(\\d+)`);
-
-            for (const sheetPath of shadowSheets) {
-                const fullPath = assetPath(`images/spritesheets/${sheetPath.replace('./', '')}`);
-                const spritesheet = await PIXI.Assets.load(fullPath);
-                for (const frameName in spritesheet.textures) {
-                    const match = frameName.match(shadowKeyPattern);
-                    if (match) {
-                        const animName = match[1]!;
-                        const direction = parseFloat(match[2]!);
-                        const frameNum = parseInt(match[3]!);
-                        if (!shadowAnimationTextures[animName]) shadowAnimationTextures[animName] = {};
-                        if (!shadowAnimationTextures[animName]![direction]) shadowAnimationTextures[animName]![direction] = [];
-                        shadowAnimationTextures[animName]![direction]![frameNum] = spritesheet.textures[frameName]!;
-                    }
-                }
-            }
-
-            for (const animName in shadowAnimationTextures) {
-                for (const direction in shadowAnimationTextures[animName]) {
-                    shadowAnimationTextures[animName]![Number(direction)] =
-                        shadowAnimationTextures[animName]![Number(direction)]!.filter(isDefined);
-                }
-            }
-
-            this.shadowTextures = shadowAnimationTextures;
+        const shadow = await loadSheetTextures(manifest, `${this.spriteKey}_shadow`);
+        if (Object.keys(shadow.textures).length > 0) {
+            this.shadowTextures = shadow.textures;
         }
 
         this.initSprite();

@@ -7,18 +7,22 @@ import type { Loot } from './loot';
 import type { NPC } from './npc';
 import { Inventory } from './inventory';
 
-interface GameState {
-    app: PIXI.Application | null;
-    area: Area | null;
-    player: Player | null;
-    ui: UI | null;
-    inventory: Inventory;
+interface InputState {
     pointerHeld: boolean;
     pointerScreenX: number;
     pointerScreenY: number;
     hoveredEntity: Entity | null;
     pendingLootPickup: Loot | null;
     pendingNpcInteraction: NPC | null;
+}
+
+interface GameState {
+    app: PIXI.Application | null;
+    area: Area | null;
+    player: Player | null;
+    ui: UI | null;
+    inventory: Inventory;
+    input: InputState;
     sessionUptimeMs: number;
 }
 
@@ -28,14 +32,16 @@ const state: GameState = {
     player: null,
     ui: null,
     inventory: new Inventory(25),
-    pointerHeld: false,
-    pointerScreenX: 0,
-    pointerScreenY: 0,
-    hoveredEntity: null,
-    pendingLootPickup: null,
-    pendingNpcInteraction: null,
+    input: {
+        pointerHeld: false,
+        pointerScreenX: 0,
+        pointerScreenY: 0,
+        hoveredEntity: null,
+        pendingLootPickup: null,
+        pendingNpcInteraction: null,
+    },
     sessionUptimeMs: 0,
 } satisfies GameState;
 
 export default state;
-export type { GameState };
+export type { GameState, InputState };

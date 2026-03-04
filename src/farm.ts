@@ -1,15 +1,11 @@
-import { AreaLoader, type AreaDefinition } from './areaLoader';
+import { loadArea, type AreaDefinition } from './areaLoader';
+import type { Area } from './area';
 import farmData from './data/farm.json';
 
 /**
- * The Farm area – the starting zone for the player.
+ * Create the Farm area – the starting zone for the player.
  * All layout data lives in `src/data/farm.json`.
  */
-class Farm extends AreaLoader {
-    constructor() {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        super(farmData as unknown as AreaDefinition);
-    }
+export function createFarm(): Promise<Area> {
+    return loadArea(farmData as unknown as AreaDefinition);
 }
-
-export { Farm };

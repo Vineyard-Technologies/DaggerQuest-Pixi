@@ -1,6 +1,6 @@
 import { Character } from './character';
 import state from './state';
-import { CombatResolver } from './combat';
+import { CombatResolver, type DamageType } from './combat';
 import { EnemyState } from './types';
 
 interface EnemyOptions {
@@ -13,13 +13,14 @@ interface EnemyOptions {
     attackRange?: number;
     aggroRange?: number;
     attackDamage?: number;
+    attackDamageType?: DamageType;
     attackCooldown?: number;
 }
 
 class Enemy extends Character {
-    health: number;
     readonly aggroRange: number;
     readonly attackDamage: number;
+    readonly attackDamageType: DamageType;
     readonly attackCooldown: number;
     private lastAttackTime: number;
     state: EnemyState;
@@ -29,28 +30,20 @@ class Enemy extends Character {
     constructor({
         x, y, spriteKey = 'enemy', speed = 100, animFps = {},
         health = 50, attackRange = 60, aggroRange = 300,
-        attackDamage = 5, attackCooldown = 1000,
+        attackDamage = 5, attackDamageType = 'slash', attackCooldown = 1000,
     }: EnemyOptions) {
         super({ x, y, spriteKey, speed, animFps, attackRange });
-        this.health = health;
+        this.currentHealth = health;
         this.maxHealth = health;
         this.aggroRange = aggroRange;
         this.attackDamage = attackDamage;
+        this.attackDamageType = attackDamageType;
         this.attackCooldown = attackCooldown;
         this.lastAttackTime = 0;
         this.isAlive = true;
         this.state = EnemyState.Idle;
         this.patrolOrigin = { x, y };
         this.patrolRadius = 150;
-    }
-
-    takeDamage(amount: number): void {
-        if (!this.isAlive) return;
-        this.health -= amount;
-        if (this.health <= 0) {
-            this.health = 0;
-            this.die();
-        }
     }
 
     /** Apply this enemy's attack damage to the player using CombatResolver. */
@@ -65,11 +58,8 @@ class Enemy extends Character {
             const angle = Math.atan2(dy, dx) * (180 / Math.PI);
             this.direction = this.findClosestDirection(angle);
 
-            const finalDamage = CombatResolver.resolve(this, state.player, 'slash', this.attackDamage);
-            state.player.currentHealth = Math.max(0, state.player.currentHealth - finalDamage);
-            if (state.player.currentHealth <= 0) {
-                state.player.die();
-            }
+            const finalDamage = CombatResolver.resolve(this, state.player, this.attackDamageType, this.attackDamage);
+            state.player.takeDamage(finalDamage);
         }
     }
 

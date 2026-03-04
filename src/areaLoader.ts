@@ -71,77 +71,54 @@ export interface AreaDefinition {
     loot?: AreaLootDef[];
 }
 
-// ── AreaLoader ────────────────────────────────────────────────────────────
+// ── loadArea ──────────────────────────────────────────────────────────────
 
 /**
- * Construct an `Area` from a plain `AreaDefinition` object (typically loaded
- * from a JSON file) and populate it with all defined objects.
+ * Build an `Area` from a plain `AreaDefinition` (typically loaded from a
+ * JSON file), spawn every object described in the definition, and return
+ * the fully-initialised area ready for use.
  */
-export class AreaLoader extends Area {
-    private readonly _def: AreaDefinition;
+export async function loadArea(def: AreaDefinition): Promise<Area> {
+    const area = new Area(def.area);
 
-    constructor(def: AreaDefinition) {
-        super(def.area);
-        this._def = def;
+    await area.createBackground();
+
+    for (const b of def.boundaries ?? []) {
+        area.boundaries.push(b);
     }
 
-    override async spawnObjects(): Promise<void> {
-        await Promise.all([
-            this._spawnBoundaries(),
-            this._spawnStaticSprites(this._def.buildings ?? []),
-            this._spawnStaticSprites(this._def.fences ?? []),
-            this._spawnStaticSprites(this._def.props ?? []),
-            this._spawnNpcs(),
-            this._spawnEnemies(),
-            this._spawnLoot(),
-        ]);
-    }
-
-    private _spawnBoundaries(): Promise<void> {
-        for (const b of this._def.boundaries ?? []) {
-            this.boundaries.push(b);
-        }
-        return Promise.resolve();
-    }
-
-    private async _spawnStaticSprites(defs: AreaStaticSprite[]): Promise<void> {
-        await Promise.all(defs.map(d =>
-            this.placeStaticSprite(d.key, d.x, d.y, {
-                shadow: d.shadow,
-                collider: d.collider,
-            }),
-        ));
-    }
-
-    private async _spawnNpcs(): Promise<void> {
-        await Promise.all((this._def.npcs ?? []).map(async def => {
+    await Promise.all([
+        ...(def.buildings ?? []).map(d =>
+            area.placeStaticSprite(d.key, d.x, d.y, { shadow: d.shadow, collider: d.collider }),
+        ),
+        ...(def.fences ?? []).map(d =>
+            area.placeStaticSprite(d.key, d.x, d.y, { shadow: d.shadow, collider: d.collider }),
+        ),
+        ...(def.props ?? []).map(d =>
+            area.placeStaticSprite(d.key, d.x, d.y, { shadow: d.shadow, collider: d.collider }),
+        ),
+        ...(def.npcs ?? []).map(async npcDef => {
             const npc = new NPC({
-                x: def.x,
-                y: def.y,
-                spriteKey: def.spriteKey,
-                name: def.name,
-                speed: def.speed,
-                interactRange: def.interactRange,
-                dialog: def.dialog,
+                x: npcDef.x,
+                y: npcDef.y,
+                spriteKey: npcDef.spriteKey,
+                name: npcDef.name,
+                speed: npcDef.speed,
+                interactRange: npcDef.interactRange,
+                dialog: npcDef.dialog,
             });
             await npc.loadTextures();
             npc.startIdlePingPong();
-            this.container.addChild(npc.container);
-            this.npcs.push(npc);
-        }));
-    }
-
-    private async _spawnEnemies(): Promise<void> {
-        await Promise.all((this._def.enemies ?? []).map(async def => {
-            const enemy = new Enemy(def);
+            area.container.addChild(npc.container);
+            area.npcs.push(npc);
+        }),
+        ...(def.enemies ?? []).map(async enemyDef => {
+            const enemy = new Enemy(enemyDef);
             await enemy.loadTextures();
-            this.container.addChild(enemy.container);
-            this.enemies.push(enemy);
-        }));
-    }
-
-    private async _spawnLoot(): Promise<void> {
-        await Promise.all((this._def.loot ?? []).map(async ({ x, y, sortY, item: itemDef }) => {
+            area.container.addChild(enemy.container);
+            area.enemies.push(enemy);
+        }),
+        ...(def.loot ?? []).map(async ({ x, y, sortY, item: itemDef }) => {
             const item = new Item({
                 id: itemDef.id,
                 name: itemDef.name,
@@ -153,9 +130,11 @@ export class AreaLoader extends Area {
             const loot = item.createLoot(x, y);
             await loot.loadTextures();
             if (sortY != null) loot.container.sortY = sortY;
-            this.container.addChild(loot.container);
-            loot.attachLabelsTo(this.lootLabelsContainer);
-            this.lootOnGround.push(loot);
-        }));
-    }
+            area.container.addChild(loot.container);
+            loot.attachLabelsTo(area.lootLabelsContainer);
+            area.lootOnGround.push(loot);
+        }),
+    ]);
+
+    return area;
 }

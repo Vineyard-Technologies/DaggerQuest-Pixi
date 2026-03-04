@@ -197,6 +197,14 @@ class Character extends Entity implements CharacterStats {
         }
     }
 
+    takeDamage(amount: number): void {
+        if (!this.isAlive) return;
+        this.currentHealth = Math.max(0, this.currentHealth - amount);
+        if (this.currentHealth <= 0) {
+            this.die();
+        }
+    }
+
     update(delta: number): void {
         if (!this.isAlive) return;
 

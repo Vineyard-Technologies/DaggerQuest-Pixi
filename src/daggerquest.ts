@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import state from './state';
-import { Farm } from './farm';
+import { createFarm } from './farm';
 import { Man, Woman } from './classes';
 import { UI } from './ui';
 import { bus } from './events';
@@ -69,10 +69,8 @@ async function init(): Promise<void> {
         document.fonts.load('italic 600 14px Grenze'),
     ]);
 
-    state.area = new Farm();
+    state.area = await createFarm();
     state.app.stage.addChild(state.area.container);
-    await state.area.createBackground();
-    await state.area.spawnObjects();
 
     await createPlayer(Woman);
 
@@ -221,25 +219,25 @@ function findHoverableAtPosition(screenX: number, screenY: number): Entity | nul
 }
 
 function updateHoverOutline(): void {
-    const overUI = state.ui && state.ui.hitTest(state.pointerScreenX, state.pointerScreenY);
-    const target = overUI ? null : findHoverableAtPosition(state.pointerScreenX, state.pointerScreenY);
+    const overUI = state.ui && state.ui.hitTest(state.input.pointerScreenX, state.input.pointerScreenY);
+    const target = overUI ? null : findHoverableAtPosition(state.input.pointerScreenX, state.input.pointerScreenY);
 
-    if (target === state.hoveredEntity) return;
+    if (target === state.input.hoveredEntity) return;
 
-    if (state.hoveredEntity && state.hoveredEntity.sprite) {
-        state.hoveredEntity.sprite.filters = state.hoveredEntity.sprite.filters
-            ? state.hoveredEntity.sprite.filters.filter((f: PIXI.Filter) => f !== HOVER_OUTLINE)
+    if (state.input.hoveredEntity && state.input.hoveredEntity.sprite) {
+        state.input.hoveredEntity.sprite.filters = state.input.hoveredEntity.sprite.filters
+            ? state.input.hoveredEntity.sprite.filters.filter((f: PIXI.Filter) => f !== HOVER_OUTLINE)
             : [];
-        if (state.hoveredEntity.sprite.filters.length === 0) {
-            state.hoveredEntity.sprite.filters = null;
+        if (state.input.hoveredEntity.sprite.filters.length === 0) {
+            state.input.hoveredEntity.sprite.filters = null;
         }
     }
 
-    state.hoveredEntity = target;
+    state.input.hoveredEntity = target;
 
-    if (state.hoveredEntity && state.hoveredEntity.sprite) {
-        const existing = state.hoveredEntity.sprite.filters || [];
-        state.hoveredEntity.sprite.filters = [...existing, HOVER_OUTLINE];
+    if (state.input.hoveredEntity && state.input.hoveredEntity.sprite) {
+        const existing = state.input.hoveredEntity.sprite.filters || [];
+        state.input.hoveredEntity.sprite.filters = [...existing, HOVER_OUTLINE];
     }
 }
 
@@ -253,10 +251,10 @@ function onPointerDown(event: PIXI.FederatedPointerEvent): void {
     if (!state.player || !state.player.isAlive) return;
 
     const pos = event.data.global;
-    state.pointerScreenX = pos.x;
-    state.pointerScreenY = pos.y;
+    state.input.pointerScreenX = pos.x;
+    state.input.pointerScreenY = pos.y;
 
-    const loot = findLootAtPosition(state.pointerScreenX, state.pointerScreenY);
+    const loot = findLootAtPosition(state.input.pointerScreenX, state.input.pointerScreenY);
     if (loot) {
         endActiveNpcInteraction();
         const dx = loot.x - state.player!.x;
@@ -264,19 +262,19 @@ function onPointerDown(event: PIXI.FederatedPointerEvent): void {
         const dist = Math.sqrt(dx * dx + dy * dy);
 
         if (dist <= state.player!.pickupRange) {
-            state.pendingLootPickup = null;
+            state.input.pendingLootPickup = null;
             state.player!.pickupAndEquip(loot);
             return;
         }
 
-        state.pendingLootPickup = loot;
+        state.input.pendingLootPickup = loot;
         state.player!.moveToward(loot.x, loot.y);
         return;
     }
 
-    const clickedNpc = findNpcAtPosition(state.pointerScreenX, state.pointerScreenY);
+    const clickedNpc = findNpcAtPosition(state.input.pointerScreenX, state.input.pointerScreenY);
     if (clickedNpc) {
-        state.pendingLootPickup = null;
+        state.input.pendingLootPickup = null;
 
         if (clickedNpc.isInteracting) {
             const next = clickedNpc.advanceDialog();
@@ -294,15 +292,15 @@ function onPointerDown(event: PIXI.FederatedPointerEvent): void {
             return;
         }
 
-        state.pendingNpcInteraction = clickedNpc;
+        state.input.pendingNpcInteraction = clickedNpc;
         state.player!.moveToward(clickedNpc.x, clickedNpc.y);
         return;
     }
 
-    state.pendingLootPickup = null;
+    state.input.pendingLootPickup = null;
     endActiveNpcInteraction();
 
-    state.pointerHeld = true;
+    state.input.pointerHeld = true;
     if (state.player && state.player.isAlive) {
         movePlayerToPointer();
     }
@@ -310,12 +308,12 @@ function onPointerDown(event: PIXI.FederatedPointerEvent): void {
 
 function onPointerMove(event: PIXI.FederatedPointerEvent): void {
     const pos = event.data.global;
-    state.pointerScreenX = pos.x;
-    state.pointerScreenY = pos.y;
+    state.input.pointerScreenX = pos.x;
+    state.input.pointerScreenY = pos.y;
 }
 
 function onPointerUp(): void {
-    state.pointerHeld = false;
+    state.input.pointerHeld = false;
 }
 
 function findNpcAtPosition(screenX: number, screenY: number): NPC | null {
@@ -351,7 +349,7 @@ function startNpcInteraction(npc: NPC): void {
 }
 
 function endActiveNpcInteraction(): void {
-    state.pendingNpcInteraction = null;
+    state.input.pendingNpcInteraction = null;
     if (!state.area?.npcs) return;
     for (const npc of state.area.npcs) {
         if (npc.isInteracting) {
@@ -361,8 +359,8 @@ function endActiveNpcInteraction(): void {
 }
 
 function movePlayerToPointer(): void {
-    const worldX = state.pointerScreenX - state.area!.container.x;
-    const worldY = state.pointerScreenY - state.area!.container.y;
+    const worldX = state.input.pointerScreenX - state.area!.container.x;
+    const worldY = state.input.pointerScreenY - state.area!.container.y;
     state.player!.moveToward(worldX, worldY);
 }
 
@@ -371,10 +369,10 @@ function gameLoop(ticker: PIXI.Ticker): void {
 
     updateHoverOutline();
 
-    if (state.pointerHeld && state.player.isAlive) {
+    if (state.input.pointerHeld && state.player.isAlive) {
         movePlayerToPointer();
-        state.pendingLootPickup = null;
-        state.pendingNpcInteraction = null;
+        state.input.pendingLootPickup = null;
+        state.input.pendingNpcInteraction = null;
     }
 
     const delta = ticker.deltaTime;
@@ -382,12 +380,12 @@ function gameLoop(ticker: PIXI.Ticker): void {
     state.player.update(delta);
     state.player.container.zIndex = state.player.y;
 
-    if (state.pendingLootPickup) {
-        if (!state.pendingLootPickup.sprite || !state.area!.lootOnGround.includes(state.pendingLootPickup)) {
-            state.pendingLootPickup = null;
+    if (state.input.pendingLootPickup) {
+        if (!state.input.pendingLootPickup.sprite || !state.area!.lootOnGround.includes(state.input.pendingLootPickup)) {
+            state.input.pendingLootPickup = null;
         } else {
-            const dx = state.pendingLootPickup.x - state.player.x;
-            const dy = state.pendingLootPickup.y - state.player.y;
+            const dx = state.input.pendingLootPickup.x - state.player.x;
+            const dy = state.input.pendingLootPickup.y - state.player.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
 
             const stopped = !state.player.targetPosition;
@@ -396,23 +394,23 @@ function gameLoop(ticker: PIXI.Ticker): void {
                 : state.player.pickupRange;
 
             if (dist <= range) {
-                const loot = state.pendingLootPickup;
-                state.pendingLootPickup = null;
+                const loot = state.input.pendingLootPickup;
+                state.input.pendingLootPickup = null;
                 state.player.pickupAndEquip(loot);
             } else if (stopped) {
-                state.pendingLootPickup = null;
+                state.input.pendingLootPickup = null;
             }
         }
     }
 
-    if (state.pendingNpcInteraction) {
-        const npc = state.pendingNpcInteraction;
+    if (state.input.pendingNpcInteraction) {
+        const npc = state.input.pendingNpcInteraction;
         const dist = state.player.distanceTo(npc);
         if (dist <= npc.interactRange) {
-            state.pendingNpcInteraction = null;
+            state.input.pendingNpcInteraction = null;
             startNpcInteraction(npc);
         } else if (!state.player.targetPosition) {
-            state.pendingNpcInteraction = null;
+            state.input.pendingNpcInteraction = null;
         }
     }
 

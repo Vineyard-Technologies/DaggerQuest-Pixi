@@ -1029,7 +1029,7 @@ class DragDropController {
             if (entry.placeholder) entry.placeholder.visible = true;
 
             if (state.player) {
-                await state.player.unequipSlotSilent(slotType);
+                await state.player.unequipSlot(slotType);
             }
         } finally {
             this._rightClickBusy = false;
@@ -1215,7 +1215,7 @@ class DragDropController {
             if (!dstItem) {
                 this._equipment.detachIcon(src);
                 await this._inventory.setSlot(dst, srcItem);
-                if (player) await player.unequipSlotSilent(src.slotType);
+                if (player) await player.unequipSlot(src.slotType);
                 return true;
             }
 
@@ -1298,7 +1298,7 @@ class DragDropController {
         state.area.lootOnGround.push(loot);
 
         if (drag.source === UISource.Equipped && state.player) {
-            state.player.unequipSlotSilent((drag.entry as EquippedSlotEntry).slotType);
+            state.player.unequipSlot((drag.entry as EquippedSlotEntry).slotType);
         }
 
         return true;

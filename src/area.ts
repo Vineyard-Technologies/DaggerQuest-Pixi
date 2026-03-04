@@ -60,8 +60,6 @@ class Area {
         this.container.addChild(this.lootLabelsContainer);
     }
 
-    async spawnObjects(): Promise<void> {}
-
     async createBackground(): Promise<void> {
         const texture = await PIXI.Assets.load(assetPath(this.backgroundTexture));
         this.backgroundTile = new PIXI.TilingSprite({ texture, width: this.width, height: this.height * 2 });

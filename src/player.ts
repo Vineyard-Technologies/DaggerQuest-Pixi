@@ -9,29 +9,20 @@ import type { Loot } from './loot';
 class Player extends Character {
     equippedGear: Record<string, Gear>;
     defaultGearSlots: Record<string, string>;
+    private _equipGeneration: Record<string, number>;
 
     constructor({ x, y, spriteKey, speed = 0, animFps = {}, pickupRange = 150, ...rest }: CharacterOptions) {
         super({ x, y, spriteKey, speed, animFps, pickupRange, ...rest });
         this.equippedGear = {};
         this.defaultGearSlots = {};
+        this._equipGeneration = {};
     }
 
-    protected _applyItemStats(item: Item): void {
+    private _adjustItemStats(item: Item, sign: 1 | -1): void {
         if (!item) return;
-        const stats = item.stats;
-        for (const [key, value] of Object.entries(stats)) {
+        for (const [key, value] of Object.entries(item.stats)) {
             if (isCharacterStatKey(key) && typeof this[key] === 'number') {
-                (this[key] as number) += value;
-            }
-        }
-    }
-
-    protected _removeItemStats(item: Item): void {
-        if (!item) return;
-        const stats = item.stats;
-        for (const [key, value] of Object.entries(stats)) {
-            if (isCharacterStatKey(key) && typeof this[key] === 'number') {
-                (this[key] as number) -= value;
+                (this[key] as number) += value * sign;
             }
         }
     }
@@ -51,18 +42,27 @@ class Player extends Character {
             const idx = state.area.lootOnGround.indexOf(loot);
             if (idx !== -1) state.area.lootOnGround.splice(idx, 1);
         }
+        this.equipItem(item);
+    }
+
+    equipItem(item: Item): void {
+        if (!this.isAlive) return;
         const slot = item.slot;
         const oldGear = this.equippedGear[slot];
         if (oldGear && oldGear.item) {
-            this._removeItemStats(oldGear.item);
+            this._adjustItemStats(oldGear.item, -1);
         }
-        this._applyItemStats(item);
+        this._adjustItemStats(item, 1);
 
-        // Gear visuals are fire-and-forget so the UI stays instantaneous.
+        const gen = (this._equipGeneration[slot] ?? 0) + 1;
+        this._equipGeneration[slot] = gen;
+
         const newGear = item.createGear();
         this.equippedGear[slot] = newGear;
         newGear.equip(this).then(() => {
-            if (oldGear) oldGear.unequip();
+            if (this._equipGeneration[slot] === gen && oldGear) oldGear.unequip();
+        }).catch(() => {
+            if (this._equipGeneration[slot] === gen && oldGear) oldGear.unequip();
         });
 
         bus.emit('item-equipped', { slot, item });
@@ -72,16 +72,20 @@ class Player extends Character {
         if (!this.isAlive) return;
         const oldGear = this.equippedGear[slot] || null;
         if (oldGear && oldGear.item) {
-            this._removeItemStats(oldGear.item);
+            this._adjustItemStats(oldGear.item, -1);
         }
 
-        // Gear visuals are fire-and-forget so the UI stays instantaneous.
+        const gen = (this._equipGeneration[slot] ?? 0) + 1;
+        this._equipGeneration[slot] = gen;
+
         const base = this.defaultGearSlots[slot];
         if (base) {
             const defaultGear = new Gear({ slot, spriteKeyBase: base, isDefault: true });
             this.equippedGear[slot] = defaultGear;
             defaultGear.equip(this).then(() => {
-                if (oldGear) oldGear.unequip();
+                if (this._equipGeneration[slot] === gen && oldGear) oldGear.unequip();
+            }).catch(() => {
+                if (this._equipGeneration[slot] === gen && oldGear) oldGear.unequip();
             });
         } else {
             delete this.equippedGear[slot];
@@ -89,46 +93,6 @@ class Player extends Character {
         }
 
         bus.emit('item-unequipped', { slot });
-    }
-
-    equipItem(item: Item): void {
-        if (!this.isAlive) return;
-        const slot = item.slot;
-        const oldGear = this.equippedGear[slot];
-        if (oldGear && oldGear.item) {
-            this._removeItemStats(oldGear.item);
-        }
-        this._applyItemStats(item);
-
-        // Gear visuals are fire-and-forget so the UI stays instantaneous.
-        const newGear = item.createGear();
-        this.equippedGear[slot] = newGear;
-        newGear.equip(this).then(() => {
-            if (oldGear) oldGear.unequip();
-        });
-
-        bus.emit('item-equipped', { slot, item });
-    }
-
-    unequipSlotSilent(slot: GearSlot): void {
-        if (!this.isAlive) return;
-        const oldGear = this.equippedGear[slot] || null;
-        if (oldGear && oldGear.item) {
-            this._removeItemStats(oldGear.item);
-        }
-
-        // Gear visuals are fire-and-forget so the UI stays instantaneous.
-        const base = this.defaultGearSlots[slot];
-        if (base) {
-            const defaultGear = new Gear({ slot, spriteKeyBase: base, isDefault: true });
-            this.equippedGear[slot] = defaultGear;
-            defaultGear.equip(this).then(() => {
-                if (oldGear) oldGear.unequip();
-            });
-        } else {
-            delete this.equippedGear[slot];
-            if (oldGear) oldGear.unequip();
-        }
     }
 
     onAnimationChanged(): void {

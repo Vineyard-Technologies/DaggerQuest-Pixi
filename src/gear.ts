@@ -1,10 +1,11 @@
 import * as PIXI from 'pixi.js';
-import { SHADOW_BLUR, fetchManifest, assetPath } from './assets';
+import { SHADOW_BLUR, fetchManifest } from './assets';
 import { safeDestroy } from './safeDestroy';
+import { loadSheetTextures } from './textureLoader';
 import type { Character } from './character';
-import type { AnimationTextures } from './entity';
+import type { AnimationTextures } from './textureLoader';
 import type { Item } from './item';
-import { GearSlot, isDefined } from './types';
+import { GearSlot } from './types';
 
 const GEAR_SLOT_Z_ORDER = {
     [GearSlot.Feet]:     0,
@@ -94,10 +95,13 @@ class Gear {
 
         const manifest = await fetchManifest();
 
-        await this._loadSheetTextures(manifest, this._spriteKey, this._textures);
+        const main = await loadSheetTextures(manifest, this._spriteKey);
+        this._textures = main.textures;
+        this._assetPaths.push(...main.assetPaths);
 
-        const shadowKey = `${this._spriteKey}_shadow`;
-        await this._loadSheetTextures(manifest, shadowKey, this._shadowTextures);
+        const shadow = await loadSheetTextures(manifest, `${this._spriteKey}_shadow`);
+        this._shadowTextures = shadow.textures;
+        this._assetPaths.push(...shadow.assetPaths);
 
         this._createSprites();
 
@@ -130,42 +134,6 @@ class Gear {
         this._spriteKey = null;
         this._currentAnimName = null;
         this._currentDirection = null;
-    }
-
-    private async _loadSheetTextures(
-        manifest: Record<string, string[]>,
-        key: string,
-        targetObj: AnimationTextures,
-    ): Promise<void> {
-        const sheets = manifest[key] || [];
-        if (sheets.length === 0) return;
-
-        const pattern = new RegExp(`${key}-(\\w+)_([\\-\\d.]+)-(\\d+)`);
-
-        for (const sheetPath of sheets) {
-            const fullPath = assetPath(`images/spritesheets/${sheetPath.replace('./', '')}`);
-            this._assetPaths.push(fullPath);
-            const spritesheet: PIXI.Spritesheet = await PIXI.Assets.load(fullPath);
-
-            for (const frameName in spritesheet.textures) {
-                const match = frameName.match(pattern);
-                if (!match) continue;
-
-                const animName = match[1]!;
-                const direction = parseFloat(match[2]!);
-                const frameNum = parseInt(match[3]!);
-
-                if (!targetObj[animName]) targetObj[animName] = {};
-                if (!targetObj[animName]![direction]) targetObj[animName]![direction] = [];
-                targetObj[animName]![direction]![frameNum] = spritesheet.textures[frameName]!;
-            }
-        }
-
-        for (const anim in targetObj) {
-            for (const dir in targetObj[anim]) {
-                targetObj[anim]![Number(dir)] = targetObj[anim]![Number(dir)]!.filter(isDefined);
-            }
-        }
     }
 
     private _createSprites(): void {

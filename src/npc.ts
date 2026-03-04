@@ -1,7 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Character } from './character';
-import { Entity } from './entity';
-import { safeDestroy } from './safeDestroy';
+import { DialogBox } from './dialogBox';
 import state from './state';
 
 interface NPCOptions {
@@ -16,14 +15,6 @@ interface NPCOptions {
     wanderRadius?: number;
 }
 
-const DIALOG_FONT_SIZE = 14;
-const DIALOG_PAD_X = 8;
-const DIALOG_PAD_Y = 5;
-const DIALOG_WRAP_WIDTH = 200;
-const DIALOG_OFFSET_Y = 8;
-const DIALOG_MAX_HEIGHT = 50;
-const DIALOG_SCROLL_SPEED = 15;
-
 class NPC extends Character {
     readonly name: string;
     readonly interactRange: number;
@@ -32,15 +23,7 @@ class NPC extends Character {
     isInteracting: boolean;
     private readonly wanderOrigin: { readonly x: number; readonly y: number };
     readonly wanderRadius: number;
-    private _dialogWrapper: PIXI.Container | null = null;
-    private _dialogText: PIXI.Text | null = null;
-    private _dialogBg: PIXI.Graphics | null = null;
-    private _dialogScrollContainer: PIXI.Container | null = null;
-    private _dialogMask: PIXI.Graphics | null = null;
-    private _scrollTickerFn: (() => void) | null = null;
-    private _scrollOffset: number = 0;
-    private _scrollMax: number = 0;
-    private _displayHeight: number = 0;
+    private _dialogBox: DialogBox;
 
     constructor({
         x, y, spriteKey = 'guide', name = 'NPC', speed = 50, animFps = {},
@@ -54,129 +37,20 @@ class NPC extends Character {
         this.isInteracting = false;
         this.wanderOrigin = { x, y };
         this.wanderRadius = wanderRadius;
+        this._dialogBox = new DialogBox();
     }
 
     showDialog(text: string): void {
         if (!this.sprite) return;
-
-        // Clean up any previous dialog fully so we rebuild with correct sizing
-        this.hideDialog();
-
-        this._dialogWrapper = new PIXI.Container();
-        this.container.addChild(this._dialogWrapper);
-
-        // Create the text element to measure its natural height
-        this._dialogText = new PIXI.Text({
-            text,
-            style: {
-                fontFamily: 'Grenze, serif',
-                fontSize: DIALOG_FONT_SIZE,
-                fontWeight: '600',
-                fill: 0xFFFFFF,
-                stroke: { color: 0x000000, width: 3 },
-                align: 'center',
-                padding: 4,
-                wordWrap: true,
-                wordWrapWidth: DIALOG_WRAP_WIDTH,
-            },
-        });
-        this._dialogText.anchor.set(0.5, 0);
-
-        const textH = this._dialogText.height;
-        const needsScroll = textH > DIALOG_MAX_HEIGHT;
-        this._displayHeight = needsScroll ? DIALOG_MAX_HEIGHT : textH;
-
-        const labelY = this.sprite.y - (this.sprite.height * this.sprite.anchor.y) - DIALOG_OFFSET_Y;
-
-        // Background
-        this._dialogBg = new PIXI.Graphics();
-        this._dialogBg.y = labelY;
-        this._dialogWrapper.addChild(this._dialogBg);
-
-        if (needsScroll) {
-            // Scrolling container with mask
-            this._dialogScrollContainer = new PIXI.Container();
-            this._dialogScrollContainer.y = labelY - this._displayHeight;
-            this._dialogText.x = 0;
-            this._dialogText.y = 0;
-            this._dialogScrollContainer.addChild(this._dialogText);
-
-            // Mask to clip text to max height
-            const textW = this._dialogText.width;
-            this._dialogMask = new PIXI.Graphics();
-            this._dialogMask.rect(
-                -textW / 2 - DIALOG_PAD_X,
-                0,
-                textW + DIALOG_PAD_X * 2,
-                this._displayHeight,
-            );
-            this._dialogMask.fill({ color: 0xFFFFFF });
-            this._dialogMask.y = labelY - this._displayHeight;
-            this._dialogWrapper.addChild(this._dialogMask);
-            this._dialogScrollContainer.mask = this._dialogMask;
-
-            this._dialogWrapper.addChild(this._dialogScrollContainer);
-
-            // Set up auto-scroll
-            this._scrollOffset = 0;
-            this._scrollMax = textH - this._displayHeight;
-            this._scrollTickerFn = () => {
-                if (!this._dialogScrollContainer || this._scrollMax <= 0) return;
-                this._scrollOffset += DIALOG_SCROLL_SPEED * (PIXI.Ticker.shared.deltaTime / 60);
-                if (this._scrollOffset > this._scrollMax) {
-                    this._scrollOffset = this._scrollMax;
-                }
-                this._dialogScrollContainer.y = (labelY - this._displayHeight) - this._scrollOffset;
-            };
-            PIXI.Ticker.shared.add(this._scrollTickerFn);
-        } else {
-            // No scrolling needed — place text directly
-            this._dialogText.anchor.set(0.5, 1);
-            this._dialogText.y = labelY;
-            this._dialogWrapper.addChild(this._dialogText);
-        }
-
-        this._drawDialogBg();
-        requestAnimationFrame(() => this._drawDialogBg());
-    }
-
-    private _drawDialogBg(): void {
-        if (!this._dialogText || !this._dialogBg) return;
-        const w = this._dialogText.width;
-        const h = this._displayHeight;
-        this._dialogBg.clear();
-        this._dialogBg.roundRect(
-            -w / 2 - DIALOG_PAD_X,
-            -h - DIALOG_PAD_Y,
-            w + DIALOG_PAD_X * 2,
-            h + DIALOG_PAD_Y * 2,
-            4,
-        );
-        this._dialogBg.fill({ color: 0x000000, alpha: 0.7 });
-    }
-
-    private _stopScrollTicker(): void {
-        if (this._scrollTickerFn) {
-            PIXI.Ticker.shared.remove(this._scrollTickerFn);
-            this._scrollTickerFn = null;
-        }
+        this._dialogBox.show(text, this.container, this.sprite);
     }
 
     hideDialog(): void {
-        this._stopScrollTicker();
-        if (this._dialogWrapper) {
-            safeDestroy(this._dialogWrapper, { children: true });
-            this._dialogWrapper = null;
-            this._dialogText = null;
-            this._dialogBg = null;
-            this._dialogScrollContainer = null;
-            this._dialogMask = null;
-        }
+        this._dialogBox.hide();
     }
 
     getDialogBounds(): PIXI.Bounds | null {
-        if (!this._dialogText) return null;
-        return this._dialogText.getBounds();
+        return this._dialogBox.getBounds();
     }
 
     interact(): string | null {
