@@ -271,6 +271,13 @@ function initDebug(): void {
                 if (np) drawPoly(np, 0x00ffff, 0.15, 0x00ffff, 0.7, 1.5);
             }
         }
+
+        // Projectile collision polys (magenta)
+        for (const proj of state.projectiles) {
+            if (!proj.isAlive) continue;
+            const pp = proj.getWorldPoly();
+            drawPoly(pp, 0xff00ff, 0.15, 0xff00ff, 0.7, 1.5);
+        }
     };
 
     app.ticker.add(debugTicker);

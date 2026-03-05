@@ -81,12 +81,13 @@ export class Projectile {
         this.graphics.x = this.x;
         this.graphics.y = this.y;
         this.graphics.rotation = this.angle;
+        this.graphics.visible = false;
     }
 
     get isAlive(): boolean { return this.alive; }
 
     /** Build the oriented-bounding-box polygon in world space. */
-    private getWorldPoly(): WorldPoint[] {
+    getWorldPoly(): WorldPoint[] {
         const cos = Math.cos(this.angle);
         const sin = Math.sin(this.angle);
         const hw = this.rectW / 2;

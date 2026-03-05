@@ -1,3 +1,4 @@
+import * as PIXI from 'pixi.js';
 import { Entity } from './entity';
 import { resolveCollisions, resolveBoundaryCollisions, aabbOverlap, satOverlap, type WorldPoint } from './collision';
 import state from './state';
@@ -138,10 +139,16 @@ class Character extends Entity implements CharacterStats {
     /**
      * Play a named animation as part of an ability cast.
      * Sets `isCasting` for the duration and returns to idle when done.
-     * @param animName  Animation key (e.g. 'attack').
-     * @param onComplete  Optional callback fired after the animation finishes.
+     * @param animName      Animation key (e.g. 'attack').
+     * @param onComplete    Optional callback fired after the animation finishes.
+     * @param frameCallbacks Map of frame index → callback, fired once when
+     *                       that frame is first reached during playback.
      */
-    playAbilityAnimation(animName: string, onComplete?: () => void): void {
+    playAbilityAnimation(
+        animName: string,
+        onComplete?: () => void,
+        frameCallbacks?: Record<number, () => void>,
+    ): void {
         if (!this.sprite) { onComplete?.(); return; }
         const frames = this.getAnimationFrames(animName, this.direction);
         if (frames.length === 0) { onComplete?.(); return; }
@@ -152,7 +159,28 @@ class Character extends Entity implements CharacterStats {
         this.sprite.animationSpeed = this.getAnimFps(animName) / 60;
         this.sprite.gotoAndPlay(0);
         this.onAnimationChanged();
+
+        // Track which frame callbacks have already fired
+        const firedFrames = new Set<number>();
+        let tickerFn: (() => void) | null = null;
+
+        if (frameCallbacks && Object.keys(frameCallbacks).length > 0) {
+            const sprite = this.sprite;
+            tickerFn = () => {
+                const cur = sprite.currentFrame;
+                for (const frameStr in frameCallbacks) {
+                    const frame = Number(frameStr);
+                    if (cur >= frame && !firedFrames.has(frame)) {
+                        firedFrames.add(frame);
+                        frameCallbacks[frame]!();
+                    }
+                }
+            };
+            PIXI.Ticker.shared.add(tickerFn);
+        }
+
         this.sprite.onComplete = () => {
+            if (tickerFn) PIXI.Ticker.shared.remove(tickerFn);
             this.isCasting = false;
             this.startIdlePingPong();
             onComplete?.();

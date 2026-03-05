@@ -33,6 +33,9 @@ export interface BasicAttackProjectileOpts {
     color?: number;
     /** Fill alpha 0–1. */
     alpha?: number;
+    /** Animation frame index (0-based) on which the projectile is spawned.
+     *  Defaults to 0 (fires immediately when anim starts). */
+    fireFrame?: number;
 }
 
 /** Default projectile shape for enemies that don't specify one. */
@@ -67,44 +70,61 @@ function createBasicAttackDef(opts: {
             if (!target || !target.isAlive) return;
             if (!state.area) return;
 
+            // Capture narrowed target for use inside closures
+            const attackTarget = target;
+
             // Face target
             const dx = target.x - caster.x;
             const dy = target.y - caster.y;
             const angle = Math.atan2(dy, dx);
             caster.direction = caster.findClosestDirection(angle * (180 / Math.PI));
 
-            // Play the attack animation (sets isCasting for the duration)
-            caster.playAbilityAnimation('attack');
+            const fireFrame = proj.fireFrame ?? 0;
 
-            // Resolve damage once up front (based on stats at fire-time)
-            const finalDamage = CombatResolver.resolve(
-                caster, target, opts.damageType, opts.damage,
-            );
+            // Helper: spawn the projectile (called on the fire frame)
+            function spawnProjectile(): void {
+                if (!state.area) return;
+                if (!attackTarget.isAlive) return;
 
-            // Spawn projectile
-            const projectile = new Projectile({
-                x: caster.x,
-                y: caster.y,
-                angle,
-                speed: proj.speed,
-                maxDistance: proj.maxDistance,
-                width: proj.width,
-                height: proj.height,
-                color: proj.color,
-                alpha: proj.alpha,
-                owner: caster,
-                targets: () => {
-                    const t: Character[] = [];
-                    if (state.player && state.player.isAlive) t.push(state.player as unknown as Character);
-                    return t;
-                },
-                onHit(hit) {
-                    hit.takeDamage(finalDamage);
-                },
+                // Resolve damage at the moment of firing
+                const finalDamage = CombatResolver.resolve(
+                    caster, attackTarget, opts.damageType, opts.damage,
+                );
+
+                // Re-compute angle from caster's current position
+                const fdx = attackTarget.x - caster.x;
+                const fdy = attackTarget.y - caster.y;
+                const fireAngle = Math.atan2(fdy, fdx);
+
+                const projectile = new Projectile({
+                    x: caster.x,
+                    y: caster.y,
+                    angle: fireAngle,
+                    speed: proj.speed,
+                    maxDistance: proj.maxDistance,
+                    width: proj.width,
+                    height: proj.height,
+                    color: proj.color,
+                    alpha: proj.alpha,
+                    owner: caster,
+                    targets: () => {
+                        const t: Character[] = [];
+                        if (state.player && state.player.isAlive) t.push(state.player as unknown as Character);
+                        return t;
+                    },
+                    onHit(hit) {
+                        hit.takeDamage(finalDamage);
+                    },
+                });
+
+                state.projectiles.push(projectile);
+                state.area.container.addChild(projectile.graphics);
+            }
+
+            // Play the attack animation, firing the projectile on the specified frame
+            caster.playAbilityAnimation('attack', undefined, {
+                [fireFrame]: spawnProjectile,
             });
-
-            state.projectiles.push(projectile);
-            state.area.container.addChild(projectile.graphics);
         },
     };
 }
