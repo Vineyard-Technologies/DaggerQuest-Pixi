@@ -23,7 +23,6 @@ export const enum GearSlot {
 /** Possible states in the enemy AI state machine. */
 export const enum EnemyState {
     Idle   = 'idle',
-    Patrol = 'patrol',
     Chase  = 'chase',
     Attack = 'attack',
 }

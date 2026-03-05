@@ -88,27 +88,27 @@
     {
       "x": 971,  "y": 1480, "spriteKey": "goblinunderling",
       "speed": 200, "health": 10, "attackRange": 150,
-      "aggroRange": 300, "attackDamage": 7, "attackCooldown": 1000
+      "attackDamage": 7, "attackCooldown": 1000
     },
     {
       "x": 1429, "y": 1614, "spriteKey": "goblinunderling",
       "speed": 200, "health": 10, "attackRange": 150,
-      "aggroRange": 300, "attackDamage": 7, "attackCooldown": 1000
+      "attackDamage": 7, "attackCooldown": 1000
     },
     {
       "x": 3002, "y": 304,  "spriteKey": "goblinarcher",
       "speed": 200, "health": 10, "attackRange": 400,
-      "aggroRange": 500, "attackDamage": 10, "attackCooldown": 1000
+      "attackDamage": 10, "attackCooldown": 1000
     },
     {
       "x": 3676, "y": 466,  "spriteKey": "goblinarcher",
       "speed": 200, "health": 10, "attackRange": 400,
-      "aggroRange": 500, "attackDamage": 10, "attackCooldown": 1000
+      "attackDamage": 10, "attackCooldown": 1000
     },
     {
       "x": 2374, "y": 1195, "spriteKey": "goblinwarlock",
       "speed": 200, "health": 10, "attackRange": 300,
-      "aggroRange": 400, "attackDamage": 11, "attackCooldown": 2500
+      "attackDamage": 11, "attackCooldown": 2500
     }
   ],
   "loot": [

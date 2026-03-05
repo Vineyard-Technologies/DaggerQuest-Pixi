@@ -39,7 +39,6 @@ interface AreaEnemyDef {
     speed?: number;
     health?: number;
     attackRange?: number;
-    aggroRange?: number;
     attackDamage?: number;
     attackCooldown?: number;
 }
