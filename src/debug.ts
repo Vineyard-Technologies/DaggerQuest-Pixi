@@ -21,11 +21,14 @@
  *   F5  – Toggle debug mode on/off
  *   H   – Reduce player health by 10
  *   M   – Reduce player mana by 10
+ *   F6  – Toggle invincibility
+ *   F7  – Spawn a random enemy in front of the player
  */
 
 import * as PIXI from 'pixi.js';
 import state from './state';
 import { Character } from './character';
+import { Enemy } from './enemy';
 
 declare global {
     interface Window {
@@ -38,6 +41,7 @@ interface DebugState {
     showCollision: boolean;
     noclip: boolean;
     teleportMode: boolean;
+    invincible: boolean;
     gameSpeed: number;
     speedOptions: number[];
     speedIndex: number;
@@ -94,6 +98,7 @@ function exitDebug(): void {
     window.DEBUG.showCollision = false;
     window.DEBUG.noclip = false;
     window.DEBUG.teleportMode = false;
+    window.DEBUG.invincible = false;
     window.DEBUG.gameSpeed = 1;
     window.DEBUG.speedIndex = 2;
 
@@ -116,6 +121,7 @@ function initDebug(): void {
         showCollision: false,
         noclip: false,
         teleportMode: false,
+        invincible: false,
         gameSpeed: 1,
         speedOptions: [0.25, 0.5, 1, 2, 5, 10],
         speedIndex: 2, // starts at 1×
@@ -152,6 +158,14 @@ function initDebug(): void {
 
     // ── Noclip – monkey-patch Character.prototype.update ────────────
 
+    // ── Invincibility – monkey-patch Character.prototype.takeDamage ──
+
+    const _origTakeDamage = Character.prototype.takeDamage;
+    Character.prototype.takeDamage = function (this: Character, amount: number) {
+        if (window.DEBUG?.invincible && this === state.player) return;
+        _origTakeDamage.call(this, amount);
+    };
+
     const _origCharUpdate = Character.prototype.update;
     Character.prototype.update = function (this: Character, delta: number) {
         if (window.DEBUG?.noclip && this === state.player) {
@@ -185,12 +199,14 @@ function initDebug(): void {
             lines.push('Speed: ' + window.DEBUG.gameSpeed + '\u00d7');
         }
         if (window.DEBUG.noclip) lines.push('NOCLIP');
+        if (window.DEBUG.invincible) lines.push('INVINCIBLE');
         if (window.DEBUG.teleportMode) lines.push('TELEPORT (Shift+Click)');
         if (window.DEBUG.showCollision) lines.push('COLLISION');
         lines.push('');
         lines.push('F1 collision | F2 noclip');
         lines.push('F3 teleport  | F4 reset speed');
         lines.push('+/- speed    | F5 toggle debug');
+        lines.push('F6 invincible| F7 spawn enemy');
 
         debugText.text = lines.join('\n');
 
@@ -306,6 +322,16 @@ function initDebug(): void {
                 PIXI.Ticker.shared.speed = window.DEBUG.gameSpeed;
                 break;
 
+            case 'F6':
+                e.preventDefault();
+                window.DEBUG.invincible = !window.DEBUG.invincible;
+                break;
+
+            case 'F7':
+                e.preventDefault();
+                spawnRandomEnemy();
+                break;
+
             case 'h':
             case 'H':
                 if (state.player) {
@@ -340,6 +366,30 @@ function initDebug(): void {
         state.player.targetPosition = null;
         state.player.stopWalkAnimation();
     });
+
+    // ── Spawn random enemy ────────────────────────────────────────
+
+    const ENEMY_TEMPLATES = [
+        { spriteKey: 'goblinunderling', speed: 200, health: 10, attackRange: 150, attackDamage: 7, attackCooldown: 1000 },
+        { spriteKey: 'goblinarcher',    speed: 200, health: 10, attackRange: 400, attackDamage: 10, attackCooldown: 1000 },
+        { spriteKey: 'goblinwarlock',   speed: 200, health: 10, attackRange: 150, attackDamage: 7, attackCooldown: 1000 },
+    ];
+
+    async function spawnRandomEnemy(): Promise<void> {
+        if (!state.area) return;
+
+        const template = ENEMY_TEMPLATES[Math.floor(Math.random() * ENEMY_TEMPLATES.length)]!;
+
+        // Spawn at the cursor's world position
+        const spawnX = state.input.pointerScreenX - state.area.container.x;
+        const spawnY = state.input.pointerScreenY - state.area.container.y;
+
+        const enemy = new Enemy({ ...template, x: spawnX, y: spawnY });
+        await enemy.loadTextures();
+        state.area.container.addChild(enemy.container);
+        state.area.enemies.push(enemy);
+        enemy.startIdlePingPong();
+    }
 
     // ── Activation message ──────────────────────────────────────────
 

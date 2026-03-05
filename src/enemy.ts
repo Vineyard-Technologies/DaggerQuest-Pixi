@@ -21,6 +21,7 @@ class Enemy extends Character {
     readonly attackDamageType: DamageType;
     readonly attackCooldown: number;
     private lastAttackTime: number;
+    private isAttacking: boolean;
     state: EnemyState;
 
     constructor({
@@ -35,6 +36,7 @@ class Enemy extends Character {
         this.attackDamageType = attackDamageType;
         this.attackCooldown = attackCooldown;
         this.lastAttackTime = 0;
+        this.isAttacking = false;
         this.isAlive = true;
         this.state = EnemyState.Idle;
     }
@@ -62,12 +64,14 @@ class Enemy extends Character {
         if (!this.sprite) return;
         const attackFrames = this.getAnimationFrames('attack', this.direction);
         if (attackFrames.length === 0) return;
+        this.isAttacking = true;
         this.isWalking = false;
         this.sprite.textures = attackFrames;
         this.sprite.loop = false;
         this.sprite.animationSpeed = this.getAnimFps('attack') / 60;
         this.sprite.gotoAndPlay(0);
         this.sprite.onComplete = () => {
+            this.isAttacking = false;
             this.startIdlePingPong();
         };
     }
@@ -95,6 +99,8 @@ class Enemy extends Character {
     update(delta: number): void {
         if (!this.isAlive) return;
         super.update(delta);
+
+        if (this.isAttacking) return;
 
         if (state.player && state.player.isAlive && this.isOnScreen()) {
             const dist = this.distanceTo(state.player);
