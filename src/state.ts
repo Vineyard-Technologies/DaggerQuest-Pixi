@@ -5,6 +5,7 @@ import type { UI } from './ui';
 import type { Entity } from './entity';
 import type { Loot } from './loot';
 import type { NPC } from './npc';
+import type { Projectile } from './projectile';
 import { Inventory } from './inventory';
 
 interface InputState {
@@ -22,6 +23,7 @@ interface GameState {
     player: Player | null;
     ui: UI | null;
     inventory: Inventory;
+    projectiles: Projectile[];
     input: InputState;
     sessionUptimeMs: number;
 }
@@ -32,6 +34,7 @@ const state: GameState = {
     player: null,
     ui: null,
     inventory: new Inventory(25),
+    projectiles: [],
     input: {
         pointerHeld: false,
         pointerScreenX: 0,

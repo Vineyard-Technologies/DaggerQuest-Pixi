@@ -2,6 +2,8 @@ import { Character } from './character';
 import state from './state';
 import { CombatResolver, type DamageType } from './combat';
 import { EnemyState } from './types';
+import { Ability, type AbilityDef } from './ability';
+import { Projectile } from './projectile';
 
 interface EnemyOptions {
     x: number;
@@ -14,66 +16,123 @@ interface EnemyOptions {
     attackDamage?: number;
     attackDamageType?: DamageType;
     attackCooldown?: number;
+    projectile?: Partial<BasicAttackProjectileOpts>;
+}
+
+/** Options that shape the projectile spawned by a basic attack. */
+export interface BasicAttackProjectileOpts {
+    /** Rectangle width (perpendicular to travel direction). */
+    width: number;
+    /** Rectangle height (along the travel direction). */
+    height: number;
+    /** Projectile travel speed (px per frame-second). */
+    speed: number;
+    /** Maximum travel distance before the projectile vanishes. */
+    maxDistance: number;
+    /** Fill colour (hex). */
+    color?: number;
+    /** Fill alpha 0–1. */
+    alpha?: number;
+}
+
+/** Default projectile shape for enemies that don't specify one. */
+const DEFAULT_PROJECTILE: BasicAttackProjectileOpts = {
+    width: 60,
+    height: 10,
+    speed: 800,
+    maxDistance: 150,
+    color: 0xffffff,
+    alpha: 0.6,
+};
+
+/**
+ * Create an AbilityDef for a projectile-based attack: face target → play
+ * attack animation → spawn a rectangular projectile that travels toward
+ * the target and deals damage on hit.
+ */
+function createBasicAttackDef(opts: {
+    damage: number;
+    damageType: DamageType;
+    cooldown: number;
+    range: number;
+    projectile?: Partial<BasicAttackProjectileOpts>;
+}): AbilityDef {
+    const proj = { ...DEFAULT_PROJECTILE, ...opts.projectile };
+    return {
+        id: 'basic_attack',
+        name: 'Basic Attack',
+        cooldown: opts.cooldown,
+        range: opts.range,
+        execute({ caster, target }) {
+            if (!target || !target.isAlive) return;
+            if (!state.area) return;
+
+            // Face target
+            const dx = target.x - caster.x;
+            const dy = target.y - caster.y;
+            const angle = Math.atan2(dy, dx);
+            caster.direction = caster.findClosestDirection(angle * (180 / Math.PI));
+
+            // Play the attack animation (sets isCasting for the duration)
+            caster.playAbilityAnimation('attack');
+
+            // Resolve damage once up front (based on stats at fire-time)
+            const finalDamage = CombatResolver.resolve(
+                caster, target, opts.damageType, opts.damage,
+            );
+
+            // Spawn projectile
+            const projectile = new Projectile({
+                x: caster.x,
+                y: caster.y,
+                angle,
+                speed: proj.speed,
+                maxDistance: proj.maxDistance,
+                width: proj.width,
+                height: proj.height,
+                color: proj.color,
+                alpha: proj.alpha,
+                owner: caster,
+                targets: () => {
+                    const t: Character[] = [];
+                    if (state.player && state.player.isAlive) t.push(state.player as unknown as Character);
+                    return t;
+                },
+                onHit(hit) {
+                    hit.takeDamage(finalDamage);
+                },
+            });
+
+            state.projectiles.push(projectile);
+            state.area.container.addChild(projectile.graphics);
+        },
+    };
 }
 
 class Enemy extends Character {
-    readonly attackDamage: number;
-    readonly attackDamageType: DamageType;
-    readonly attackCooldown: number;
-    private lastAttackTime: number;
-    private isAttacking: boolean;
     state: EnemyState;
 
     constructor({
         x, y, spriteKey = 'enemy', speed = 100, animFps = {},
         health = 50, attackRange = 60,
         attackDamage = 5, attackDamageType = 'slash', attackCooldown = 1000,
+        projectile,
     }: EnemyOptions) {
         super({ x, y, spriteKey, speed, animFps, attackRange });
         this.currentHealth = health;
         this.maxHealth = health;
-        this.attackDamage = attackDamage;
-        this.attackDamageType = attackDamageType;
-        this.attackCooldown = attackCooldown;
-        this.lastAttackTime = 0;
-        this.isAttacking = false;
         this.isAlive = true;
         this.state = EnemyState.Idle;
-    }
 
-    /** Apply this enemy's attack damage to the player using CombatResolver. */
-    tryAttack(): void {
-        const now = performance.now();
-        if (now - this.lastAttackTime < this.attackCooldown) return;
-        this.lastAttackTime = now;
-
-        if (state.player && state.player.isAlive) {
-            const dx = state.player.x - this.x;
-            const dy = state.player.y - this.y;
-            const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-            this.direction = this.findClosestDirection(angle);
-
-            this.playAttackAnimation();
-
-            const finalDamage = CombatResolver.resolve(this, state.player, this.attackDamageType, this.attackDamage);
-            state.player.takeDamage(finalDamage);
-        }
-    }
-
-    private playAttackAnimation(): void {
-        if (!this.sprite) return;
-        const attackFrames = this.getAnimationFrames('attack', this.direction);
-        if (attackFrames.length === 0) return;
-        this.isAttacking = true;
-        this.isWalking = false;
-        this.sprite.textures = attackFrames;
-        this.sprite.loop = false;
-        this.sprite.animationSpeed = this.getAnimFps('attack') / 60;
-        this.sprite.gotoAndPlay(0);
-        this.sprite.onComplete = () => {
-            this.isAttacking = false;
-            this.startIdlePingPong();
-        };
+        // Build the basic‑attack ability from the legacy attack params
+        this.basicAbility = new Ability(createBasicAttackDef({
+            damage: attackDamage,
+            damageType: attackDamageType,
+            cooldown: attackCooldown,
+            range: attackRange,
+            projectile,
+        }));
+        this.abilities = [this.basicAbility];
     }
 
     die(): void {
@@ -100,15 +159,16 @@ class Enemy extends Character {
         if (!this.isAlive) return;
         super.update(delta);
 
-        if (this.isAttacking) return;
+        if (this.isCasting) return;
 
         if (state.player && state.player.isAlive && this.isOnScreen()) {
             const dist = this.distanceTo(state.player);
-            if (dist <= this.attackRange) {
+            const range = this.basicAbility?.range ?? this.attackRange;
+            if (dist <= range) {
                 this.state = EnemyState.Attack;
                 this.targetPosition = null;
                 this.stopWalkAnimation();
-                this.tryAttack();
+                this.basicAbility?.use({ caster: this, target: state.player });
             } else {
                 this.state = EnemyState.Chase;
                 this.moveToward(state.player.x, state.player.y);
@@ -121,4 +181,4 @@ class Enemy extends Character {
     }
 }
 
-export { Enemy };
+export { Enemy, createBasicAttackDef };

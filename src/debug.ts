@@ -370,9 +370,9 @@ function initDebug(): void {
     // ── Spawn random enemy ────────────────────────────────────────
 
     const ENEMY_TEMPLATES = [
-        { spriteKey: 'goblinunderling', speed: 200, health: 10, attackRange: 150, attackDamage: 7, attackCooldown: 1000 },
-        { spriteKey: 'goblinarcher',    speed: 200, health: 10, attackRange: 400, attackDamage: 10, attackCooldown: 1000 },
-        { spriteKey: 'goblinwarlock',   speed: 200, health: 10, attackRange: 150, attackDamage: 7, attackCooldown: 1000 },
+        { spriteKey: 'goblinunderling', speed: 200, health: 10, attackRange: 150, attackDamage: 7, attackCooldown: 1000, projectile: { width: 80, height: 14, speed: 1200, maxDistance: 120, color: 0xaaaaaa, alpha: 0.7 } },
+        { spriteKey: 'goblinarcher',    speed: 200, health: 10, attackRange: 400, attackDamage: 10, attackCooldown: 1000, projectile: { width: 8, height: 30, speed: 600, maxDistance: 500, color: 0x8b4513, alpha: 0.9 } },
+        { spriteKey: 'goblinwarlock',   speed: 200, health: 10, attackRange: 150, attackDamage: 7, attackCooldown: 1000, projectile: { width: 16, height: 16, speed: 400, maxDistance: 350, color: 0x6700ff, alpha: 0.8 } },
     ];
 
     async function spawnRandomEnemy(): Promise<void> {

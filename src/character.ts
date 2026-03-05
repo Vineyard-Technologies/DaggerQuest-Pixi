@@ -4,6 +4,7 @@ import state from './state';
 import { bus } from './events';
 import { CHARACTER_COLLISION_WIDTH, CHARACTER_COLLISION_HEIGHT } from './config';
 import { DEFAULT_CHARACTER_STATS, type CharacterStats, type CharacterStatKey } from './types';
+import { Ability } from './ability';
 
 export interface CharacterOptions extends Partial<CharacterStats> {
     x: number;
@@ -21,6 +22,9 @@ class Character extends Entity implements CharacterStats {
     targetPosition: { x: number; y: number } | null;
     isWalking: boolean;
     isAlive: boolean;
+    isCasting: boolean;
+    abilities: Ability[];
+    basicAbility: Ability | null;
     private idlePingPongForward: boolean;
 
     level!: number;
@@ -65,6 +69,9 @@ class Character extends Entity implements CharacterStats {
         this.targetPosition = null;
         this.isWalking = false;
         this.isAlive = true;
+        this.isCasting = false;
+        this.abilities = [];
+        this.basicAbility = null;
         this.idlePingPongForward = true;
         Object.assign(this, DEFAULT_CHARACTER_STATS, statOpts);
     }
@@ -126,6 +133,30 @@ class Character extends Entity implements CharacterStats {
 
     onAnimationChanged(): void {
         // Override in subclasses (e.g. Player syncs gear here)
+    }
+
+    /**
+     * Play a named animation as part of an ability cast.
+     * Sets `isCasting` for the duration and returns to idle when done.
+     * @param animName  Animation key (e.g. 'attack').
+     * @param onComplete  Optional callback fired after the animation finishes.
+     */
+    playAbilityAnimation(animName: string, onComplete?: () => void): void {
+        if (!this.sprite) { onComplete?.(); return; }
+        const frames = this.getAnimationFrames(animName, this.direction);
+        if (frames.length === 0) { onComplete?.(); return; }
+        this.isCasting = true;
+        this.isWalking = false;
+        this.sprite.textures = frames;
+        this.sprite.loop = false;
+        this.sprite.animationSpeed = this.getAnimFps(animName) / 60;
+        this.sprite.gotoAndPlay(0);
+        this.onAnimationChanged();
+        this.sprite.onComplete = () => {
+            this.isCasting = false;
+            this.startIdlePingPong();
+            onComplete?.();
+        };
     }
 
     moveToward(worldX: number, worldY: number): void {
@@ -192,7 +223,7 @@ class Character extends Entity implements CharacterStats {
         this.targetPosition = null;
         this.stopWalkAnimation();
         this.startDieAnimation();
-        if (this === state.player) {
+        if ((this as Character) === (state.player as Character | null)) {
             bus.emit('player-died', undefined as never);
         }
     }

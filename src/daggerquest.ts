@@ -418,6 +418,15 @@ function gameLoop(ticker: PIXI.Ticker): void {
         state.area.update(delta);
     }
 
+    // Update projectiles, removing dead ones
+    for (let i = state.projectiles.length - 1; i >= 0; i--) {
+        const proj = state.projectiles[i]!;
+        if (!proj.update(delta)) {
+            proj.destroy();
+            state.projectiles.splice(i, 1);
+        }
+    }
+
     updateCamera();
 
     if (state.ui) {
