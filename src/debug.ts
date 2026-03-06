@@ -9,16 +9,16 @@
  *   debug()
  *
  * Deactivate without restarting:
- *   F5 key (toggles debug on/off)
+ *   F1 key (toggles debug on/off)
  *   – or – exitdebug() from the browser console
  *
  * Features:
- *   F1  – Toggle collision polygon visualization
+ *   F5  – Toggle collision polygon visualization
  *   F2  – Toggle noclip (walk through everything)
  *   F3  – Toggle teleport mode (Shift+Click to teleport)
  *   +/- – Increase / decrease game speed
  *   F4  – Reset game speed to 1×
- *   F5  – Toggle debug mode on/off
+ *   F1  – Toggle debug mode on/off
  *   H   – Reduce player health by 10
  *   M   – Reduce player mana by 10
  *   F6  – Toggle invincibility
@@ -28,7 +28,7 @@
 import * as PIXI from 'pixi.js';
 import state from './state';
 import { Character } from './character';
-import { Enemy } from './enemy';
+import { createEnemy } from './enemy';
 
 declare global {
     interface Window {
@@ -203,9 +203,9 @@ function initDebug(): void {
         if (window.DEBUG.teleportMode) lines.push('TELEPORT (Shift+Click)');
         if (window.DEBUG.showCollision) lines.push('COLLISION');
         lines.push('');
-        lines.push('F1 collision | F2 noclip');
+        lines.push('F5 collision | F2 noclip');
         lines.push('F3 teleport  | F4 reset speed');
-        lines.push('+/- speed    | F5 toggle debug');
+        lines.push('+/- speed    | F1 toggle debug');
         lines.push('F6 invincible| F7 spawn enemy');
 
         debugText.text = lines.join('\n');
@@ -289,7 +289,7 @@ function initDebug(): void {
         if (!window.DEBUG.active) return;
 
         switch (e.key) {
-            case 'F1':
+            case 'F5':
                 e.preventDefault();
                 window.DEBUG.showCollision = !window.DEBUG.showCollision;
                 if (!window.DEBUG.showCollision) collGfx.clear();
@@ -376,22 +376,18 @@ function initDebug(): void {
 
     // ── Spawn random enemy ────────────────────────────────────────
 
-    const ENEMY_TEMPLATES = [
-        { spriteKey: 'goblinunderling', speed: 200, health: 10, attackRange: 150, attackDamage: 7, attackCooldown: 1000, projectile: { width: 80, height: 14, speed: 1200, maxDistance: 120, color: 0xaaaaaa, alpha: 0.7 } },
-        { spriteKey: 'goblinarcher',    speed: 200, health: 10, attackRange: 400, attackDamage: 10, attackCooldown: 1000, projectile: { width: 8, height: 30, speed: 600, maxDistance: 500, color: 0x8b4513, alpha: 0.9 } },
-        { spriteKey: 'goblinwarlock',   speed: 200, health: 10, attackRange: 150, attackDamage: 7, attackCooldown: 1000, projectile: { width: 16, height: 16, speed: 400, maxDistance: 350, color: 0x6700ff, alpha: 0.8 } },
-    ];
+    const ENEMY_SPRITE_KEYS = ['goblinunderling', 'goblinarcher', 'goblinwarlock'];
 
     async function spawnRandomEnemy(): Promise<void> {
         if (!state.area) return;
 
-        const template = ENEMY_TEMPLATES[Math.floor(Math.random() * ENEMY_TEMPLATES.length)]!;
+        const spriteKey = ENEMY_SPRITE_KEYS[Math.floor(Math.random() * ENEMY_SPRITE_KEYS.length)]!;
 
         // Spawn at the cursor's world position
         const spawnX = state.input.pointerScreenX - state.area.container.x;
         const spawnY = state.input.pointerScreenY - state.area.container.y;
 
-        const enemy = new Enemy({ ...template, x: spawnX, y: spawnY });
+        const enemy = createEnemy(spriteKey, spawnX, spawnY);
         await enemy.loadTextures();
         state.area.container.addChild(enemy.container);
         state.area.enemies.push(enemy);

@@ -102,7 +102,7 @@ async function init(): Promise<void> {
     });
 
     // Debug module – only loaded during development, excluded from production builds.
-    // Activate/deactivate with F5, or from the browser console with debug() / exitdebug()
+    // Activate/deactivate with F1, or from the browser console with debug() / exitdebug()
     if (import.meta.env.DEV) {
         (window as unknown as Record<string, unknown>).debug = async () => {
             const { initDebug } = await import('./debug');
@@ -113,7 +113,7 @@ async function init(): Promise<void> {
             exitDebug();
         };
         window.addEventListener('keydown', async (e: KeyboardEvent) => {
-            if (e.key === 'F5') {
+            if (e.key === 'F1') {
                 e.preventDefault();
                 if (window.DEBUG?.active) {
                     const { exitDebug } = await import('./debug');

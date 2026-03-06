@@ -41,3 +41,38 @@ export async function fetchManifest(): Promise<Record<string, string[]>> {
     }
     return _manifest!;
 }
+
+// ── Frame tags ───────────────────────────────────────────────────────────
+
+/** Per-animation tag data.  Extensible — add new tag keys as needed. */
+export interface AnimFrameTags {
+    fireFrame?: number;
+    // Future: footstep?: number[];
+    [key: string]: unknown;
+}
+
+/** animation name → tags.  Loaded from src/data/frameTags/{spriteKey}.json. */
+export type FrameTags = Record<string, AnimFrameTags>;
+
+const _frameTagsCache = new Map<string, FrameTags>();
+
+/**
+ * Fetch (and cache) the frame-tags file for a spriteKey.
+ * Returns an empty object if no file exists for that key.
+ */
+export async function fetchFrameTags(spriteKey: string): Promise<FrameTags> {
+    const cached = _frameTagsCache.get(spriteKey);
+    if (cached) return cached;
+
+    try {
+        const resp = await fetch(assetPath(`src/data/frameTags/${spriteKey}.json`));
+        if (!resp.ok) throw new Error(resp.statusText);
+        const tags: FrameTags = await resp.json();
+        _frameTagsCache.set(spriteKey, tags);
+        return tags;
+    } catch {
+        const empty: FrameTags = {};
+        _frameTagsCache.set(spriteKey, empty);
+        return empty;
+    }
+}

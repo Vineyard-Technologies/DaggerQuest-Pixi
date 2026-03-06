@@ -85,36 +85,11 @@
     }
   ],
   "enemies": [
-    {
-      "x": 971,  "y": 1480, "spriteKey": "goblinunderling",
-      "speed": 200, "health": 10, "attackRange": 150,
-      "attackDamage": 7, "attackCooldown": 1000,
-      "projectile": { "width": 80, "height": 14, "speed": 1200, "maxDistance": 120, "color": 11184810, "alpha": 0.7 }
-    },
-    {
-      "x": 1429, "y": 1614, "spriteKey": "goblinunderling",
-      "speed": 200, "health": 10, "attackRange": 150,
-      "attackDamage": 7, "attackCooldown": 1000,
-      "projectile": { "width": 80, "height": 14, "speed": 1200, "maxDistance": 120, "color": 11184810, "alpha": 0.7 }
-    },
-    {
-      "x": 3002, "y": 304,  "spriteKey": "goblinarcher",
-      "speed": 200, "health": 10, "attackRange": 400,
-      "attackDamage": 10, "attackCooldown": 1000,
-      "projectile": { "width": 8, "height": 30, "speed": 600, "maxDistance": 500, "color": 9127187, "alpha": 0.9 }
-    },
-    {
-      "x": 3676, "y": 466,  "spriteKey": "goblinarcher",
-      "speed": 200, "health": 10, "attackRange": 400,
-      "attackDamage": 10, "attackCooldown": 1000,
-      "projectile": { "width": 8, "height": 30, "speed": 600, "maxDistance": 500, "color": 9127187, "alpha": 0.9 }
-    },
-    {
-      "x": 2374, "y": 1195, "spriteKey": "goblinwarlock",
-      "speed": 200, "health": 10, "attackRange": 300,
-      "attackDamage": 11, "attackCooldown": 2500,
-      "projectile": { "width": 16, "height": 16, "speed": 400, "maxDistance": 350, "color": 6750207, "alpha": 0.8 }
-    }
+    { "x": 971,  "y": 1480, "spriteKey": "goblinunderling" },
+    { "x": 1429, "y": 1614, "spriteKey": "goblinunderling" },
+    { "x": 3002, "y": 304,  "spriteKey": "goblinarcher" },
+    { "x": 3676, "y": 466,  "spriteKey": "goblinarcher" },
+    { "x": 2374, "y": 1195, "spriteKey": "goblinwarlock" }
   ],
   "loot": [
     {

@@ -7,7 +7,7 @@
 
 import { Area, type AreaOptions } from './area';
 import { NPC } from './npc';
-import { Enemy } from './enemy';
+import { createEnemy } from './enemy';
 import { Item } from './item';
 import type { GearSlot } from './types';
 import type { RolledMod } from './mods';
@@ -36,11 +36,6 @@ interface AreaEnemyDef {
     x: number;
     y: number;
     spriteKey?: string;
-    speed?: number;
-    health?: number;
-    attackRange?: number;
-    attackDamage?: number;
-    attackCooldown?: number;
 }
 
 interface AreaItemDef {
@@ -112,7 +107,7 @@ export async function loadArea(def: AreaDefinition): Promise<Area> {
             area.npcs.push(npc);
         }),
         ...(def.enemies ?? []).map(async enemyDef => {
-            const enemy = new Enemy(enemyDef);
+            const enemy = createEnemy(enemyDef.spriteKey!, enemyDef.x, enemyDef.y);
             await enemy.loadTextures();
             area.container.addChild(enemy.container);
             area.enemies.push(enemy);

@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
-import { SHADOW_BLUR, fetchManifest } from './assets';
+import { SHADOW_BLUR, fetchManifest, fetchFrameTags } from './assets';
+import type { FrameTags } from './assets';
 import { polyToWorld, NormPoint, WorldPoint } from './collision';
 import { loadSheetTextures } from './textureLoader';
 export type { AnimationTextures } from './textureLoader';
@@ -27,6 +28,7 @@ class Entity {
     sprite: PIXI.AnimatedSprite | null;
     shadowSprite: PIXI.AnimatedSprite | null = null;
     shadowTextures: AnimationTextures | null = null;
+    frameTags: FrameTags = {};
     private _collisionPolyNorm: NormPoint[] | null;
     _textureMap: Map<PIXI.Texture[], { animName: string; direction: number }> | null = null;
     private _lastSpriteTextures: PIXI.Texture[] | null = null;
@@ -80,6 +82,8 @@ class Entity {
         if (Object.keys(shadow.textures).length > 0) {
             this.shadowTextures = shadow.textures;
         }
+
+        this.frameTags = await fetchFrameTags(this.spriteKey);
 
         this.initSprite();
     }

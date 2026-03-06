@@ -79,7 +79,10 @@ function createBasicAttackDef(opts: {
             const angle = Math.atan2(dy, dx);
             caster.direction = caster.findClosestDirection(angle * (180 / Math.PI));
 
-            const fireFrame = proj.fireFrame ?? 0;
+            // Resolve fire frame: explicit projectile opt > frameTags > 0
+            const fireFrame = proj.fireFrame
+                ?? caster.frameTags['attack']?.fireFrame
+                ?? 0;
 
             // Helper: spawn the projectile (called on the fire frame)
             function spawnProjectile(): void {
@@ -144,7 +147,6 @@ class Enemy extends Character {
         this.isAlive = true;
         this.state = EnemyState.Idle;
 
-        // Build the basic‑attack ability from the legacy attack params
         this.basicAbility = new Ability(createBasicAttackDef({
             damage: attackDamage,
             damageType: attackDamageType,
@@ -201,4 +203,70 @@ class Enemy extends Character {
     }
 }
 
-export { Enemy, createBasicAttackDef };
+// ── Enemy subclasses ────────────────────────────────────────────────────────
+
+interface EnemySpawnOptions {
+    x: number;
+    y: number;
+}
+
+class GoblinUnderling extends Enemy {
+    constructor({ x, y }: EnemySpawnOptions) {
+        super({
+            x, y,
+            spriteKey: 'goblinunderling',
+            speed: 200,
+            health: 10,
+            attackRange: 150,
+            attackDamage: 7,
+            attackCooldown: 1000,
+            projectile: { width: 80, height: 14, speed: 1200, maxDistance: 120, color: 0xaaaaaa, alpha: 0.7 },
+        });
+    }
+}
+
+class GoblinArcher extends Enemy {
+    constructor({ x, y }: EnemySpawnOptions) {
+        super({
+            x, y,
+            spriteKey: 'goblinarcher',
+            speed: 200,
+            health: 10,
+            attackRange: 400,
+            attackDamage: 10,
+            attackCooldown: 1000,
+            projectile: { width: 8, height: 30, speed: 600, maxDistance: 500, color: 0x8b4513, alpha: 0.9 },
+        });
+    }
+}
+
+class GoblinWarlock extends Enemy {
+    constructor({ x, y }: EnemySpawnOptions) {
+        super({
+            x, y,
+            spriteKey: 'goblinwarlock',
+            speed: 200,
+            health: 10,
+            attackRange: 450,
+            attackDamage: 11,
+            attackCooldown: 2500,
+            projectile: { width: 16, height: 16, speed: 400, maxDistance: 500, color: 0x6700ff, alpha: 0.8 },
+        });
+    }
+}
+
+// ── Factory ─────────────────────────────────────────────────────────────────
+
+const ENEMY_CLASSES: Record<string, new (opts: EnemySpawnOptions) => Enemy> = {
+    goblinunderling: GoblinUnderling,
+    goblinarcher: GoblinArcher,
+    goblinwarlock: GoblinWarlock,
+};
+
+function createEnemy(spriteKey: string, x: number, y: number): Enemy {
+    const EnemyClass = ENEMY_CLASSES[spriteKey];
+    if (!EnemyClass) throw new Error(`Unknown enemy type: "${spriteKey}"`);
+    return new EnemyClass({ x, y });
+}
+
+export { Enemy, GoblinUnderling, GoblinArcher, GoblinWarlock, createEnemy, createBasicAttackDef };
