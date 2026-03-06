@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { fetchManifest, assetPath } from './assets';
+import { fetchManifest, assetPath, trackSpritesheet } from './assets';
 import { safeDestroy } from './safeDestroy';
 import state from './state';
 import {
@@ -1365,6 +1365,7 @@ class UI {
             for (const sheetPath of sheets) {
                 const fullPath = assetPath(`images/spritesheets/${sheetPath.replace('./', '')}`);
                 const spritesheet: PIXI.Spritesheet = await PIXI.Assets.load(fullPath);
+                trackSpritesheet(spritesheet);
                 const names = Object.keys(spritesheet.textures);
                 if (names.length > 0) return spritesheet.textures[names[0]!]!;
             }

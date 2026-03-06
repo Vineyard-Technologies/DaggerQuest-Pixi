@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { assetPath } from './assets';
+import { assetPath, trackSpritesheet } from './assets';
 import { isDefined } from './types';
 
 /** Animation textures: { animName: { direction: Texture[] } } */
@@ -30,6 +30,7 @@ export async function loadSheetTextures(
         const fullPath = assetPath(`images/spritesheets/${sheetPath.replace('./', '')}`);
         assetPaths.push(fullPath);
         const spritesheet: PIXI.Spritesheet = await PIXI.Assets.load(fullPath);
+        trackSpritesheet(spritesheet);
 
         for (const frameName in spritesheet.textures) {
             const match = frameName.match(pattern);

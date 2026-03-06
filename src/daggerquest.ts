@@ -4,6 +4,7 @@ import { createFarm } from './farm';
 import { Man, Woman } from './classes';
 import { UI } from './ui';
 import { bus } from './events';
+import { releaseTrackedCPUData } from './assets';
 import { HOVER_OUTLINE } from './outlineFilter';
 import { Entity } from './entity';
 import type { Loot } from './loot';
@@ -90,6 +91,13 @@ async function init(): Promise<void> {
     state.app.stage.on('pointerupoutside', onPointerUp);
 
     state.app.ticker.add(gameLoop);
+
+    // After the first render uploads textures to GPU, free CPU-side image data.
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            releaseTrackedCPUData();
+        });
+    });
 
     window.addEventListener('keydown', (e: KeyboardEvent) => {
         if (!state.player) return;

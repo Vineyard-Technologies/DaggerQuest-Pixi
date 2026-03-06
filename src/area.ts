@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { COLLISION_POLYS, DEFAULT_BOX, polyToWorld, WorldPoint, NormPoint, Boundary } from './collision';
-import { SHADOW_BLUR, fetchManifest, assetPath } from './assets';
+import { SHADOW_BLUR, fetchManifest, assetPath, trackSpritesheet, trackTexture } from './assets';
 import type { Enemy } from './enemy';
 import type { NPC } from './npc';
 import type { Loot } from './loot';
@@ -62,6 +62,7 @@ class Area {
 
     async createBackground(): Promise<void> {
         const texture = await PIXI.Assets.load(assetPath(this.backgroundTexture));
+        trackTexture(texture);
         this.backgroundTile = new PIXI.TilingSprite({ texture, width: this.width, height: this.height * 2 });
         this.backgroundTile.tileRotation = Math.PI / 8;
         this.backgroundTile.scale.y = 0.5;
@@ -92,6 +93,7 @@ class Area {
             if (shadowSheets.length > 0) {
                 const shadowPath = assetPath(`images/spritesheets/${shadowSheets[0]!.replace('./', '')}`);
                 const shadowSheet = await PIXI.Assets.load(shadowPath);
+                trackSpritesheet(shadowSheet);
                 const shadowTexName = Object.keys(shadowSheet.textures)[0];
                 if (shadowTexName) {
                     const shadowSprite = new PIXI.Sprite(shadowSheet.textures[shadowTexName]);
@@ -104,6 +106,7 @@ class Area {
 
         const fullPath = assetPath(`images/spritesheets/${sheets[0]!.replace('./', '')}`);
         const spritesheet = await PIXI.Assets.load(fullPath);
+        trackSpritesheet(spritesheet);
         const textureName = Object.keys(spritesheet.textures)[0];
         if (textureName) {
             const sprite = new PIXI.Sprite(spritesheet.textures[textureName]);

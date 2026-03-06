@@ -48,6 +48,7 @@ interface DebugState {
     overlay: PIXI.Text | null;
     collisionGraphics: PIXI.Graphics | null;
     tickerCallback: (() => void) | null;
+    frameStartCallback: (() => void) | null;
 }
 
 function formatUptime(ms: number): string {
@@ -80,10 +81,14 @@ function exitDebug(): void {
         window.DEBUG.overlay = null;
     }
 
-    // Remove ticker callback
+    // Remove ticker callbacks
     if (window.DEBUG.tickerCallback) {
         app.ticker.remove(window.DEBUG.tickerCallback);
         window.DEBUG.tickerCallback = null;
+    }
+    if (window.DEBUG.frameStartCallback) {
+        app.ticker.remove(window.DEBUG.frameStartCallback);
+        window.DEBUG.frameStartCallback = null;
     }
 
     // Remove collision graphics
@@ -128,6 +133,7 @@ function initDebug(): void {
         overlay: null,
         collisionGraphics: null,
         tickerCallback: null,
+        frameStartCallback: null,
     };
     const app = state.app!;
     const area = state.area!;
@@ -155,6 +161,35 @@ function initDebug(): void {
     (collGfx as PIXI.Graphics & { sortY: number }).sortY = Infinity;
     window.DEBUG.collisionGraphics = collGfx;
     area.container.addChild(collGfx);
+
+    // ── System metrics (queried once at debug activation) ───────────
+
+    let gpuRendererName = 'N/A';
+    let gpuTotalVRAM_KB = 0;
+    try {
+        const renderer = app.renderer as any;
+        const gl: WebGL2RenderingContext | null = renderer.context?.gl ?? null;
+        if (gl) {
+            const debugExt = gl.getExtension('WEBGL_debug_renderer_info');
+            if (debugExt) {
+                let raw = gl.getParameter(debugExt.UNMASKED_RENDERER_WEBGL) as string;
+                const m = raw.match(/ANGLE \([^,]*,\s*([^,]+)/);
+                if (m) raw = m[1].replace(/\s+Direct3D.*$/, '').trim();
+                gpuRendererName = raw.length > 48 ? raw.substring(0, 48) + '\u2026' : raw;
+            }
+            // NVIDIA VRAM via NVX_gpu_memory_info (may work through ANGLE)
+            try {
+                const kb = gl.getParameter(0x9047);
+                if (kb && typeof kb === 'number' && kb > 0) gpuTotalVRAM_KB = kb;
+            } catch { /* not available */ }
+        }
+    } catch { /* WebGL info unavailable */ }
+
+    let frameDurationSmoothed = 0;
+    let frameStartTime = 0;
+    const frameStartCb = () => { frameStartTime = performance.now(); };
+    app.ticker.add(frameStartCb, undefined, PIXI.UPDATE_PRIORITY.HIGH);
+    window.DEBUG.frameStartCallback = frameStartCb;
 
     // ── Noclip – monkey-patch Character.prototype.update ────────────
 
@@ -189,8 +224,44 @@ function initDebug(): void {
         const player = state.player;
 
         // ── Overlay text ────────────────────────────────────────────
+        // Frame processing time → CPU utilization estimate
+        const frameProcessingMs = performance.now() - frameStartTime;
+        frameDurationSmoothed = frameDurationSmoothed === 0
+            ? frameProcessingMs
+            : frameDurationSmoothed * 0.9 + frameProcessingMs * 0.1;
+        const targetMs = 1000 / 60;
+        const cpuPct = Math.min(100, Math.round((frameDurationSmoothed / targetMs) * 100));
+
         const lines = ['[DEBUG]'];
         lines.push('FPS: ' + Math.round(app.ticker.FPS));
+        lines.push('CPU: ' + cpuPct + '% (' + frameDurationSmoothed.toFixed(1) + 'ms)');
+        lines.push('GPU: ' + gpuRendererName);
+
+        // JS heap memory (Chromium browsers only)
+        const perfMem = (performance as any).memory;
+        if (perfMem) {
+            const usedMB = Math.round(perfMem.usedJSHeapSize / (1024 * 1024));
+            const limitMB = Math.round(perfMem.jsHeapSizeLimit / (1024 * 1024));
+            lines.push('RAM: ' + usedMB + ' MB / ' + limitMB + ' MB');
+        } else {
+            lines.push('RAM: N/A');
+        }
+
+        // GPU VRAM (NVIDIA via NVX extension)
+        if (gpuTotalVRAM_KB > 0) {
+            try {
+                const gl: WebGL2RenderingContext = (app.renderer as any).context?.gl;
+                const availKB = gl.getParameter(0x9048) as number;
+                const usedMB = Math.round((gpuTotalVRAM_KB - availKB) / 1024);
+                const totalMB = Math.round(gpuTotalVRAM_KB / 1024);
+                lines.push('VRAM: ' + usedMB + ' MB / ' + totalMB + ' MB');
+            } catch {
+                lines.push('VRAM: N/A');
+            }
+        } else {
+            lines.push('VRAM: N/A');
+        }
+
         lines.push('Uptime: ' + formatUptime(state.sessionUptimeMs));
         if (player) {
             lines.push('Pos: ' + Math.round(player.x) + ', ' + Math.round(player.y));
