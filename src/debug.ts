@@ -164,26 +164,78 @@ function initDebug(): void {
 
     // ── System metrics (queried once at debug activation) ───────────
 
+    const renderer = app.renderer as any;
+    const isWebGPU = renderer.name === 'webgpu';
     let gpuRendererName = 'N/A';
-    let gpuTotalVRAM_KB = 0;
+
     try {
-        const renderer = app.renderer as any;
-        const gl: WebGL2RenderingContext | null = renderer.context?.gl ?? null;
-        if (gl) {
-            const debugExt = gl.getExtension('WEBGL_debug_renderer_info');
-            if (debugExt) {
-                let raw = gl.getParameter(debugExt.UNMASKED_RENDERER_WEBGL) as string;
-                const m = raw.match(/ANGLE \([^,]*,\s*([^,]+)/);
-                if (m) raw = m[1].replace(/\s+Direct3D.*$/, '').trim();
-                gpuRendererName = raw.length > 48 ? raw.substring(0, 48) + '\u2026' : raw;
+        if (isWebGPU) {
+            // WebGPU path – adapter.info has GPU details
+            const adapter: GPUAdapter | null = renderer.gpu?.adapter ?? null;
+            if (adapter) {
+                const info = adapter.info;
+                const device = info.device || '';
+                const vendor = info.vendor || '';
+                const arch = info.architecture || '';
+                let name = device || [vendor, arch].filter(Boolean).join(' ');
+                if (!name) name = 'WebGPU';
+                gpuRendererName = name.length > 48 ? name.substring(0, 48) + '\u2026' : name;
+            } else {
+                gpuRendererName = 'WebGPU';
             }
-            // NVIDIA VRAM via NVX_gpu_memory_info (may work through ANGLE)
-            try {
-                const kb = gl.getParameter(0x9047);
-                if (kb && typeof kb === 'number' && kb > 0) gpuTotalVRAM_KB = kb;
-            } catch { /* not available */ }
+        } else {
+            // WebGL path
+            const glContext: WebGL2RenderingContext | null = renderer.context?.gl ?? null;
+            if (glContext) {
+                const debugExt = glContext.getExtension('WEBGL_debug_renderer_info');
+                if (debugExt) {
+                    let raw = glContext.getParameter(debugExt.UNMASKED_RENDERER_WEBGL) as string;
+                    const m = raw.match(/ANGLE \([^,]*,\s*([^,]+)/);
+                    if (m) raw = m[1].replace(/\s+Direct3D.*$/, '').trim();
+                    gpuRendererName = raw.length > 48 ? raw.substring(0, 48) + '\u2026' : raw;
+                }
+            }
         }
-    } catch { /* WebGL info unavailable */ }
+    } catch { /* GPU info unavailable */ }
+
+    /** Bytes per pixel for common GPU texture formats. */
+    function bytesPerPixel(format: string): number {
+        if (format.startsWith('rgba32'))  return 16;
+        if (format.startsWith('rgba16'))  return 8;
+        if (format.startsWith('rgba8'))   return 4;
+        if (format.startsWith('bgra8'))   return 4;
+        if (format.startsWith('rg32'))    return 8;
+        if (format.startsWith('rg16'))    return 4;
+        if (format.startsWith('rg8'))     return 2;
+        if (format.startsWith('r32'))     return 4;
+        if (format.startsWith('r16'))     return 2;
+        if (format.startsWith('r8'))      return 1;
+        if (format.startsWith('depth32')) return 4;
+        if (format.startsWith('depth24')) return 4;
+        if (format.startsWith('depth16')) return 2;
+        // BC / ASTC compressed – rough average
+        if (format.startsWith('bc1') || format.startsWith('bc4'))  return 0.5;
+        if (format.startsWith('bc'))      return 1;
+        if (format.startsWith('astc'))    return 1;
+        return 4; // default assumption: 4 bytes (RGBA8)
+    }
+
+    /** Sum VRAM for all textures currently managed by the renderer. */
+    function calcTextureVRAM(): number {
+        let totalBytes = 0;
+        const managed: PIXI.TextureSource[] = renderer.texture?.managedTextures ?? [];
+        for (const src of managed) {
+            if (!src) continue;
+            const w = src.pixelWidth;
+            const h = src.pixelHeight;
+            const bpp = bytesPerPixel(src.format);
+            let texBytes = w * h * bpp;
+            // Account for mipmaps (adds ~33%)
+            if (src.mipLevelCount > 1) texBytes *= 1.33;
+            totalBytes += texBytes;
+        }
+        return totalBytes;
+    }
 
     let frameDurationSmoothed = 0;
     let frameStartTime = 0;
@@ -235,7 +287,7 @@ function initDebug(): void {
         const lines = ['[DEBUG]'];
         lines.push('FPS: ' + Math.round(app.ticker.FPS));
         lines.push('CPU: ' + cpuPct + '% (' + frameDurationSmoothed.toFixed(1) + 'ms)');
-        lines.push('GPU: ' + gpuRendererName);
+        lines.push('GPU: ' + gpuRendererName + (isWebGPU ? ' (WebGPU)' : ' (WebGL)'));
 
         // JS heap memory (Chromium browsers only)
         const perfMem = (performance as any).memory;
@@ -247,20 +299,11 @@ function initDebug(): void {
             lines.push('RAM: N/A');
         }
 
-        // GPU VRAM (NVIDIA via NVX extension)
-        if (gpuTotalVRAM_KB > 0) {
-            try {
-                const gl: WebGL2RenderingContext = (app.renderer as any).context?.gl;
-                const availKB = gl.getParameter(0x9048) as number;
-                const usedMB = Math.round((gpuTotalVRAM_KB - availKB) / 1024);
-                const totalMB = Math.round(gpuTotalVRAM_KB / 1024);
-                lines.push('VRAM: ' + usedMB + ' MB / ' + totalMB + ' MB');
-            } catch {
-                lines.push('VRAM: N/A');
-            }
-        } else {
-            lines.push('VRAM: N/A');
-        }
+        // GPU VRAM – running total of managed texture memory
+        const vramBytes = calcTextureVRAM();
+        const vramMB = (vramBytes / (1024 * 1024)).toFixed(1);
+        const texCount = (renderer.texture?.managedTextures ?? []).length;
+        lines.push('VRAM: ~' + vramMB + ' MB (' + texCount + ' textures)');
 
         lines.push('Uptime: ' + formatUptime(state.sessionUptimeMs));
         if (player) {
