@@ -10,6 +10,7 @@ import { Entity } from './entity';
 import type { Loot } from './loot';
 import { NPC } from './npc';
 import type { Player } from './player';
+import { waitForLogin, setLoadingProgress, hideOverlays } from './login';
 
 type PlayerClass = new (opts: { x: number; y: number }) => Player;
 
@@ -50,6 +51,11 @@ function enforceFrameOrigin(): void {
 async function init(): Promise<void> {
     enforceFrameOrigin();
 
+    // Wait for the user to log in before loading the heavy game assets.
+    await waitForLogin();
+
+    setLoadingProgress(5, 'Initializing engine…');
+
     state.app = new PIXI.Application();
     await state.app.init({
         resizeTo: window,
@@ -64,16 +70,24 @@ async function init(): Promise<void> {
 
     document.addEventListener('contextmenu', (e: Event) => e.preventDefault());
 
+    setLoadingProgress(15, 'Loading fonts…');
+
     await Promise.all([
         document.fonts.load('600 14px Cinzel'),
         document.fonts.load('600 14px Grenze'),
         document.fonts.load('italic 600 14px Grenze'),
     ]);
 
+    setLoadingProgress(30, 'Building world…');
+
     state.area = await createFarm();
     state.app.stage.addChild(state.area.container);
 
+    setLoadingProgress(60, 'Creating player…');
+
     await createPlayer(Woman);
+
+    setLoadingProgress(80, 'Preparing UI…');
 
     state.ui = new UI();
     await state.ui.load();
@@ -91,6 +105,11 @@ async function init(): Promise<void> {
     state.app.stage.on('pointerupoutside', onPointerUp);
 
     state.app.ticker.add(gameLoop);
+
+    setLoadingProgress(100, 'Ready!');
+    // Brief pause so the user sees 100 % before the overlay fades out.
+    await new Promise(r => setTimeout(r, 400));
+    hideOverlays();
 
     // After the first render uploads textures to GPU, free CPU-side image data.
     requestAnimationFrame(() => {
