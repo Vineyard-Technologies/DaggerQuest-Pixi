@@ -31,6 +31,7 @@ class Character extends Entity implements CharacterStats {
     level!: number;
     experience!: number;
     actionSpeed!: number;
+    attackSpeed!: number;
     pickupRange!: number;
     attackRange!: number;
     currentHealth!: number;
@@ -156,7 +157,8 @@ class Character extends Entity implements CharacterStats {
         this.isWalking = false;
         this.sprite.textures = frames;
         this.sprite.loop = false;
-        this.sprite.animationSpeed = this.getAnimFps(animName) / 60;
+        const baseFps = this.getAnimFps(animName) / 60;
+        this.sprite.animationSpeed = animName === 'attack' ? baseFps * this.attackSpeed : baseFps;
         this.sprite.gotoAndPlay(0);
         this.onAnimationChanged();
 

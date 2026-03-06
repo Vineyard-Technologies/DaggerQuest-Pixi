@@ -15,7 +15,7 @@ interface EnemyOptions {
     attackRange?: number;
     attackDamage?: number;
     attackDamageType?: DamageType;
-    attackCooldown?: number;
+    attackSpeed?: number;
     projectile?: Partial<BasicAttackProjectileOpts>;
 }
 
@@ -138,10 +138,10 @@ class Enemy extends Character {
     constructor({
         x, y, spriteKey = 'enemy', speed = 100, animFps = {},
         health = 50, attackRange = 60,
-        attackDamage = 5, attackDamageType = 'slash', attackCooldown = 1000,
+        attackDamage = 5, attackDamageType = 'slash', attackSpeed = 1,
         projectile,
     }: EnemyOptions) {
-        super({ x, y, spriteKey, speed, animFps, attackRange });
+        super({ x, y, spriteKey, speed, animFps, attackRange, attackSpeed });
         this.currentHealth = health;
         this.maxHealth = health;
         this.isAlive = true;
@@ -150,7 +150,7 @@ class Enemy extends Character {
         this.basicAbility = new Ability(createBasicAttackDef({
             damage: attackDamage,
             damageType: attackDamageType,
-            cooldown: attackCooldown,
+            cooldown: 0,
             range: attackRange,
             projectile,
         }));
@@ -219,7 +219,7 @@ class GoblinUnderling extends Enemy {
             health: 10,
             attackRange: 150,
             attackDamage: 7,
-            attackCooldown: 1000,
+            attackSpeed: 1,
             projectile: { width: 80, height: 14, speed: 1200, maxDistance: 120, color: 0xaaaaaa, alpha: 0.7 },
         });
     }
@@ -234,7 +234,7 @@ class GoblinArcher extends Enemy {
             health: 10,
             attackRange: 400,
             attackDamage: 10,
-            attackCooldown: 1000,
+            attackSpeed: 1,
             projectile: { width: 8, height: 30, speed: 600, maxDistance: 500, color: 0x8b4513, alpha: 0.9 },
         });
     }
@@ -249,7 +249,7 @@ class GoblinWarlock extends Enemy {
             health: 10,
             attackRange: 450,
             attackDamage: 11,
-            attackCooldown: 2500,
+            attackSpeed: 0.6,
             projectile: { width: 16, height: 16, speed: 400, maxDistance: 500, color: 0x6700ff, alpha: 0.8 },
         });
     }

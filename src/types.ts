@@ -51,6 +51,7 @@ export interface CharacterStats {
     level: number;
     experience: number;
     actionSpeed: number;
+    attackSpeed: number;
     pickupRange: number;
     attackRange: number;
     currentHealth: number;
@@ -87,6 +88,7 @@ export const DEFAULT_CHARACTER_STATS: Readonly<CharacterStats> = {
     level: 1,
     experience: 0,
     actionSpeed: 1,
+    attackSpeed: 1,
     pickupRange: 150,
     attackRange: 50,
     currentHealth: 100,
