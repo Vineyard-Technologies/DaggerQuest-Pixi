@@ -89,11 +89,15 @@ export type FrameTags = Record<string, AnimFrameTags>;
 
 const _frameTagsCache = new Map<string, FrameTags>();
 
+const FRAME_TAG_KEYS = new Set(['goblinarcher', 'goblinunderling', 'goblinwarlock']);
+
 /**
  * Fetch (and cache) the frame-tags file for a spriteKey.
  * Returns an empty object if no file exists for that key.
  */
 export async function fetchFrameTags(spriteKey: string): Promise<FrameTags> {
+    if (!FRAME_TAG_KEYS.has(spriteKey)) return {};
+
     const cached = _frameTagsCache.get(spriteKey);
     if (cached) return cached;
 
