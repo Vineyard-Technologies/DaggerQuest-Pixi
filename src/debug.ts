@@ -191,7 +191,7 @@ function initDebug(): void {
                 if (debugExt) {
                     let raw = glContext.getParameter(debugExt.UNMASKED_RENDERER_WEBGL) as string;
                     const m = raw.match(/ANGLE \([^,]*,\s*([^,]+)/);
-                    if (m) raw = m[1].replace(/\s+Direct3D.*$/, '').trim();
+                    if (m?.[1]) raw = m[1].replace(/\s+Direct3D.*$/, '').trim();
                     gpuRendererName = raw.length > 48 ? raw.substring(0, 48) + '\u2026' : raw;
                 }
             }

@@ -106,4 +106,39 @@ class NPC extends Character {
     }
 }
 
-export { NPC };
+// ── NPC subclasses ──────────────────────────────────────────────────────────
+
+interface NPCSpawnOptions {
+    x: number;
+    y: number;
+}
+
+class Guide extends NPC {
+    constructor({ x, y }: NPCSpawnOptions) {
+        super({
+            x, y,
+            spriteKey: 'guide',
+            name: 'The Guide',
+            speed: 50,
+            interactRange: 350,
+            dialog: [
+                'Welcome, traveler. These lands grow ever more dangerous.',
+                'Take what supplies you can from the tables and prepare yourself. The goblins to the north have grown bolder since the old watchtower fell, and their raiding parties strike without warning. You would do well to arm yourself before venturing too far from the safety of this farmstead.',
+            ],
+        });
+    }
+}
+
+// ── Factory ─────────────────────────────────────────────────────────────────
+
+const NPC_CLASSES: Record<string, new (opts: NPCSpawnOptions) => NPC> = {
+    guide: Guide,
+};
+
+function createNPC(spriteKey: string, x: number, y: number): NPC {
+    const NPCClass = NPC_CLASSES[spriteKey];
+    if (!NPCClass) throw new Error(`Unknown NPC type: "${spriteKey}"`);
+    return new NPCClass({ x, y });
+}
+
+export { NPC, Guide, createNPC };

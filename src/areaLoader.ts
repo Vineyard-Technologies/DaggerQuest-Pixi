@@ -6,7 +6,7 @@
  */
 
 import { Area, type AreaOptions } from './area';
-import { NPC } from './npc';
+import { createNPC } from './npc';
 import { createEnemy } from './enemy';
 import { Item } from './item';
 import type { GearSlot } from './types';
@@ -26,10 +26,6 @@ interface AreaNpcDef {
     x: number;
     y: number;
     spriteKey: string;
-    name: string;
-    speed?: number;
-    interactRange?: number;
-    dialog?: string[];
 }
 
 interface AreaEnemyDef {
@@ -92,15 +88,7 @@ export async function loadArea(def: AreaDefinition): Promise<Area> {
             area.placeStaticSprite(d.key, d.x, d.y, { shadow: d.shadow, collider: d.collider }),
         ),
         ...(def.npcs ?? []).map(async npcDef => {
-            const npc = new NPC({
-                x: npcDef.x,
-                y: npcDef.y,
-                spriteKey: npcDef.spriteKey,
-                name: npcDef.name,
-                speed: npcDef.speed,
-                interactRange: npcDef.interactRange,
-                dialog: npcDef.dialog,
-            });
+            const npc = createNPC(npcDef.spriteKey, npcDef.x, npcDef.y);
             await npc.loadTextures();
             npc.startIdlePingPong();
             area.container.addChild(npc.container);

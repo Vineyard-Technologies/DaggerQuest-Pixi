@@ -71,18 +71,7 @@
     { "key": "pillaroffate",  "x": 1377, "y": 3702 }
   ],
   "npcs": [
-    {
-      "x": 2571,
-      "y": 3584,
-      "spriteKey": "guide",
-      "name": "The Guide",
-      "speed": 50,
-      "interactRange": 350,
-      "dialog": [
-        "Welcome, traveler. These lands grow ever more dangerous.",
-        "Take what supplies you can from the tables and prepare yourself. The goblins to the north have grown bolder since the old watchtower fell, and their raiding parties strike without warning. You would do well to arm yourself before venturing too far from the safety of this farmstead."
-      ]
-    }
+    { "x": 2571, "y": 3584, "spriteKey": "guide" }
   ],
   "enemies": [
     { "x": 971,  "y": 1480, "spriteKey": "goblinunderling" },

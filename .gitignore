@@ -3,6 +3,7 @@ dist/
 
 # Firebase emulator data
 .firebase/
+firebase-debug.log
 
 # Environment secrets — never commit these
 .env
