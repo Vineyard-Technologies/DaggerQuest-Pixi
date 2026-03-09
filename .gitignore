@@ -10,7 +10,8 @@ firebase-debug.log
 
 # Environment secrets — never commit these
 .env
-.env.*
+.env.local
+.env.*.local
 *.pem
 *.key
 service-account*.json
