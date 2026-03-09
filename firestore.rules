@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // signupLimits is only accessed by the Admin SDK (Cloud Functions).
+    // No client should ever read or write this collection.
+    match /signupLimits/{document=**} {
+      allow read, write: if false;
+    }
+
+    // Deny-all catch-all: no client can read or write any collection
+    // unless explicitly allowed above.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

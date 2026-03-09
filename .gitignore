@@ -1,2 +1,12 @@
 node_modules/
 dist/
+
+# Firebase emulator data
+.firebase/
+
+# Environment secrets — never commit these
+.env
+.env.*
+*.pem
+*.key
+service-account*.json
