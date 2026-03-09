@@ -53,7 +53,8 @@ export function releaseTrackedCPUData(): void {
  * builds with `--base /game/` it returns e.g. `/game/images/…`.
  */
 export function assetPath(relativePath: string): string {
-    const base = import.meta.env.BASE_URL; // e.g. "/" or "/game/"
+    const cdnBase = import.meta.env.VITE_ASSET_BASE_URL; // e.g. "https://assets.daggerquest.com/"
+    const base = cdnBase || import.meta.env.BASE_URL;
     // Strip leading "./" so we don't end up with "/game/./images/…"
     const clean = relativePath.replace(/^\.\/?/, '');
     return `${base}${clean}`;

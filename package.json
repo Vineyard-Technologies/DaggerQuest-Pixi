@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "spritesheets": "tsx scripts/makeSpritesheets.ts",
+    "upload-assets": "tsx scripts/uploadAssets.ts",
     "anchors": "tsx scripts/patchAnchors.ts",
     "detect-fireframe": "tsx scripts/detectFireFrame.ts"
   },
@@ -16,6 +17,7 @@
     "pixi.js": "^8.16.0"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.1005.0",
     "@types/sharp": "^0.31.1",
     "sharp": "^0.34.5",
     "tsx": "^4.21.0",

@@ -5,6 +5,9 @@ dist/
 .firebase/
 firebase-debug.log
 
+# Wrangler local state
+.wrangler/
+
 # Environment secrets — never commit these
 .env
 .env.*

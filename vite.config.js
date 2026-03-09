@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite';
-import { cpSync } from 'fs';
 
 export default defineConfig({
     root: '.',
@@ -13,10 +12,4 @@ export default defineConfig({
             'X-Frame-Options': 'DENY',
         },
     },
-    plugins: [{
-        name: 'copy-spritesheets',
-        closeBundle() {
-            cpSync('images/spritesheets', 'dist/images/spritesheets', { recursive: true });
-        },
-    }],
 });
