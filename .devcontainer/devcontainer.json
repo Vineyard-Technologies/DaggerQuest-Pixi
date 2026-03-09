@@ -1,0 +1,30 @@
+{
+  "name": "DaggerQuest",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21",
+      "installGradle": "false",
+      "installMaven": "false"
+    }
+  },
+  "forwardPorts": [5173, 9099, 5001, 8080, 4000],
+  "portsAttributes": {
+    "5173": { "label": "Vite Dev Server" },
+    "9099": { "label": "Auth Emulator" },
+    "5001": { "label": "Functions Emulator" },
+    "8080": { "label": "Firestore Emulator" },
+    "4000": { "label": "Emulator UI" }
+  },
+  "postCreateCommand": "npm install && cd functions && npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
+}
