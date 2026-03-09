@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import state from './state';
 import { createFarm } from './farm';
-import { Man, Woman } from './classes';
+import { createPlayer } from './classes';
 import { UI } from './ui';
 import { bus } from './events';
 import { releaseTrackedCPUData } from './assets';
@@ -9,10 +9,7 @@ import { HOVER_OUTLINE } from './outlineFilter';
 import { Entity } from './entity';
 import type { Loot } from './loot';
 import { NPC } from './npc';
-import type { Player } from './player';
 import { waitForLogin, setLoadingProgress, hideOverlays } from './login';
-
-type PlayerClass = new (opts: { x: number; y: number }) => Player;
 
 // Ensure the game is only playable when embedded in an iframe on DaggerQuest.com.
 // Block direct access (top-level browsing) and embedding on unauthorized sites.
@@ -67,7 +64,7 @@ async function init(): Promise<void> {
 
     setLoadingProgress(60, 'Creating player…');
 
-    await createPlayer(Woman);
+    await initPlayer('woman');
 
     setLoadingProgress(80, 'Preparing UI…');
 
@@ -136,11 +133,12 @@ async function init(): Promise<void> {
     }
 }
 
-async function createPlayer(PlayerClassCtor: PlayerClass): Promise<void> {
-    state.player = new PlayerClassCtor({
-        x: state.area!.playerStartX,
-        y: state.area!.playerStartY,
-    });
+async function initPlayer(spriteKey: string): Promise<void> {
+    state.player = createPlayer(
+        spriteKey,
+        state.area!.playerStartX,
+        state.area!.playerStartY,
+    );
 
     await state.player.loadTextures();
 

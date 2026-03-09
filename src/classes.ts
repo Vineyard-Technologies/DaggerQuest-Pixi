@@ -30,4 +30,22 @@ class Woman extends Player {
     }
 }
 
-export { Man, Woman };
+// ── Factory ─────────────────────────────────────────────────────────────────
+
+interface PlayerSpawnOptions {
+    x: number;
+    y: number;
+}
+
+const PLAYER_CLASSES: Record<string, new (opts: PlayerSpawnOptions) => Player> = {
+    man: Man,
+    woman: Woman,
+};
+
+function createPlayer(spriteKey: string, x: number, y: number): Player {
+    const PlayerClass = PLAYER_CLASSES[spriteKey];
+    if (!PlayerClass) throw new Error(`Unknown player class: "${spriteKey}"`);
+    return new PlayerClass({ x, y });
+}
+
+export { Man, Woman, createPlayer };
