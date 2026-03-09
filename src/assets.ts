@@ -98,7 +98,7 @@ export async function fetchFrameTags(spriteKey: string): Promise<FrameTags> {
     if (cached) return cached;
 
     try {
-        const resp = await fetch(assetPath(`src/data/frameTags/${spriteKey}.json`));
+        const resp = await fetch(`${import.meta.env.BASE_URL}src/data/frameTags/${spriteKey}.json`);
         if (!resp.ok) throw new Error(resp.statusText);
         const tags: FrameTags = await resp.json();
         _frameTagsCache.set(spriteKey, tags);
