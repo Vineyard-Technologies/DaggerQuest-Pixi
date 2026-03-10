@@ -22,7 +22,7 @@ const firebaseConfig = {
 const app  = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+export const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 
 if (isLocal) {
     connectAuthEmulator(auth, 'http://localhost:9099');

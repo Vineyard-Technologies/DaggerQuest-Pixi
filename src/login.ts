@@ -11,9 +11,11 @@
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
+    sendEmailVerification,
+    sendPasswordResetEmail,
     type AuthError,
 } from 'firebase/auth';
-import { auth } from './firebase';
+import { auth, isLocal } from './firebase';
 
 // ── DOM handles ───────────────────────────────────────────────────────────
 
@@ -23,7 +25,9 @@ const loginError     = document.getElementById('login-error')!;
 const loginSubmit    = document.getElementById('login-submit')! as HTMLButtonElement;
 const loginConfirm   = document.getElementById('login-confirm')! as HTMLInputElement;
 const loginToggle    = document.getElementById('login-toggle')!;
-const loginSubtitle  = document.getElementById('login-subtitle')!;
+const forgotPassword = document.getElementById('forgot-password')!;
+const passwordReqs   = document.getElementById('password-requirements')!;
+const loginPassword  = document.getElementById('login-password')! as HTMLInputElement;
 
 const loadingOverlay = document.getElementById('loading-overlay')!;
 const loadingStatus  = document.getElementById('loading-status')!;
@@ -38,26 +42,73 @@ let isCreateMode = false;
 /** Returns a promise that resolves once the user has authenticated. */
 export function waitForLogin(): Promise<void> {
     return new Promise<void>((resolve) => {
+        // Live password-strength indicator.
+        const reqChecks: { key: string; test: (p: string) => boolean }[] = [
+            { key: 'length',  test: (p) => p.length >= 8 },
+            { key: 'upper',   test: (p) => /[A-Z]/.test(p) },
+            { key: 'lower',   test: (p) => /[a-z]/.test(p) },
+            { key: 'digit',   test: (p) => /[0-9]/.test(p) },
+            { key: 'special', test: (p) => /[^A-Za-z0-9]/.test(p) },
+        ];
+
+        function updatePasswordReqs(): void {
+            const pw = loginPassword.value;
+            for (const { key, test } of reqChecks) {
+                const li = passwordReqs.querySelector(`[data-req="${key}"]`)!;
+                const icon = li.querySelector('.req-icon')!;
+                if (test(pw)) {
+                    icon.textContent = '✓';
+                    (icon as HTMLElement).style.color = '#4caf50';
+                } else {
+                    icon.textContent = '✗';
+                    (icon as HTMLElement).style.color = '#cc4444';
+                }
+            }
+        }
+
+        loginPassword.addEventListener('input', () => {
+            if (isCreateMode) updatePasswordReqs();
+        });
+
         // Toggle between Sign In / Create Account modes.
         loginToggle.addEventListener('click', () => {
             isCreateMode = !isCreateMode;
             loginError.textContent = '';
+            loginForm.reset();
 
             if (isCreateMode) {
                 loginSubmit.textContent   = 'Create Account';
-                loginSubtitle.textContent = 'Create your account';
                 loginConfirm.style.display = '';
                 loginConfirm.required      = true;
+                passwordReqs.style.display = '';
+                updatePasswordReqs();
+                forgotPassword.style.display = 'none';
                 loginToggle.innerHTML     =
                     'Have an account? <span style="color:#c8a84e;text-decoration:underline;">Sign in</span>';
             } else {
                 loginSubmit.textContent   = 'Sign In';
-                loginSubtitle.textContent = 'Enter the realm';
                 loginConfirm.style.display = 'none';
                 loginConfirm.required      = false;
                 loginConfirm.value         = '';
+                passwordReqs.style.display = 'none';
+                forgotPassword.style.display = '';
                 loginToggle.innerHTML     =
                     'No account? <span style="color:#c8a84e;text-decoration:underline;">Create one</span>';
+            }
+        });
+
+        // Forgot password handler.
+        forgotPassword.addEventListener('click', async () => {
+            const email = (document.getElementById('login-email') as HTMLInputElement).value.trim();
+            if (!email || !isValidEmail(email)) {
+                loginError.textContent = 'Please enter your email address above, then click here.';
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                loginError.textContent = 'Password reset email sent! Check your inbox.';
+            } catch (err) {
+                loginError.textContent = friendlyError(err as AuthError);
             }
         });
 
@@ -72,9 +123,21 @@ export function waitForLogin(): Promise<void> {
                 return;
             }
 
-            if (isCreateMode && password !== loginConfirm.value) {
-                loginError.textContent = 'Passwords do not match.';
+            if (!isValidEmail(email)) {
+                loginError.textContent = 'Please input a valid email address.';
                 return;
+            }
+
+            if (isCreateMode) {
+                const passwordIssue = validatePassword(password);
+                if (passwordIssue) {
+                    loginError.textContent = passwordIssue;
+                    return;
+                }
+                if (password !== loginConfirm.value) {
+                    loginError.textContent = 'Passwords do not match.';
+                    return;
+                }
             }
 
             loginError.textContent = '';
@@ -83,9 +146,23 @@ export function waitForLogin(): Promise<void> {
 
             try {
                 if (isCreateMode) {
-                    await createUserWithEmailAndPassword(auth, email, password);
+                    const { user } = await createUserWithEmailAndPassword(auth, email, password);
+                    if (!isLocal) {
+                        await sendEmailVerification(user);
+                        // Switch to sign-in mode so they can log in after verifying.
+                        loginToggle.click();
+                        loginError.textContent = 'Verification email sent! Please check your inbox and verify your email, then sign in.';
+                        loginSubmit.disabled   = false;
+                        return;
+                    }
                 } else {
-                    await signInWithEmailAndPassword(auth, email, password);
+                    const { user } = await signInWithEmailAndPassword(auth, email, password);
+                    if (!isLocal && !user.emailVerified) {
+                        loginError.textContent = 'Please verify your email before signing in. Check your inbox for a verification link.';
+                        loginSubmit.disabled   = false;
+                        loginSubmit.textContent = 'Sign In';
+                        return;
+                    }
                 }
 
                 showLoadingOverlay();
@@ -124,6 +201,25 @@ function showLoadingOverlay(): void {
     loginOverlay.classList.add('hidden');
     loadingOverlay.style.display = 'flex';
     setLoadingProgress(0, 'Authentication successful — loading game…');
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function isValidEmail(email: string): boolean {
+    return EMAIL_RE.test(email);
+}
+
+/**
+ * Returns an error message if the password is too weak, or `null` if it passes.
+ * Requirements: ≥ 8 chars, uppercase, lowercase, digit, special character.
+ */
+function validatePassword(password: string): string | null {
+    if (password.length < 8)        return 'Password must be at least 8 characters.';
+    if (!/[A-Z]/.test(password))    return 'Password must include an uppercase letter.';
+    if (!/[a-z]/.test(password))    return 'Password must include a lowercase letter.';
+    if (!/[0-9]/.test(password))    return 'Password must include a number.';
+    if (!/[^A-Za-z0-9]/.test(password)) return 'Password must include a special character.';
+    return null;
 }
 
 /** Map Firebase error codes to player-friendly messages. */

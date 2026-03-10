@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "firebase emulators:exec --only auth \"vite\"",
+    "dev": "firebase emulators:exec --only auth --ui \"vite\"",
     "build": "vite build",
     "preview": "vite preview",
     "spritesheets": "tsx scripts/makeSpritesheets.ts",

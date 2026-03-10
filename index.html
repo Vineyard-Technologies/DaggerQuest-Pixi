@@ -58,18 +58,11 @@
         }
 
         #login-title {
-            font-size: 42px;
-            letter-spacing: 4px;
-            margin-bottom: 8px;
-            color: #e2c97e;
-            text-shadow: 0 0 20px rgba(226, 201, 126, 0.3);
+            margin-bottom: 16px;
         }
-        #login-subtitle {
-            font-family: 'Grenze', 'Georgia', serif;
-            font-size: 16px;
-            color: #8a7a52;
-            margin-bottom: 36px;
-            letter-spacing: 2px;
+        #login-title img {
+            max-width: 280px;
+            height: auto;
         }
 
         #login-form {
@@ -168,23 +161,40 @@
 <body>
     <!-- Login overlay — renders instantly, no JS needed -->
     <div id="login-overlay">
-        <div id="login-title">DaggerQuest</div>
-        <div id="login-subtitle">Enter the realm</div>
+        <div id="login-title"><img src="logo.webp" alt="DaggerQuest" /></div>
         <form id="login-form" autocomplete="off">
-            <input type="email" id="login-email" placeholder="Email" required />
-            <input type="password" id="login-password" placeholder="Password" required />
-            <input type="password" id="login-confirm" placeholder="Confirm Password" style="display:none;" />
+            <input type="text" id="login-email" placeholder="Email" />
+            <div id="password-requirements" style="display:none;font-family:'Grenze','Georgia',serif;font-size:16px;color:#8a7a52;margin:4px 0;text-align:left;">
+                Password must contain:
+                <ul style="margin:2px 0 0;padding-left:8px;list-style:none;">
+                    <li data-req="length"><span class="req-icon">✗</span> At least 8 characters</li>
+                    <li data-req="upper"><span class="req-icon">✗</span> An uppercase letter</li>
+                    <li data-req="lower"><span class="req-icon">✗</span> A lowercase letter</li>
+                    <li data-req="digit"><span class="req-icon">✗</span> A number</li>
+                    <li data-req="special"><span class="req-icon">✗</span> A special character</li>
+                </ul>
+            </div>
+            <input type="text" id="login-password" placeholder="Password" style="-webkit-text-security:disc;" />
+            <input type="text" id="login-confirm" placeholder="Confirm Password" style="display:none;-webkit-text-security:disc;" />
             <button type="submit" id="login-submit">Sign In</button>
         </form>
         <div id="login-error"></div>
         <div id="login-toggle" style="
             font-family: 'Grenze', 'Georgia', serif;
-            font-size: 14px;
+            font-size: 17px;
             color: #8a7a52;
             margin-top: 14px;
             cursor: pointer;
             transition: color 0.2s;
         ">No account? <span style="color:#c8a84e;text-decoration:underline;">Create one</span></div>
+        <div id="forgot-password" style="
+            font-family: 'Grenze', 'Georgia', serif;
+            font-size: 15px;
+            color: #8a7a52;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: color 0.2s;
+        "><span style="color:#c8a84e;text-decoration:underline;">Forgot password?</span></div>
     </div>
 
     <!-- Loading overlay — shown after successful login -->
