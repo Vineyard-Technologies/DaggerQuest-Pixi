@@ -1,9 +1,36 @@
-import { defineConfig } from 'vite'
+import { defineConfig, PluginOption } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
+import fs from 'fs'
+
+// Serve game/index.html for /game/ requests before SPA fallback intercepts them.
+function gameEntryPlugin(): PluginOption {
+  return {
+    name: 'game-entry',
+    configureServer(server) {
+      server.middlewares.use((req, _res, next) => {
+        if (req.url?.startsWith('/game') && !req.url.includes('.')) {
+          req.url = '/game/index.html'
+        }
+        next()
+      })
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use((req, res, next) => {
+        if (req.url?.startsWith('/game') && !req.url.includes('.')) {
+          const filePath = resolve(__dirname, 'dist', 'game', 'index.html')
+          res.setHeader('Content-Type', 'text/html')
+          fs.createReadStream(filePath).pipe(res)
+          return
+        }
+        next()
+      })
+    },
+  }
+}
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [gameEntryPlugin(), react()],
   build: {
     outDir: 'dist',
     assetsDir: 'assets',

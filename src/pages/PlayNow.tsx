@@ -20,7 +20,7 @@ function PlayNow() {
 
   useEffect(() => {
     // Load AdSense script only on approved domains
-    if (window.location.hostname === "daggerquest.com" || window.location.hostname === "test.daggerquest.com") {
+    if (window.location.hostname === "daggerquest.com") {
       const loadAdSenseScript = () => {
         // Check if script is already loaded
         if (document.getElementById('google-adsense-script')) {
@@ -102,7 +102,7 @@ function PlayNow() {
       <main className="container flex-ads">
         <aside ref={leftAdRef} className="ad-slot left-ad desktop-only fade-in-element">
           {/* DaggerQuest Left Ad */}
-          {(window.location.hostname === "daggerquest.com" || window.location.hostname === "test.daggerquest.com") && (
+          {window.location.hostname === "daggerquest.com" && (
             <ins
               className="adsbygoogle"
               style={{ display: 'inline-block', width: '160px', height: '600px' }}
@@ -126,7 +126,7 @@ function PlayNow() {
         </section>
         <aside ref={rightAdRef} className="ad-slot right-ad desktop-only fade-in-element">
           {/* DaggerQuest Right Ad */}
-          {(window.location.hostname === "daggerquest.com" || window.location.hostname === "test.daggerquest.com") && (
+          {window.location.hostname === "daggerquest.com" && (
             <>
               <ins
                 className="adsbygoogle"

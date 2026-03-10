@@ -2,8 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -60,9 +60,6 @@ jobs:
 
       - name: Build
         run: npm run build
-
-      - name: Add CNAME
-        run: echo "app.daggerquest.com" > dist/CNAME
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
