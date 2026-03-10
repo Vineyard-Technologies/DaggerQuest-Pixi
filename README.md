@@ -25,8 +25,7 @@ This repository contains the source code for DaggerQuest, built using [Pixi.js](
 
 ### 📋 Related Repositories
 
-- [**DaggerQuest.com**](https://github.com/Vineyard-Technologies/DaggerQuest.com) - The website where you can play *DaggerQuest*, read news posts, and browse the guide.
-- [**Overlord**](https://github.com/Vineyard-Technologies/Overlord) - An render pipeline management tool used to generated assets for *DaggerQuest*.
+- [**Overlord**](https://github.com/Vineyard-Technologies/Overlord) - A render pipeline management tool used to generate assets for *DaggerQuest*.
 
 ## 🧙‍♂️ Updates
 
