@@ -1,5 +1,6 @@
 node_modules/
 dist/
+docs/
 
 # Firebase emulator data
 .firebase/
@@ -15,3 +16,12 @@ firebase-debug.log
 *.pem
 *.key
 service-account*.json
+
+# Playwright
+playwright/test-results/
+playwright/playwright-report/
+playwright/.cache/
+playwright/node_modules/
+
+# Logs
+*.log

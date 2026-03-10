@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DaggerQuest</title>
+    <link rel="icon" type="image/webp" href="/images/favicon.webp" />
+    <link rel="shortcut icon" type="image/webp" href="/images/favicon.webp" />
+    <link rel="apple-touch-icon" href="/images/favicon.webp" />
+    <style>
+        @font-face {
+            font-family: 'Cinzel';
+            src: url('/fonts/cinzel-semibold.woff2') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+            font-display: block;
+        }
+        @font-face {
+            font-family: 'Grenze';
+            src: url('/fonts/grenze-semibold.woff2') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+            font-display: block;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at center, #1a1209 0%, #0a0a0a 70%);
+            font-family: 'Cinzel', 'Georgia', serif;
+            color: #c8b06b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            text-align: center;
+            max-width: 340px;
+            width: 90%;
+        }
+        .logo { max-width: 240px; margin-bottom: 24px; }
+        .title {
+            font-size: 22px;
+            letter-spacing: 3px;
+            color: #e2c97e;
+            margin-bottom: 12px;
+        }
+        .message {
+            font-family: 'Grenze', 'Georgia', serif;
+            font-size: 17px;
+            color: #a89860;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .error {
+            font-family: 'Grenze', 'Georgia', serif;
+            font-size: 15px;
+            color: #cc6644;
+            margin-bottom: 16px;
+        }
+        input {
+            font-family: 'Grenze', 'Georgia', serif;
+            font-size: 16px;
+            padding: 10px 14px;
+            border: 1px solid #3a3020;
+            border-radius: 4px;
+            background: rgba(20, 16, 8, 0.8);
+            color: #d4c28a;
+            outline: none;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+        input::placeholder { color: #6a5e3e; }
+        input:focus { border-color: #c8a84e; }
+        button {
+            font-family: 'Cinzel', 'Georgia', serif;
+            font-size: 15px;
+            padding: 11px 0;
+            border: 1px solid #5a4a28;
+            border-radius: 4px;
+            background: linear-gradient(180deg, #3a2e14 0%, #241c08 100%);
+            color: #d4c28a;
+            cursor: pointer;
+            letter-spacing: 2px;
+            width: 100%;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        button:hover {
+            background: linear-gradient(180deg, #4a3e1c 0%, #2e2410 100%);
+            border-color: #8a7430;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+        .password-reqs {
+            font-family: 'Grenze', 'Georgia', serif;
+            font-size: 14px;
+            color: #8a7a52;
+            text-align: left;
+            margin-bottom: 12px;
+        }
+        .password-reqs ul {
+            margin: 2px 0 0;
+            padding-left: 8px;
+            list-style: none;
+        }
+        .req-pass { color: #4caf50; }
+        .req-fail { color: #cc4444; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <img src="/images/logo.webp" alt="DaggerQuest" class="logo" />
+
+        <!-- Verify email view -->
+        <div id="verify-view" class="hidden">
+            <div class="title">Email Verification</div>
+            <div id="verify-message" class="message">Verifying your email…</div>
+            <div id="verify-error" class="error hidden"></div>
+        </div>
+
+        <!-- Reset password view -->
+        <div id="reset-view" class="hidden">
+            <div class="title">Reset Password</div>
+            <div id="reset-message" class="message">Enter your new password below.</div>
+            <div id="reset-error" class="error hidden"></div>
+            <form id="reset-form">
+                <div class="password-reqs">
+                    Password must contain:
+                    <ul>
+                        <li data-req="length"><span class="req-icon req-fail">✗</span> At least 8 characters</li>
+                        <li data-req="upper"><span class="req-icon req-fail">✗</span> An uppercase letter</li>
+                        <li data-req="lower"><span class="req-icon req-fail">✗</span> A lowercase letter</li>
+                        <li data-req="digit"><span class="req-icon req-fail">✗</span> A number</li>
+                        <li data-req="special"><span class="req-icon req-fail">✗</span> A special character</li>
+                    </ul>
+                </div>
+                <input type="password" id="new-password" placeholder="New Password" />
+                <input type="password" id="confirm-password" placeholder="Confirm Password" />
+                <button type="submit" id="reset-submit">Reset Password</button>
+            </form>
+        </div>
+
+        <!-- Unknown / fallback -->
+        <div id="unknown-view" class="hidden">
+            <div class="title">Invalid Link</div>
+            <div class="message">This link is invalid or has expired.</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js';
+        import { getAuth, applyActionCode, confirmPasswordReset } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js';
+
+        const app = initializeApp({
+            apiKey: "AIzaSyCgr0MjqE5kIQ5t1s9uhapOtRV5Hls0dWA",
+            authDomain: "daggerquest-backend.firebaseapp.com",
+            projectId: "daggerquest-backend",
+        });
+        const auth = getAuth(app);
+
+        const params = new URLSearchParams(location.search);
+        const mode = params.get('mode');
+        const oobCode = params.get('oobCode');
+
+        if (mode === 'verifyEmail' && oobCode) {
+            handleVerifyEmail();
+        } else if (mode === 'resetPassword' && oobCode) {
+            handleResetPassword();
+        } else {
+            document.getElementById('unknown-view').classList.remove('hidden');
+        }
+
+        async function handleVerifyEmail() {
+            const view = document.getElementById('verify-view');
+            const msg = document.getElementById('verify-message');
+            const err = document.getElementById('verify-error');
+            view.classList.remove('hidden');
+
+            try {
+                await applyActionCode(auth, oobCode);
+                msg.textContent = 'Your email has been verified! You may now sign in to DaggerQuest.';
+            } catch (e) {
+                console.error('applyActionCode failed:', e);
+                msg.classList.add('hidden');
+                err.classList.remove('hidden');
+                err.textContent = 'This verification link is invalid or has expired. Please sign in to request a new one.';
+            }
+        }
+
+        function handleResetPassword() {
+            const view = document.getElementById('reset-view');
+            const form = document.getElementById('reset-form');
+            const msg = document.getElementById('reset-message');
+            const err = document.getElementById('reset-error');
+            const pwInput = document.getElementById('new-password');
+            const confirmInput = document.getElementById('confirm-password');
+            const submitBtn = document.getElementById('reset-submit');
+
+            view.classList.remove('hidden');
+
+            const checks = [
+                { key: 'length',  test: (p) => p.length >= 8 },
+                { key: 'upper',   test: (p) => /[A-Z]/.test(p) },
+                { key: 'lower',   test: (p) => /[a-z]/.test(p) },
+                { key: 'digit',   test: (p) => /[0-9]/.test(p) },
+                { key: 'special', test: (p) => /[^A-Za-z0-9]/.test(p) },
+            ];
+
+            function updateReqs() {
+                const pw = pwInput.value;
+                for (const { key, test } of checks) {
+                    const li = view.querySelector(`[data-req="${key}"]`);
+                    const icon = li.querySelector('.req-icon');
+                    if (test(pw)) {
+                        icon.textContent = '✓';
+                        icon.className = 'req-icon req-pass';
+                    } else {
+                        icon.textContent = '✗';
+                        icon.className = 'req-icon req-fail';
+                    }
+                }
+            }
+
+            pwInput.addEventListener('input', updateReqs);
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                err.classList.add('hidden');
+
+                const pw = pwInput.value;
+                const confirm = confirmInput.value;
+
+                for (const { test } of checks) {
+                    if (!test(pw)) {
+                        err.textContent = 'Please meet all password requirements.';
+                        err.classList.remove('hidden');
+                        return;
+                    }
+                }
+
+                if (pw !== confirm) {
+                    err.textContent = 'Passwords do not match.';
+                    err.classList.remove('hidden');
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Resetting…';
+
+                try {
+                    await confirmPasswordReset(auth, oobCode, pw);
+                    form.classList.add('hidden');
+                    msg.textContent = 'Your password has been reset! You may now sign in with your new password.';
+                } catch (e) {
+                    err.textContent = 'This reset link is invalid or has expired. Please request a new one.';
+                    err.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Reset Password';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

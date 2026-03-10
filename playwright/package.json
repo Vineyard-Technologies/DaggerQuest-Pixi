@@ -1,0 +1,29 @@
+{
+  "name": "daggerquest-playwright",
+  "version": "1.0.0",
+  "description": "Playwright E2E testing framework for DaggerQuest and DaggerQuest.com",
+  "scripts": {
+    "test": "playwright test",
+    "test:basic": "playwright test tests/daggerquest-basic.spec.ts",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "install:browsers": "playwright install"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "daggerquest",
+    "e2e",
+    "automation"
+  ],
+  "author": "Vineyard Technologies",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

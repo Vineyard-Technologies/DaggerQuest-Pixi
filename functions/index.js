@@ -125,9 +125,15 @@ exports.sendVerificationEmail = onCall(
         const user = await getAuth().getUser(uid);
         if (user.emailVerified) return { sent: false, reason: "already-verified" };
 
-        const link = await getAuth().generateEmailVerificationLink(user.email, {
-            url: ACTION_URL,
-        });
+        let link;
+        try {
+            link = await getAuth().generateEmailVerificationLink(user.email, {
+                url: ACTION_URL,
+            });
+        } catch (err) {
+            console.error("Failed to generate verification link:", err);
+            throw new HttpsError("internal", "Failed to generate verification link.");
+        }
 
         const html = emailTemplate(
             "Verify Your Email",
@@ -136,12 +142,17 @@ exports.sendVerificationEmail = onCall(
              <p style="font-size:13px;color:#6a5e3e;margin-top:16px;">If you didn't create this account, you can safely ignore this email.</p>`
         );
 
-        await getResend().emails.send({
-            from: "DaggerQuest <noreply@daggerquest.com>",
-            to: user.email,
-            subject: "Verify your DaggerQuest email",
-            html,
-        });
+        try {
+            await getResend().emails.send({
+                from: "DaggerQuest <noreply@daggerquest.com>",
+                to: user.email,
+                subject: "Verify your DaggerQuest email",
+                html,
+            });
+        } catch (err) {
+            console.error("Resend API error:", err);
+            throw new HttpsError("internal", "Failed to send verification email.");
+        }
 
         return { sent: true };
     }

@@ -3,208 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:,">
-    <!-- <base href="/game/"> -->
-    <title>DaggerQuest</title>
-    <style>
-        @font-face {
-            font-family: 'Cinzel';
-            src: url('fonts/cinzel-semibold.woff2') format('woff2');
-            font-weight: 600;
-            font-style: normal;
-            font-display: block;
-        }
-        @font-face {
-            font-family: 'Grenze';
-            src: url('fonts/grenze-semibold.woff2') format('woff2');
-            font-weight: 600;
-            font-style: normal;
-            font-display: block;
-        }
-        @font-face {
-            font-family: 'Grenze';
-            src: url('fonts/grenze-semibolditalic.woff2') format('woff2');
-            font-weight: 600;
-            font-style: italic;
-            font-display: block;
-        }
-        html, body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: black;
-        }
-        canvas {
-            background-color: black;
-        }
+    <title>DaggerQuest | Browser ARPG</title>
+    <meta name="description" content="Play DaggerQuest, a browser-based action RPG. Dive into adventure, battle monsters, and collect loot in this free online game.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://DaggerQuest.com/">
+    <meta property="og:title" content="DaggerQuest | Browser ARPG">
+    <meta property="og:description" content="Play DaggerQuest, a browser-based action RPG. Dive into adventure, battle monsters, and collect loot in this free online game.">
+    <meta property="og:image" content="https://DaggerQuest.com/images/logo.webp">
+    <meta property="og:image:alt" content="DaggerQuest Logo">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://DaggerQuest.com/">
+    <meta property="twitter:title" content="DaggerQuest | Browser ARPG">
+    <meta property="twitter:description" content="Play DaggerQuest, a browser-based action RPG. Dive into adventure, battle monsters, and collect loot in this free online game.">
+    <meta property="twitter:image" content="https://DaggerQuest.com/images/logo.webp">
 
-        /* ── Login Screen ─────────────────────────────────────────── */
-        #login-overlay {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(ellipse at center, #1a1209 0%, #0a0a0a 70%);
-            z-index: 9999;
-            font-family: 'Cinzel', 'Georgia', serif;
-            color: #c8b06b;
-            transition: opacity 0.5s ease;
-        }
-        #login-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        #login-title {
-            margin-bottom: 16px;
-        }
-        #login-title img {
-            max-width: 280px;
-            height: auto;
-        }
-
-        #login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            width: 280px;
-        }
-        #login-form input {
-            font-family: 'Grenze', 'Georgia', serif;
-            font-size: 16px;
-            padding: 10px 14px;
-            border: 1px solid #3a3020;
-            border-radius: 4px;
-            background: rgba(20, 16, 8, 0.8);
-            color: #d4c28a;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        #login-form input::placeholder {
-            color: #6a5e3e;
-        }
-        #login-form input:focus {
-            border-color: #c8a84e;
-        }
-        #login-form button {
-            font-family: 'Cinzel', 'Georgia', serif;
-            font-size: 15px;
-            padding: 11px 0;
-            margin-top: 4px;
-            border: 1px solid #5a4a28;
-            border-radius: 4px;
-            background: linear-gradient(180deg, #3a2e14 0%, #241c08 100%);
-            color: #d4c28a;
-            cursor: pointer;
-            letter-spacing: 2px;
-            transition: background 0.2s, border-color 0.2s;
-        }
-        #login-form button:hover {
-            background: linear-gradient(180deg, #4a3e1c 0%, #2e2410 100%);
-            border-color: #8a7430;
-        }
-
-        #login-error {
-            font-family: 'Grenze', 'Georgia', serif;
-            font-size: 14px;
-            color: #cc6644;
-            height: 20px;
-            margin-top: 6px;
-            text-align: center;
-        }
-
-        /* ── Loading Bar (after login) ────────────────────────────── */
-        #loading-overlay {
-            position: fixed;
-            inset: 0;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(ellipse at center, #1a1209 0%, #0a0a0a 70%);
-            z-index: 9998;
-            font-family: 'Cinzel', 'Georgia', serif;
-            color: #c8b06b;
-            transition: opacity 0.5s ease;
-        }
-        #loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        #loading-status {
-            font-size: 16px;
-            letter-spacing: 2px;
-            margin-bottom: 24px;
-            color: #a89860;
-        }
-
-        #loading-bar-track {
-            width: 320px;
-            height: 14px;
-            border: 1px solid #3a3020;
-            border-radius: 7px;
-            background: rgba(20, 16, 8, 0.8);
-            overflow: hidden;
-        }
-        #loading-bar-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #8a6e1e, #d4aa30);
-            border-radius: 7px;
-            transition: width 0.3s ease;
-        }
-    </style>
+    <!-- Favicon -->
+    <link rel="icon" type="image/webp" href="/images/favicon.webp" />
+    <link rel="shortcut icon" type="image/webp" href="/images/favicon.webp" />
+    <link rel="apple-touch-icon" href="/images/favicon.webp" />
+    
+    <!-- Performance optimizations -->
+    <link rel="dns-prefetch" href="//test.daggerquest.com">
+    <link rel="preload" href="/images/logo.webp" as="image">
+    <link rel="preload" href="/fonts/cinzel-semibold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/grenze-semibold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="canonical" href="https://DaggerQuest.com/" />
+    
+    <!-- SPA 404 redirect handler -->
+    <script>
+        // Restore the original path from sessionStorage if we were redirected from 404
+        (function() {
+            var redirect = sessionStorage.redirect;
+            delete sessionStorage.redirect;
+            if (redirect && redirect !== location.href) {
+                history.replaceState(null, null, redirect);
+            }
+        })();
+    </script>
 </head>
 <body>
-    <!-- Login overlay — renders instantly, no JS needed -->
-    <div id="login-overlay">
-        <div id="login-title"><img src="logo.webp" alt="DaggerQuest" /></div>
-        <form id="login-form" autocomplete="off">
-            <input type="text" id="login-email" placeholder="Email" />
-            <div id="password-requirements" style="display:none;font-family:'Grenze','Georgia',serif;font-size:16px;color:#8a7a52;margin:4px 0;text-align:left;">
-                Password must contain:
-                <ul style="margin:2px 0 0;padding-left:8px;list-style:none;">
-                    <li data-req="length"><span class="req-icon">✗</span> At least 8 characters</li>
-                    <li data-req="upper"><span class="req-icon">✗</span> An uppercase letter</li>
-                    <li data-req="lower"><span class="req-icon">✗</span> A lowercase letter</li>
-                    <li data-req="digit"><span class="req-icon">✗</span> A number</li>
-                    <li data-req="special"><span class="req-icon">✗</span> A special character</li>
-                </ul>
-            </div>
-            <input type="text" id="login-password" placeholder="Password" style="-webkit-text-security:disc;" />
-            <input type="text" id="login-confirm" placeholder="Confirm Password" style="display:none;-webkit-text-security:disc;" />
-            <button type="submit" id="login-submit">Sign In</button>
-        </form>
-        <div id="login-error"></div>
-        <div id="login-toggle" style="
-            font-family: 'Grenze', 'Georgia', serif;
-            font-size: 17px;
-            color: #8a7a52;
-            margin-top: 14px;
-            cursor: pointer;
-            transition: color 0.2s;
-        ">No account? <span style="color:#c8a84e;text-decoration:underline;">Create one</span></div>
-        <div id="forgot-password" style="
-            font-family: 'Grenze', 'Georgia', serif;
-            font-size: 15px;
-            color: #8a7a52;
-            margin-top: 8px;
-            cursor: pointer;
-            transition: color 0.2s;
-        "><span style="color:#c8a84e;text-decoration:underline;">Forgot password?</span></div>
-    </div>
-
-    <!-- Loading overlay — shown after successful login -->
-    <div id="loading-overlay">
-        <div id="loading-status">Loading...</div>
-        <div id="loading-bar-track">
-            <div id="loading-bar-fill"></div>
-        </div>
-    </div>
-
-    <script type="module" src="/src/daggerquest.ts"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

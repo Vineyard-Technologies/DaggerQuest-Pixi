@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DaggerQuest | Browser ARPG</title>
+    <meta name="description" content="Play DaggerQuest, a browser-based action RPG. Dive into adventure, battle monsters, and collect loot in this free online game.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://DaggerQuest.com/">
+    <meta property="og:title" content="DaggerQuest | Browser ARPG">
+    <meta property="og:description" content="Play DaggerQuest, a browser-based action RPG. Dive into adventure, battle monsters, and collect loot in this free online game.">
+    <meta property="og:image" content="https://DaggerQuest.com/images/logo.webp">
+    <meta property="og:image:alt" content="DaggerQuest Logo">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://DaggerQuest.com/">
+    <meta property="twitter:title" content="DaggerQuest | Browser ARPG">
+    <meta property="twitter:description" content="Play DaggerQuest, a browser-based action RPG. Dive into adventure, battle monsters, and collect loot in this free online game.">
+    <meta property="twitter:image" content="https://DaggerQuest.com/images/logo.webp">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/webp" href="/images/favicon.webp" />
+    <link rel="shortcut icon" type="image/webp" href="/images/favicon.webp" />
+    <link rel="apple-touch-icon" href="/images/favicon.webp" />
+    
+    <!-- Performance optimizations -->
+    <link rel="dns-prefetch" href="//test.daggerquest.com">
+    
+    <script type="module" crossorigin src="/assets/index-DeSw4uUq.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-C0Zn6geE.css">
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script>
+        // Single Page Application 404 redirect
+        // Store the intended path and redirect to root so React Router can handle it
+        (function() {
+            var path = location.pathname + location.search + location.hash;
+            
+            // Check if this looks like an asset request (has file extension)
+            var hasFileExtension = /\.[^\/]+$/.test(location.pathname);
+            
+            // Don't redirect asset requests or if already at root
+            if (!hasFileExtension && path !== '/') {
+                sessionStorage.redirect = path;
+                location.replace('/');
+            }
+        })();
+    </script>
+</body>
+</html>
