@@ -8,9 +8,18 @@ function gameEntryPlugin(): PluginOption {
   return {
     name: 'game-entry',
     configureServer(server) {
-      server.middlewares.use((req, _res, next) => {
+      server.middlewares.use(async (req, res, next) => {
         if (req.url?.startsWith('/game') && !req.url.includes('.')) {
-          req.url = '/game/index.html'
+          try {
+            const filePath = resolve(__dirname, 'game', 'index.html')
+            let html = fs.readFileSync(filePath, 'utf-8')
+            html = await server.transformIndexHtml('/game/index.html', html)
+            res.writeHead(200, { 'Content-Type': 'text/html' })
+            res.end(html)
+          } catch (e) {
+            next(e)
+          }
+          return
         }
         next()
       })

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "22"
+  },
   "scripts": {
     "dev": "firebase emulators:exec --only auth,functions --ui \"vite\"",
     "build": "vite build",
