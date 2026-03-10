@@ -113,6 +113,7 @@ exports.sendVerificationEmail = onCall(
         memory: "256MiB",
         timeoutSeconds: 15,
         region: "us-central1",
+        cors: true,
         secrets: ["RESEND_API_KEY"],
     },
     async (request) => {
@@ -156,6 +157,7 @@ exports.sendResetEmail = onCall(
         memory: "256MiB",
         timeoutSeconds: 15,
         region: "us-central1",
+        cors: true,
         secrets: ["RESEND_API_KEY"],
     },
     async (request) => {
