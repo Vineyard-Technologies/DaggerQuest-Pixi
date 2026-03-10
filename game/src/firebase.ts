@@ -6,7 +6,7 @@
  */
 
 import { initializeApp } from 'firebase/app';
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 
 const firebaseConfig = {
@@ -22,11 +22,7 @@ const firebaseConfig = {
 const app  = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-export const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-
-if (isLocal) {
-    connectAuthEmulator(auth, 'http://localhost:9099');
-}
+const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 
 // Skip App Check on localhost – the debug-token exchange requires a token
 // registered in the Firebase Console and always produces noisy 403s otherwise.

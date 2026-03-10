@@ -304,17 +304,9 @@ h1 {
      letter-spacing: 2px;
 }
 .game-frame {
-     width: 90vw;
-     max-width: 1200px;
-     aspect-ratio: 16/9;
      background: #222;
-     margin-top: 0;
 }
 @media (max-width: 700px) {
-     .game-frame {
-         aspect-ratio: 9/16;
-         width: 98vw;
-    }
      h1 {
          font-size: 1.3em;
     }
@@ -667,6 +659,23 @@ h1 {
     color: #bba;
     opacity: 0.7;
 }
+/* --- Play Page: fill viewport, no scroll --- */
+body.play-page {
+  height: 100dvh;
+  overflow: hidden;
+}
+body.play-page #root {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+body.play-page main {
+  flex: 1;
+  min-height: 0;
+}
+body.play-page .footer-container {
+  flex-shrink: 0;
+}
 /* --- DaggerQuest Game Page Ad Layout --- */
 .container.flex-ads {
   display: flex;
@@ -674,29 +683,40 @@ h1 {
   justify-content: center;
   align-items: flex-start;
   width: 100%;
+  height: 100%;
+  min-height: 0;
   gap: 0;
+  overflow: hidden;
 }
 .ad-slot {
   width: 160px;
   min-width: 160px;
-  height: 600px;
+  height: 100%;
+  max-height: 600px;
   background: #f0f0f0;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
   flex-shrink: 0;
+}
+.ad-slot.left-ad {
+  justify-content: flex-end;
+}
+.ad-slot.right-ad {
+  justify-content: flex-start;
 }
 .center-content {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  width: 1584px;
+  justify-content: center;
   flex: 0 0 auto;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 .game-frame {
-  width: 1584px;
-  min-width: 1584px;
-  min-height: 891px;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+  max-width: calc(100vw - 320px);
   border: none;
 }
 @media (max-width: 900px) {

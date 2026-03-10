@@ -14,13 +14,12 @@ import {
     signOut,
     type AuthError,
 } from 'firebase/auth';
-import { getFunctions, httpsCallable, connectFunctionsEmulator } from 'firebase/functions';
-import { auth, isLocal } from './firebase';
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import { auth } from './firebase';
 
 // ── Cloud Function callables ──────────────────────────────────────────────
 
 const functions = getFunctions(undefined, 'us-central1');
-if (isLocal) connectFunctionsEmulator(functions, 'localhost', 5001);
 
 const callSendVerificationEmail = httpsCallable(functions, 'sendVerificationEmail');
 const callSendResetEmail        = httpsCallable(functions, 'sendResetEmail');
@@ -155,31 +154,27 @@ export function waitForLogin(): Promise<void> {
             try {
                 if (isCreateMode) {
                     const { user } = await createUserWithEmailAndPassword(auth, email, password);
-                    if (!isLocal) {
-                        await callSendVerificationEmail();
-                        await signOut(auth);
-                        // Switch to sign-in mode so they can log in after verifying.
-                        loginToggle.click();
-                        loginError.textContent = 'Verification email sent! Please check your inbox and verify your email, then sign in.';
-                        loginSubmit.disabled   = false;
-                        return;
-                    }
+                    await callSendVerificationEmail();
+                    await signOut(auth);
+                    // Switch to sign-in mode so they can log in after verifying.
+                    loginToggle.click();
+                    loginError.textContent = 'Verification email sent! Please check your inbox and verify your email, then sign in.';
+                    loginSubmit.disabled   = false;
+                    return;
                 } else {
                     const { user } = await signInWithEmailAndPassword(auth, email, password);
-                    if (!isLocal) {
-                        await user.reload();
-                        if (!user.emailVerified) {
-                            try {
-                                await callSendVerificationEmail();
-                            } catch {
-                                // Email sending failed — still sign out and prompt verification.
-                            }
-                            await signOut(auth);
-                            loginError.textContent = 'Please verify your email before signing in. A new verification email has been sent.';
-                            loginSubmit.disabled   = false;
-                            loginSubmit.textContent = 'Sign In';
-                            return;
+                    await user.reload();
+                    if (!user.emailVerified) {
+                        try {
+                            await callSendVerificationEmail();
+                        } catch {
+                            // Email sending failed — still sign out and prompt verification.
                         }
+                        await signOut(auth);
+                        loginError.textContent = 'Please verify your email before signing in. A new verification email has been sent.';
+                        loginSubmit.disabled   = false;
+                        loginSubmit.textContent = 'Sign In';
+                        return;
                     }
                 }
 

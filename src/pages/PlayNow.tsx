@@ -9,13 +9,8 @@ function PlayNow() {
   const rightAdRef = useScrollAnimation()
 
   useEffect(() => {
-    // Scroll iframe into view on page load
-    const iframe = document.querySelector('.game-frame')
-    if (iframe) {
-      setTimeout(() => {
-        iframe.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }, 100)
-    }
+    document.body.classList.add('play-page')
+    return () => document.body.classList.remove('play-page')
   }, [])
 
   useEffect(() => {
