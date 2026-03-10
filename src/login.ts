@@ -11,11 +11,19 @@
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
-    sendEmailVerification,
-    sendPasswordResetEmail,
+    signOut,
     type AuthError,
 } from 'firebase/auth';
+import { getFunctions, httpsCallable, connectFunctionsEmulator } from 'firebase/functions';
 import { auth, isLocal } from './firebase';
+
+// ── Cloud Function callables ──────────────────────────────────────────────
+
+const functions = getFunctions(undefined, 'us-central1');
+if (isLocal) connectFunctionsEmulator(functions, 'localhost', 5001);
+
+const callSendVerificationEmail = httpsCallable(functions, 'sendVerificationEmail');
+const callSendResetEmail        = httpsCallable(functions, 'sendResetEmail');
 
 // ── DOM handles ───────────────────────────────────────────────────────────
 
@@ -105,7 +113,7 @@ export function waitForLogin(): Promise<void> {
                 return;
             }
             try {
-                await sendPasswordResetEmail(auth, email);
+                await callSendResetEmail({ email });
                 loginError.textContent = 'Password reset email sent! Check your inbox.';
             } catch (err) {
                 loginError.textContent = friendlyError(err as AuthError);
@@ -148,7 +156,8 @@ export function waitForLogin(): Promise<void> {
                 if (isCreateMode) {
                     const { user } = await createUserWithEmailAndPassword(auth, email, password);
                     if (!isLocal) {
-                        await sendEmailVerification(user);
+                        await callSendVerificationEmail();
+                        await signOut(auth);
                         // Switch to sign-in mode so they can log in after verifying.
                         loginToggle.click();
                         loginError.textContent = 'Verification email sent! Please check your inbox and verify your email, then sign in.';
@@ -157,11 +166,16 @@ export function waitForLogin(): Promise<void> {
                     }
                 } else {
                     const { user } = await signInWithEmailAndPassword(auth, email, password);
-                    if (!isLocal && !user.emailVerified) {
-                        loginError.textContent = 'Please verify your email before signing in. Check your inbox for a verification link.';
-                        loginSubmit.disabled   = false;
-                        loginSubmit.textContent = 'Sign In';
-                        return;
+                    if (!isLocal) {
+                        await user.reload();
+                        if (!user.emailVerified) {
+                            await callSendVerificationEmail();
+                            await signOut(auth);
+                            loginError.textContent = 'Please verify your email before signing in. A new verification email has been sent.';
+                            loginSubmit.disabled   = false;
+                            loginSubmit.textContent = 'Sign In';
+                            return;
+                        }
                     }
                 }
 
