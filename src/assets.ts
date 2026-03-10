@@ -87,29 +87,22 @@ export interface AnimFrameTags {
 /** animation name → tags.  Loaded from src/data/frameTags/{spriteKey}.json. */
 export type FrameTags = Record<string, AnimFrameTags>;
 
-const _frameTagsCache = new Map<string, FrameTags>();
+/** Eagerly import every JSON file under data/frameTags/ at build time. */
+const _frameTagModules = import.meta.glob<FrameTags>(
+    './data/frameTags/*.json',
+    { eager: true, import: 'default' },
+);
 
-const FRAME_TAG_KEYS = new Set(['goblinarcher', 'goblinunderling', 'goblinwarlock']);
+const _frameTagsMap: Record<string, FrameTags> = {};
+for (const [path, tags] of Object.entries(_frameTagModules)) {
+    const key = path.replace('./data/frameTags/', '').replace('.json', '');
+    _frameTagsMap[key] = tags;
+}
 
 /**
- * Fetch (and cache) the frame-tags file for a spriteKey.
+ * Return the frame-tags for a spriteKey.
  * Returns an empty object if no file exists for that key.
  */
 export async function fetchFrameTags(spriteKey: string): Promise<FrameTags> {
-    if (!FRAME_TAG_KEYS.has(spriteKey)) return {};
-
-    const cached = _frameTagsCache.get(spriteKey);
-    if (cached) return cached;
-
-    try {
-        const resp = await fetch(`${import.meta.env.BASE_URL}src/data/frameTags/${spriteKey}.json`);
-        if (!resp.ok) throw new Error(resp.statusText);
-        const tags: FrameTags = await resp.json();
-        _frameTagsCache.set(spriteKey, tags);
-        return tags;
-    } catch {
-        const empty: FrameTags = {};
-        _frameTagsCache.set(spriteKey, empty);
-        return empty;
-    }
+    return _frameTagsMap[spriteKey] ?? {};
 }
