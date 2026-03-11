@@ -33,6 +33,7 @@ const loginSubmit    = document.getElementById('login-submit')! as HTMLButtonEle
 const loginConfirm   = document.getElementById('login-confirm')! as HTMLInputElement;
 const loginToggle    = document.getElementById('login-toggle')!;
 const forgotPassword = document.getElementById('forgot-password')!;
+const signInLink     = document.getElementById('sign-in-link')!;
 const passwordReqs   = document.getElementById('password-requirements')!;
 const loginPassword  = document.getElementById('login-password')! as HTMLInputElement;
 
@@ -42,7 +43,7 @@ const loadingBarFill = document.getElementById('loading-bar-fill')!;
 
 // ── State ─────────────────────────────────────────────────────────────────
 
-let isCreateMode = false;
+let mode: 'signin' | 'create' | 'forgot' = 'signin';
 
 // ── Public API ────────────────────────────────────────────────────────────
 
@@ -74,49 +75,65 @@ export function waitForLogin(): Promise<void> {
         }
 
         loginPassword.addEventListener('input', () => {
-            if (isCreateMode) updatePasswordReqs();
+            if (mode === 'create') updatePasswordReqs();
         });
+
+        function enterSignInMode(): void {
+            mode = 'signin';
+            loginError.textContent     = '';
+            loginForm.reset();
+            loginSubmit.textContent    = 'Sign In';
+            loginPassword.style.display = '';
+            loginConfirm.style.display = 'none';
+            loginConfirm.required      = false;
+            loginConfirm.value         = '';
+            passwordReqs.style.display = 'none';
+            forgotPassword.style.display = '';
+            loginToggle.style.display  = '';
+            signInLink.style.display   = 'none';
+            loginToggle.innerHTML      =
+                'No account? <span style="color:#c8a84e;text-decoration:underline;">Create one</span>';
+        }
 
         // Toggle between Sign In / Create Account modes.
         loginToggle.addEventListener('click', () => {
-            isCreateMode = !isCreateMode;
+            mode = mode === 'create' ? 'signin' : 'create';
             loginError.textContent = '';
             loginForm.reset();
 
-            if (isCreateMode) {
-                loginSubmit.textContent   = 'Create Account';
+            if (mode === 'create') {
+                loginSubmit.textContent    = 'Create Account';
+                loginPassword.style.display = '';
                 loginConfirm.style.display = '';
                 loginConfirm.required      = true;
                 passwordReqs.style.display = '';
                 updatePasswordReqs();
                 forgotPassword.style.display = 'none';
-                loginToggle.innerHTML     =
+                loginToggle.innerHTML      =
                     'Have an account? <span style="color:#c8a84e;text-decoration:underline;">Sign in</span>';
             } else {
-                loginSubmit.textContent   = 'Sign In';
-                loginConfirm.style.display = 'none';
-                loginConfirm.required      = false;
-                loginConfirm.value         = '';
-                passwordReqs.style.display = 'none';
-                forgotPassword.style.display = '';
-                loginToggle.innerHTML     =
-                    'No account? <span style="color:#c8a84e;text-decoration:underline;">Create one</span>';
+                enterSignInMode();
             }
         });
 
-        // Forgot password handler.
-        forgotPassword.addEventListener('click', async () => {
-            const email = (document.getElementById('login-email') as HTMLInputElement).value.trim();
-            if (!email || !isValidEmail(email)) {
-                loginError.textContent = 'Please enter your email address above, then click here.';
-                return;
-            }
-            try {
-                await callSendResetEmail({ email });
-                loginError.textContent = 'Password reset email sent! Check your inbox.';
-            } catch (err) {
-                loginError.textContent = friendlyError(err as AuthError);
-            }
+        // Forgot password — switch to forgot mode.
+        forgotPassword.addEventListener('click', () => {
+            mode = 'forgot';
+            loginError.textContent      = '';
+            loginForm.reset();
+            loginSubmit.textContent     = 'Reset Password';
+            loginPassword.style.display = 'none';
+            loginConfirm.style.display  = 'none';
+            loginConfirm.required       = false;
+            passwordReqs.style.display  = 'none';
+            forgotPassword.style.display = 'none';
+            loginToggle.style.display   = 'none';
+            signInLink.style.display    = '';
+        });
+
+        // Return to sign-in from forgot mode.
+        signInLink.addEventListener('click', () => {
+            enterSignInMode();
         });
 
         loginForm.addEventListener('submit', async (e: Event) => {
@@ -125,8 +142,8 @@ export function waitForLogin(): Promise<void> {
             const email    = (document.getElementById('login-email') as HTMLInputElement).value.trim();
             const password = (document.getElementById('login-password') as HTMLInputElement).value;
 
-            if (!email || !password) {
-                loginError.textContent = 'Please fill in both fields.';
+            if (!email) {
+                loginError.textContent = 'Please enter your email address.';
                 return;
             }
 
@@ -135,7 +152,27 @@ export function waitForLogin(): Promise<void> {
                 return;
             }
 
-            if (isCreateMode) {
+            // Forgot-password mode: send reset email and stop.
+            if (mode === 'forgot') {
+                loginSubmit.disabled    = true;
+                loginSubmit.textContent = 'Sending…';
+                try {
+                    await callSendResetEmail({ email });
+                    loginError.textContent = 'Password reset email sent! Check your inbox.';
+                } catch (err) {
+                    loginError.textContent = friendlyError(err as AuthError);
+                }
+                loginSubmit.disabled    = false;
+                loginSubmit.textContent = 'Reset Password';
+                return;
+            }
+
+            if (!password) {
+                loginError.textContent = 'Please enter your password.';
+                return;
+            }
+
+            if (mode === 'create') {
                 const passwordIssue = validatePassword(password);
                 if (passwordIssue) {
                     loginError.textContent = passwordIssue;
@@ -149,15 +186,15 @@ export function waitForLogin(): Promise<void> {
 
             loginError.textContent = '';
             loginSubmit.disabled   = true;
-            loginSubmit.textContent = isCreateMode ? 'Creating…' : 'Signing in…';
+            loginSubmit.textContent = mode === 'create' ? 'Creating…' : 'Signing in…';
 
             try {
-                if (isCreateMode) {
+                if (mode === 'create') {
                     const { user } = await createUserWithEmailAndPassword(auth, email, password);
                     await callSendVerificationEmail();
                     await signOut(auth);
                     // Switch to sign-in mode so they can log in after verifying.
-                    loginToggle.click();
+                    enterSignInMode();
                     loginError.textContent = 'Verification email sent! Please check your inbox and verify your email, then sign in.';
                     loginSubmit.disabled   = false;
                     return;
@@ -183,7 +220,7 @@ export function waitForLogin(): Promise<void> {
             } catch (err) {
                 loginError.textContent = friendlyError(err as AuthError);
                 loginSubmit.disabled   = false;
-                loginSubmit.textContent = isCreateMode ? 'Create Account' : 'Sign In';
+                loginSubmit.textContent = mode === 'create' ? 'Create Account' : 'Sign In';
             }
         });
     });

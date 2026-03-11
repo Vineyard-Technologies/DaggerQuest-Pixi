@@ -69,23 +69,25 @@ function getResend() {
 function emailTemplate(title, bodyContent) {
     return `<!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#0a0a0a;font-family:Georgia,serif;">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Grenze:wght@600&display=swap');</style>
+</head>
+<body style="margin:0;padding:0;background:#0a0a0a;font-family:'Grenze',Georgia,serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;padding:40px 0;">
 <tr><td align="center">
 <table width="480" cellpadding="0" cellspacing="0" style="background:linear-gradient(180deg,#1a1209,#0f0d06);border:1px solid #3a3020;border-radius:8px;padding:40px;">
 <tr><td align="center" style="padding-bottom:24px;">
-  <img src="https://daggerquest.com/logo.webp" alt="DaggerQuest" width="220" style="display:block;" />
+  <img src="https://daggerquest.com/images/logo.webp" alt="DaggerQuest" width="220" style="display:block;" />
 </td></tr>
-<tr><td align="center" style="color:#e2c97e;font-size:22px;padding-bottom:16px;letter-spacing:2px;">
+<tr><td align="center" style="font-family:'Cinzel',Georgia,serif;color:#e2c97e;font-size:22px;padding-bottom:16px;letter-spacing:2px;">
   ${title}
 </td></tr>
-<tr><td style="color:#b8a66a;font-size:16px;line-height:1.6;padding:0 10px;">
+<tr><td style="font-family:'Grenze',Georgia,serif;color:#b8a66a;font-size:16px;line-height:1.6;padding:0 10px;">
   ${bodyContent}
 </td></tr>
 </table>
 <table width="480" cellpadding="0" cellspacing="0" style="padding-top:20px;">
-<tr><td align="center" style="color:#5a4e32;font-size:12px;">
+<tr><td align="center" style="font-family:'Grenze',Georgia,serif;color:#5a4e32;font-size:12px;">
   &copy; Vineyard Technologies &mdash; DaggerQuest
 </td></tr>
 </table>
@@ -98,7 +100,7 @@ function emailTemplate(title, bodyContent) {
 function actionButton(url, label) {
     return `<table width="100%" cellpadding="0" cellspacing="0" style="padding:24px 0 8px;">
 <tr><td align="center">
-  <a href="${url}" style="display:inline-block;padding:12px 32px;background:linear-gradient(180deg,#3a2e14,#241c08);border:1px solid #5a4a28;border-radius:4px;color:#d4c28a;font-size:15px;text-decoration:none;letter-spacing:2px;">${label}</a>
+  <a href="${url}" style="display:inline-block;padding:12px 32px;background:linear-gradient(180deg,#3a2e14,#241c08);border:1px solid #5a4a28;border-radius:4px;color:#d4c28a;font-family:'Cinzel',Georgia,serif;font-size:15px;text-decoration:none;letter-spacing:2px;">${label}</a>
 </td></tr>
 </table>`;
 }
