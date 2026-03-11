@@ -222,9 +222,9 @@
   "mainhandplaceholder": [
     "./mainhandplaceholder/mainhandplaceholder-0.json"
   ],
-  "man": [
-    "./man/man-0.json",
-    "./man/man-1.json"
+  "chevalier": [
+    "./chevalier/chevalier-0.json",
+    "./chevalier/chevalier-1.json"
   ],
   "manacover": [
     "./manacover/manacover-0.json"
@@ -232,108 +232,108 @@
   "manaorb": [
     "./manaorb/manaorb-0.json"
   ],
-  "man_ability": [
-    "./man_ability/man_ability-0.json"
+  "chevalier_ability": [
+    "./chevalier_ability/chevalier_ability-0.json"
   ],
-  "man_crudehelmet_gear": [
-    "./man_crudehelmet_gear/man_crudehelmet_gear-0.json"
+  "chevalier_crudehelmet_gear": [
+    "./chevalier_crudehelmet_gear/chevalier_crudehelmet_gear-0.json"
   ],
-  "man_crudehelmet_gear_shadow": [
-    "./man_crudehelmet_gear_shadow/man_crudehelmet_gear_shadow-0.json"
+  "chevalier_crudehelmet_gear_shadow": [
+    "./chevalier_crudehelmet_gear_shadow/chevalier_crudehelmet_gear_shadow-0.json"
   ],
-  "man_headdefault_gear": [
-    "./man_headdefault_gear/man_headdefault_gear-0.json"
+  "chevalier_headdefault_gear": [
+    "./chevalier_headdefault_gear/chevalier_headdefault_gear-0.json"
   ],
-  "man_headdefault_gear_shadow": [
-    "./man_headdefault_gear_shadow/man_headdefault_gear_shadow-0.json"
+  "chevalier_headdefault_gear_shadow": [
+    "./chevalier_headdefault_gear_shadow/chevalier_headdefault_gear_shadow-0.json"
   ],
-  "man_leatherjacket_gear": [
-    "./man_leatherjacket_gear/man_leatherjacket_gear-0.json"
+  "chevalier_leatherjacket_gear": [
+    "./chevalier_leatherjacket_gear/chevalier_leatherjacket_gear-0.json"
   ],
-  "man_leatherjacket_gear_shadow": [
-    "./man_leatherjacket_gear_shadow/man_leatherjacket_gear_shadow-0.json"
+  "chevalier_leatherjacket_gear_shadow": [
+    "./chevalier_leatherjacket_gear_shadow/chevalier_leatherjacket_gear_shadow-0.json"
   ],
-  "man_leggings_gear": [
-    "./man_leggings_gear/man_leggings_gear-0.json"
+  "chevalier_leggings_gear": [
+    "./chevalier_leggings_gear/chevalier_leggings_gear-0.json"
   ],
-  "man_leggings_gear_shadow": [
-    "./man_leggings_gear_shadow/man_leggings_gear_shadow-0.json"
+  "chevalier_leggings_gear_shadow": [
+    "./chevalier_leggings_gear_shadow/chevalier_leggings_gear_shadow-0.json"
   ],
-  "man_legsdefault_gear": [
-    "./man_legsdefault_gear/man_legsdefault_gear-0.json"
+  "chevalier_legsdefault_gear": [
+    "./chevalier_legsdefault_gear/chevalier_legsdefault_gear-0.json"
   ],
-  "man_legsdefault_gear_shadow": [
-    "./man_legsdefault_gear_shadow/man_legsdefault_gear_shadow-0.json"
+  "chevalier_legsdefault_gear_shadow": [
+    "./chevalier_legsdefault_gear_shadow/chevalier_legsdefault_gear_shadow-0.json"
   ],
-  "man_maraudersbracers_gear": [
-    "./man_maraudersbracers_gear/man_maraudersbracers_gear-0.json"
+  "chevalier_maraudersbracers_gear": [
+    "./chevalier_maraudersbracers_gear/chevalier_maraudersbracers_gear-0.json"
   ],
-  "man_maraudersbracers_gear_shadow": [
-    "./man_maraudersbracers_gear_shadow/man_maraudersbracers_gear_shadow-0.json"
+  "chevalier_maraudersbracers_gear_shadow": [
+    "./chevalier_maraudersbracers_gear_shadow/chevalier_maraudersbracers_gear_shadow-0.json"
   ],
-  "man_maraudersstraps_gear": [
-    "./man_maraudersstraps_gear/man_maraudersstraps_gear-0.json"
+  "chevalier_maraudersstraps_gear": [
+    "./chevalier_maraudersstraps_gear/chevalier_maraudersstraps_gear-0.json"
   ],
-  "man_maraudersstraps_gear_shadow": [
-    "./man_maraudersstraps_gear_shadow/man_maraudersstraps_gear_shadow-0.json"
+  "chevalier_maraudersstraps_gear_shadow": [
+    "./chevalier_maraudersstraps_gear_shadow/chevalier_maraudersstraps_gear_shadow-0.json"
   ],
-  "man_ornateshield_gear": [
-    "./man_ornateshield_gear/man_ornateshield_gear-0.json"
+  "chevalier_ornateshield_gear": [
+    "./chevalier_ornateshield_gear/chevalier_ornateshield_gear-0.json"
   ],
-  "man_ornateshield_gear_shadow": [
-    "./man_ornateshield_gear_shadow/man_ornateshield_gear_shadow-0.json"
+  "chevalier_ornateshield_gear_shadow": [
+    "./chevalier_ornateshield_gear_shadow/chevalier_ornateshield_gear_shadow-0.json"
   ],
-  "man_shadow": [
-    "./man_shadow/man_shadow-0.json",
-    "./man_shadow/man_shadow-1.json"
+  "chevalier_shadow": [
+    "./chevalier_shadow/chevalier_shadow-0.json",
+    "./chevalier_shadow/chevalier_shadow-1.json"
   ],
-  "man_simplegloves_gear": [
-    "./man_simplegloves_gear/man_simplegloves_gear-0.json"
+  "chevalier_simplegloves_gear": [
+    "./chevalier_simplegloves_gear/chevalier_simplegloves_gear-0.json"
   ],
-  "man_simplegloves_gear_shadow": [
-    "./man_simplegloves_gear_shadow/man_simplegloves_gear_shadow-0.json"
+  "chevalier_simplegloves_gear_shadow": [
+    "./chevalier_simplegloves_gear_shadow/chevalier_simplegloves_gear_shadow-0.json"
   ],
-  "man_simplehelmet_gear": [
-    "./man_simplehelmet_gear/man_simplehelmet_gear-0.json"
+  "chevalier_simplehelmet_gear": [
+    "./chevalier_simplehelmet_gear/chevalier_simplehelmet_gear-0.json"
   ],
-  "man_simplehelmet_gear_shadow": [
-    "./man_simplehelmet_gear_shadow/man_simplehelmet_gear_shadow-0.json"
+  "chevalier_simplehelmet_gear_shadow": [
+    "./chevalier_simplehelmet_gear_shadow/chevalier_simplehelmet_gear_shadow-0.json"
   ],
-  "man_simplemace_gear": [
-    "./man_simplemace_gear/man_simplemace_gear-0.json"
+  "chevalier_simplemace_gear": [
+    "./chevalier_simplemace_gear/chevalier_simplemace_gear-0.json"
   ],
-  "man_simplemace_gear_shadow": [
-    "./man_simplemace_gear_shadow/man_simplemace_gear_shadow-0.json"
+  "chevalier_simplemace_gear_shadow": [
+    "./chevalier_simplemace_gear_shadow/chevalier_simplemace_gear_shadow-0.json"
   ],
-  "man_simplepants_gear": [
-    "./man_simplepants_gear/man_simplepants_gear-0.json"
+  "chevalier_simplepants_gear": [
+    "./chevalier_simplepants_gear/chevalier_simplepants_gear-0.json"
   ],
-  "man_simplepants_gear_shadow": [
-    "./man_simplepants_gear_shadow/man_simplepants_gear_shadow-0.json"
+  "chevalier_simplepants_gear_shadow": [
+    "./chevalier_simplepants_gear_shadow/chevalier_simplepants_gear_shadow-0.json"
   ],
-  "man_simpleshield_gear": [
-    "./man_simpleshield_gear/man_simpleshield_gear-0.json"
+  "chevalier_simpleshield_gear": [
+    "./chevalier_simpleshield_gear/chevalier_simpleshield_gear-0.json"
   ],
-  "man_simpleshield_gear_shadow": [
-    "./man_simpleshield_gear_shadow/man_simpleshield_gear_shadow-0.json"
+  "chevalier_simpleshield_gear_shadow": [
+    "./chevalier_simpleshield_gear_shadow/chevalier_simpleshield_gear_shadow-0.json"
   ],
-  "man_simpleshirt_gear": [
-    "./man_simpleshirt_gear/man_simpleshirt_gear-0.json"
+  "chevalier_simpleshirt_gear": [
+    "./chevalier_simpleshirt_gear/chevalier_simpleshirt_gear-0.json"
   ],
-  "man_simpleshirt_gear_shadow": [
-    "./man_simpleshirt_gear_shadow/man_simpleshirt_gear_shadow-0.json"
+  "chevalier_simpleshirt_gear_shadow": [
+    "./chevalier_simpleshirt_gear_shadow/chevalier_simpleshirt_gear_shadow-0.json"
   ],
-  "man_simplesword_gear": [
-    "./man_simplesword_gear/man_simplesword_gear-0.json"
+  "chevalier_simplesword_gear": [
+    "./chevalier_simplesword_gear/chevalier_simplesword_gear-0.json"
   ],
-  "man_simplesword_gear_shadow": [
-    "./man_simplesword_gear_shadow/man_simplesword_gear_shadow-0.json"
+  "chevalier_simplesword_gear_shadow": [
+    "./chevalier_simplesword_gear_shadow/chevalier_simplesword_gear_shadow-0.json"
   ],
-  "man_strappedboots_gear": [
-    "./man_strappedboots_gear/man_strappedboots_gear-0.json"
+  "chevalier_strappedboots_gear": [
+    "./chevalier_strappedboots_gear/chevalier_strappedboots_gear-0.json"
   ],
-  "man_strappedboots_gear_shadow": [
-    "./man_strappedboots_gear_shadow/man_strappedboots_gear_shadow-0.json"
+  "chevalier_strappedboots_gear_shadow": [
+    "./chevalier_strappedboots_gear_shadow/chevalier_strappedboots_gear_shadow-0.json"
   ],
   "maraudersbracers_item": [
     "./maraudersbracers_item/maraudersbracers_item-0.json"
@@ -401,11 +401,11 @@
   "ringplaceholder": [
     "./ringplaceholder/ringplaceholder-0.json"
   ],
-  "selectman": [
-    "./selectman/selectman-0.json"
+  "selectchevalier": [
+    "./selectchevalier/selectchevalier-0.json"
   ],
-  "selectwoman": [
-    "./selectwoman/selectwoman-0.json"
+  "selectvanguard": [
+    "./selectvanguard/selectvanguard-0.json"
   ],
   "settingsmenu": [
     "./settingsmenu/settingsmenu-0.json"
@@ -512,50 +512,50 @@
   "windmillupperstairs": [
     "./windmillupperstairs/windmillupperstairs-0.json"
   ],
-  "woman": [
-    "./woman/woman-0.json"
+  "vanguard": [
+    "./vanguard/vanguard-0.json"
   ],
-  "woman_chestdefault_gear": [
-    "./woman_chestdefault_gear/woman_chestdefault_gear-0.json"
+  "vanguard_chestdefault_gear": [
+    "./vanguard_chestdefault_gear/vanguard_chestdefault_gear-0.json"
   ],
-  "woman_chestdefault_gear_shadow": [
-    "./woman_chestdefault_gear_shadow/woman_chestdefault_gear_shadow-0.json"
+  "vanguard_chestdefault_gear_shadow": [
+    "./vanguard_chestdefault_gear_shadow/vanguard_chestdefault_gear_shadow-0.json"
   ],
-  "woman_headdefault_gear": [
-    "./woman_headdefault_gear/woman_headdefault_gear-0.json"
+  "vanguard_headdefault_gear": [
+    "./vanguard_headdefault_gear/vanguard_headdefault_gear-0.json"
   ],
-  "woman_headdefault_gear_shadow": [
-    "./woman_headdefault_gear_shadow/woman_headdefault_gear_shadow-0.json"
+  "vanguard_headdefault_gear_shadow": [
+    "./vanguard_headdefault_gear_shadow/vanguard_headdefault_gear_shadow-0.json"
   ],
-  "woman_leatherjacket_gear": [
-    "./woman_leatherjacket_gear/woman_leatherjacket_gear-0.json"
+  "vanguard_leatherjacket_gear": [
+    "./vanguard_leatherjacket_gear/vanguard_leatherjacket_gear-0.json"
   ],
-  "woman_leatherjacket_gear_shadow": [
-    "./woman_leatherjacket_gear_shadow/woman_leatherjacket_gear_shadow-0.json"
+  "vanguard_leatherjacket_gear_shadow": [
+    "./vanguard_leatherjacket_gear_shadow/vanguard_leatherjacket_gear_shadow-0.json"
   ],
-  "woman_leggings_gear": [
-    "./woman_leggings_gear/woman_leggings_gear-0.json"
+  "vanguard_leggings_gear": [
+    "./vanguard_leggings_gear/vanguard_leggings_gear-0.json"
   ],
-  "woman_legsdefault_gear": [
-    "./woman_legsdefault_gear/woman_legsdefault_gear-0.json"
+  "vanguard_legsdefault_gear": [
+    "./vanguard_legsdefault_gear/vanguard_legsdefault_gear-0.json"
   ],
-  "woman_legsdefault_gear_shadow": [
-    "./woman_legsdefault_gear_shadow/woman_legsdefault_gear_shadow-0.json"
+  "vanguard_legsdefault_gear_shadow": [
+    "./vanguard_legsdefault_gear_shadow/vanguard_legsdefault_gear_shadow-0.json"
   ],
-  "woman_shadow": [
-    "./woman_shadow/woman_shadow-0.json"
+  "vanguard_shadow": [
+    "./vanguard_shadow/vanguard_shadow-0.json"
   ],
-  "woman_simplepants_gear": [
-    "./woman_simplepants_gear/woman_simplepants_gear-0.json"
+  "vanguard_simplepants_gear": [
+    "./vanguard_simplepants_gear/vanguard_simplepants_gear-0.json"
   ],
-  "woman_simplepants_gear_shadow": [
-    "./woman_simplepants_gear_shadow/woman_simplepants_gear_shadow-0.json"
+  "vanguard_simplepants_gear_shadow": [
+    "./vanguard_simplepants_gear_shadow/vanguard_simplepants_gear_shadow-0.json"
   ],
-  "woman_simpleshirt_gear": [
-    "./woman_simpleshirt_gear/woman_simpleshirt_gear-0.json"
+  "vanguard_simpleshirt_gear": [
+    "./vanguard_simpleshirt_gear/vanguard_simpleshirt_gear-0.json"
   ],
-  "woman_simpleshirt_gear_shadow": [
-    "./woman_simpleshirt_gear_shadow/woman_simpleshirt_gear_shadow-0.json"
+  "vanguard_simpleshirt_gear_shadow": [
+    "./vanguard_simpleshirt_gear_shadow/vanguard_simpleshirt_gear_shadow-0.json"
   ],
   "woodenchest": [
     "./woodenchest/woodenchest-0.json"

@@ -9,9 +9,9 @@ interface ClassOptions {
     animFps?: Record<string, number>;
 }
 
-class Man extends Player {
+class Chevalier extends Player {
     constructor({ x, y, speed = 250, animFps = { idle: 10 } }: ClassOptions = {} as ClassOptions) {
-        super({ x, y, spriteKey: 'man', speed, animFps });
+        super({ x, y, spriteKey: 'chevalier', speed, animFps });
         this.defaultGearSlots = {
             [GearSlot.Head]: 'headdefault',
             [GearSlot.Legs]: 'legsdefault',
@@ -19,9 +19,9 @@ class Man extends Player {
     }
 }
 
-class Woman extends Player {
+class Vanguard extends Player {
     constructor({ x, y, speed = 250, animFps = { idle: 10 } }: ClassOptions = {} as ClassOptions) {
-        super({ x, y, spriteKey: 'woman', speed, animFps });
+        super({ x, y, spriteKey: 'vanguard', speed, animFps });
         this.defaultGearSlots = {
             [GearSlot.Head]: 'headdefault',
             [GearSlot.Chest]: 'chestdefault',
@@ -38,8 +38,8 @@ interface PlayerSpawnOptions {
 }
 
 const PLAYER_CLASSES: Record<string, new (opts: PlayerSpawnOptions) => Player> = {
-    man: Man,
-    woman: Woman,
+    chevalier: Chevalier,
+    vanguard: Vanguard,
 };
 
 function createPlayer(spriteKey: string, x: number, y: number): Player {
@@ -48,4 +48,4 @@ function createPlayer(spriteKey: string, x: number, y: number): Player {
     return new PlayerClass({ x, y });
 }
 
-export { Man, Woman, createPlayer };
+export { Chevalier, Vanguard, createPlayer };

@@ -6,13 +6,13 @@
  *
  * Recursively scans the entire DaggerQuest objectTypes directory for JSON
  * files that contain animation data with originX/originY per frame.  Each
- * objectType JSON has a "name" field (e.g. "man", "goblinArcher",
- * "man_simpleSword_gear") which is matched case-insensitively to a
+ * objectType JSON has a "name" field (e.g. "chevalier", "goblinArcher",
+ * "chevalier_simpleSword_gear") which is matched case-insensitively to a
  * spritesheet folder in the spritesheets directory.
  *
  * Spritesheet frame names follow the pattern:
  *   <objectName>-<animType>_<direction>-<frameIndex>
- *   e.g. man-walk_135-008
+ *   e.g. chevalier-walk_135-008
  *
  * Usage:
  *   npx tsx scripts/patchAnchors.ts [daggerQuestObjectTypesDir] [spritesheetsDir]
@@ -137,7 +137,7 @@ async function main(): Promise<void> {
             let patchedInFile = 0;
 
             // Build regex using the actual spritesheet prefix (lowercase)
-            // Pattern 1: directional frames — man-walk_135-008
+            // Pattern 1: directional frames — chevalier-walk_135-008
             const directionalRegex = new RegExp(
                 `^${escapeRegex(sheetDirName)}-([\\w]+_[\\-\\d.]+)-(\\d+)$`, 'i'
             );

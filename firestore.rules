@@ -7,6 +7,22 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Character data: each user can manage up to 3 characters.
+    match /users/{userId}/characters/{charId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId
+                    && request.resource.data.keys().hasAll(['name', 'className', 'level', 'slot', 'createdAt'])
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() >= 1
+                    && request.resource.data.name.size() <= 16
+                    && request.resource.data.className is string
+                    && request.resource.data.level is int
+                    && request.resource.data.slot is int
+                    && request.resource.data.slot >= 0
+                    && request.resource.data.slot <= 2;
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
     // Deny-all catch-all: no client can read or write any collection
     // unless explicitly allowed above.
     match /{document=**} {

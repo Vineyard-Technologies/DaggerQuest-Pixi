@@ -215,7 +215,8 @@ export function waitForLogin(): Promise<void> {
                     }
                 }
 
-                showLoadingOverlay();
+                // Hide login — character select will appear next.
+                loginOverlay.classList.add('hidden');
                 resolve();
             } catch (err) {
                 loginError.textContent = friendlyError(err as AuthError);
@@ -244,13 +245,10 @@ export function hideOverlays(): void {
     }, 600);
 }
 
-// ── Internals ─────────────────────────────────────────────────────────────
-
-function showLoadingOverlay(): void {
-    // Fade out login, show loading.
-    loginOverlay.classList.add('hidden');
+/** Show the loading bar overlay after character selection. */
+export function showLoadingOverlay(): void {
     loadingOverlay.style.display = 'flex';
-    setLoadingProgress(0, 'Authentication successful — loading game…');
+    setLoadingProgress(0, 'Loading game…');
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

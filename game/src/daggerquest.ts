@@ -9,7 +9,8 @@ import { HOVER_OUTLINE } from './outlineFilter';
 import { Entity } from './entity';
 import type { Loot } from './loot';
 import { NPC } from './npc';
-import { waitForLogin, setLoadingProgress, hideOverlays } from './login';
+import { waitForLogin, setLoadingProgress, hideOverlays, showLoadingOverlay } from './login';
+import { waitForCharacterSelect, hideCharacterSelect } from './characterSelect';
 
 // Ensure the game is only playable when embedded in an iframe on DaggerQuest.com.
 // Block direct access (top-level browsing) and embedding on unauthorized sites.
@@ -33,6 +34,11 @@ async function init(): Promise<void> {
     // Wait for the user to log in before loading the heavy game assets.
     await waitForLogin();
 
+    // Let the player choose (or create) a character.
+    const selectedChar = await waitForCharacterSelect();
+    hideCharacterSelect();
+
+    showLoadingOverlay();
     setLoadingProgress(5, 'Initializing engine…');
 
     state.app = new PIXI.Application();
@@ -64,7 +70,7 @@ async function init(): Promise<void> {
 
     setLoadingProgress(60, 'Creating player…');
 
-    await initPlayer('woman');
+    await initPlayer(selectedChar.className);
 
     setLoadingProgress(80, 'Preparing UI…');
 
