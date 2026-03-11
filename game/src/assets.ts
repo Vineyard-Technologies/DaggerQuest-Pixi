@@ -30,12 +30,13 @@ export function trackTexture(texture: PIXI.Texture): void {
 
 /**
  * Free CPU-side image data for all tracked texture sources.
- * Call after the first render frame so textures are already on the GPU.
- * After this call, textures remain usable for rendering but cannot be
- * re-uploaded on WebGL context loss.
+ * Forces GPU upload for every source first so that multi-atlas
+ * spritesheets whose later atlases haven't been rendered yet are
+ * safely on the GPU before we close their ImageBitmaps.
  */
-export function releaseTrackedCPUData(): void {
+export function releaseTrackedCPUData(renderer: PIXI.Renderer): void {
     for (const source of _trackedSources) {
+        renderer.texture.initSource(source);
         const res = source.resource;
         if (res && typeof (res as ImageBitmap).close === 'function') {
             (res as ImageBitmap).close();
