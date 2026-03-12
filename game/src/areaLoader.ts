@@ -8,9 +8,7 @@
 import { Area, type AreaOptions } from './area';
 import { createNPC } from './npc';
 import { createEnemy } from './enemy';
-import { Item } from './item';
-import type { GearSlot } from './types';
-import type { RolledMod } from './mods';
+import { createItem } from './items';
 
 // ── JSON schema types ─────────────────────────────────────────────────────
 
@@ -34,27 +32,16 @@ interface AreaEnemyDef {
     spriteKey?: string;
 }
 
-interface AreaItemDef {
-    id: string;
-    name: string;
-    description?: string;
-    slot: string;
-    baseStats?: Record<string, number>;
-    mods?: RolledMod[];
-}
-
 interface AreaLootDef {
     x: number;
     y: number;
     sortY?: number;
-    item: AreaItemDef;
+    id: string;
 }
 
 export interface AreaDefinition {
     area: AreaOptions;
     boundaries?: Array<{ x: number; y: number; width: number; height: number }>;
-    buildings?: AreaStaticSprite[];
-    fences?: AreaStaticSprite[];
     props?: AreaStaticSprite[];
     npcs?: AreaNpcDef[];
     enemies?: AreaEnemyDef[];
@@ -78,12 +65,6 @@ export async function loadArea(def: AreaDefinition): Promise<Area> {
     }
 
     await Promise.all([
-        ...(def.buildings ?? []).map(d =>
-            area.placeStaticSprite(d.key, d.x, d.y, { shadow: d.shadow, collider: d.collider }),
-        ),
-        ...(def.fences ?? []).map(d =>
-            area.placeStaticSprite(d.key, d.x, d.y, { shadow: d.shadow, collider: d.collider }),
-        ),
         ...(def.props ?? []).map(d =>
             area.placeStaticSprite(d.key, d.x, d.y, { shadow: d.shadow, collider: d.collider }),
         ),
@@ -100,15 +81,8 @@ export async function loadArea(def: AreaDefinition): Promise<Area> {
             area.container.addChild(enemy.container);
             area.enemies.push(enemy);
         }),
-        ...(def.loot ?? []).map(async ({ x, y, sortY, item: itemDef }) => {
-            const item = new Item({
-                id: itemDef.id,
-                name: itemDef.name,
-                description: itemDef.description,
-                slot: itemDef.slot as GearSlot,
-                baseStats: itemDef.baseStats,
-                mods: itemDef.mods,
-            });
+        ...(def.loot ?? []).map(async ({ x, y, sortY, id }) => {
+            const item = createItem(id);
             const loot = item.createLoot(x, y);
             await loot.loadTextures();
             if (sortY != null) loot.container.sortY = sortY;

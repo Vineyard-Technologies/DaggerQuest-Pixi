@@ -1,9 +1,9 @@
 import * as PIXI from 'pixi.js';
 import { fetchManifest, assetPath } from './assets';
-import { rollMods, aggregateModStats, formatMod } from './mods';
+import { MOD_POOL, rollMods, aggregateModStats, formatMod } from './mods';
 import { Loot } from './loot';
 import { Gear } from './gear';
-import type { RolledMod } from './mods';
+import type { ModDefinition, RolledMod } from './mods';
 import type { GearSlot } from './types';
 
 interface ItemOptions {
@@ -13,7 +13,8 @@ interface ItemOptions {
     slot: GearSlot;
     baseStats?: Record<string, number>;
     stats?: Record<string, number>;
-    mods?: RolledMod[];
+    allowedClasses?: readonly string[];
+    modTables?: readonly string[];
 }
 
 class Item {
@@ -23,18 +24,36 @@ class Item {
     readonly slot: GearSlot;
     readonly baseStats: Readonly<Record<string, number>>;
     readonly mods: readonly RolledMod[];
+    /** Player class spriteKeys allowed to equip this item (empty = all). */
+    readonly allowedClasses: readonly string[];
+    /** Mod-type tags this item can roll on (empty = full pool). */
+    readonly modTables: readonly string[];
     private _iconTexture: PIXI.Texture | null;
     private _iconAssetPaths: string[];
 
-    constructor({ id, name, description = '', slot, baseStats = {}, stats = {}, mods = undefined }: ItemOptions) {
+    constructor({ id, name, description = '', slot, baseStats = {}, stats = {}, allowedClasses = [], modTables = [] }: ItemOptions) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.slot = slot;
+        this.allowedClasses = allowedClasses;
+        this.modTables = modTables;
         this.baseStats = Object.keys(baseStats).length > 0 ? baseStats : stats;
-        this.mods = mods !== undefined ? mods : rollMods();
+        this.mods = rollMods({ pool: this.modPool });
         this._iconTexture = null;
         this._iconAssetPaths = [];
+    }
+
+    /** Filtered mod pool based on this item's modTables. */
+    get modPool(): readonly ModDefinition[] {
+        if (this.modTables.length === 0) return MOD_POOL;
+        const allowed = new Set(this.modTables);
+        return MOD_POOL.filter(m => allowed.has(m.type));
+    }
+
+    /** Whether the given player class spriteKey is allowed to equip this item. */
+    canBeUsedBy(classSpriteKey: string): boolean {
+        return this.allowedClasses.length === 0 || this.allowedClasses.includes(classSpriteKey);
     }
 
     get stats(): Record<string, number> {

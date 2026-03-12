@@ -11,14 +11,12 @@
     { "x": 4050, "y": 2046, "width": 50,  "height": 4096 },
     { "x": 3813, "y": 3614, "width": 50,  "height": 984  }
   ],
-  "buildings": [
+  "props": [
     { "key": "farmhouse",       "x": 1594, "y": 3337 },
     { "key": "longhouse",       "x": 869,  "y": 3981 },
     { "key": "cottageexterior", "x": 733,  "y": 493,  "shadow": true  },
     { "key": "farmhousetree",   "x": 4030, "y": 4049 },
-    { "key": "cottagedoor",     "x": 728,  "y": 493,  "shadow": false, "collider": false }
-  ],
-  "fences": [
+    { "key": "cottagedoor",     "x": 728,  "y": 493,  "shadow": false, "collider": false },
     { "key": "fencepatchedright",   "x": 708,  "y": 2528 },
     { "key": "fenceright",          "x": 1032, "y": 2365 },
     { "key": "fencepatchedright",   "x": 1355, "y": 2204 },
@@ -61,12 +59,9 @@
     { "key": "fencevertical", "x": 4098, "y": 611  },
     { "key": "fencevertical", "x": 4099, "y": 2150 },
     { "key": "fencevertical", "x": 4098, "y": 2380 },
-    { "key": "fencevertical", "x": 4099, "y": 2612 }
-  ],
-  "props": [
+    { "key": "fencevertical", "x": 4099, "y": 2612 },
     { "key": "cart",          "x": 3150, "y": 3624 },
     { "key": "table",         "x": 2065, "y": 3661 },
-    { "key": "table",         "x": 1683, "y": 3565 },
     { "key": "woodenchest",   "x": 3834, "y": 2156 },
     { "key": "pillaroffate",  "x": 1377, "y": 3702 }
   ],
@@ -81,48 +76,7 @@
     { "x": 2374, "y": 1195, "spriteKey": "goblinwarlock" }
   ],
   "loot": [
-    {
-      "x": 1750, "y": 3480, "sortY": 3566,
-      "item": {
-        "id": "simplesword", "name": "Simple Sword",
-        "description": "The first of many",
-        "slot": "mainhand",
-        "baseStats": { "slashDamage": 3 },
-        "mods": [{ "modId": "flat_stab_damage", "value": 2 }]
-      }
-    },
-    {
-      "x": 1833, "y": 3531, "sortY": 3566,
-      "item": {
-        "id": "simpleshield", "name": "Simple Shield",
-        "description": "No respite for the scorned",
-        "slot": "offhand",
-        "baseStats": { "armor": 5 },
-        "mods": [{ "modId": "flat_max_health", "value": 4 }]
-      }
-    },
-    {
-      "x": 2127, "y": 3581, "sortY": 3662,
-      "item": {
-        "id": "simpleshirt", "name": "Simple Shirt",
-        "description": "Deep in the midst, you conceal him",
-        "slot": "chest",
-        "baseStats": { "maxHealth": 2 },
-        "mods": [
-          { "modId": "flat_armor",       "value": 1 },
-          { "modId": "flat_health_regen","value": 1 }
-        ]
-      }
-    },
-    {
-      "x": 2218, "y": 3627, "sortY": 3662,
-      "item": {
-        "id": "simplepants", "name": "Simple Pants",
-        "description": "Whoso is simple, let him perish!",
-        "slot": "legs",
-        "baseStats": { "manaRegen": 1 },
-        "mods": []
-      }
-    }
+    { "x": 2127, "y": 3581, "sortY": 3662, "id": "simpleshirt" },
+    { "x": 2218, "y": 3627, "sortY": 3662, "id": "simplepants" }
   ]
 }

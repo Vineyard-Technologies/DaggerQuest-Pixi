@@ -69,11 +69,11 @@ function rollModValue(min: number, max: number, exponent = 2): number {
     return Math.round(min + t * (max - min));
 }
 
-function rollMods({ maxMods = 6, valueExponent = 2 } = {}): RolledMod[] {
+function rollMods({ maxMods = 6, valueExponent = 2, pool }: { maxMods?: number; valueExponent?: number; pool?: readonly ModDefinition[] } = {}): RolledMod[] {
     const countWeights = MOD_COUNT_WEIGHTS.slice(0, maxMods + 1);
     const count = weightedRandomIndex(countWeights);
     if (count === 0) return [];
-    const available = [...MOD_POOL];
+    const available = [...(pool ?? MOD_POOL)];
     const chosen: RolledMod[] = [];
     for (let i = 0; i < count && available.length > 0; i++) {
         const weights = available.map(m => m.weight);

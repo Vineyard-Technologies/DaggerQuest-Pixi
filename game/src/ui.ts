@@ -831,7 +831,28 @@ class TooltipManager {
         slotText.x = pad;
         slotText.y = yOffset;
         this._container.addChild(slotText);
-        yOffset += slotText.height + 6;
+        yOffset += slotText.height + 4;
+
+        if (item.allowedClasses.length > 0) {
+            const classNames = item.allowedClasses
+                .map((c: string) => c.charAt(0).toUpperCase() + c.slice(1))
+                .join(', ');
+            const classText = new PIXI.Text({
+                text: classNames + ' Only',
+                style: {
+                    fontFamily: 'Grenze, serif',
+                    fontSize: TOOLTIP_DESC_FONT_SIZE,
+                    fill: 0xCC8844,
+                    stroke: { color: 0x000000, width: 1 },
+                },
+            });
+            classText.x = pad;
+            classText.y = yOffset;
+            this._container.addChild(classText);
+            yOffset += classText.height + 4;
+        }
+
+        yOffset += 2;
 
         const baseEntries = Object.entries(item.baseStats);
         if (baseEntries.length > 0) {

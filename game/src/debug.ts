@@ -22,13 +22,15 @@
  *   H   – Reduce player health by 10
  *   M   – Reduce player mana by 10
  *   F6  – Toggle invincibility
- *   F7  – Spawn a random enemy in front of the player
+ *   F7  – Spawn a random enemy at the cursor
+ *   F8  – Spawn a random piece of loot at the cursor
  */
 
 import * as PIXI from 'pixi.js';
 import state from './state';
 import { Character } from './character';
 import { createEnemy } from './enemy';
+import { createItem } from './items';
 
 declare global {
     interface Window {
@@ -317,10 +319,11 @@ function initDebug(): void {
         if (window.DEBUG.teleportMode) lines.push('TELEPORT (Shift+Click)');
         if (window.DEBUG.showCollision) lines.push('COLLISION');
         lines.push('');
-        lines.push('F5 collision | F2 noclip');
-        lines.push('F3 teleport  | F4 reset speed');
-        lines.push('+/- speed    | F1 toggle debug');
-        lines.push('F6 invincible| F7 spawn enemy');
+        lines.push('F1 toggle debug | F2 noclip');
+        lines.push('F3 teleport     | F4 reset speed');
+        lines.push('F5 collision    | F6 invincible');
+        lines.push('F7 spawn enemy  | F8 spawn loot');
+        lines.push('+/- speed | H health | M mana');
 
         debugText.text = lines.join('\n');
 
@@ -453,6 +456,11 @@ function initDebug(): void {
                 spawnRandomEnemy();
                 break;
 
+            case 'F8':
+                e.preventDefault();
+                spawnRandomLoot();
+                break;
+
             case 'h':
             case 'H':
                 if (state.player) {
@@ -506,6 +514,31 @@ function initDebug(): void {
         state.area.container.addChild(enemy.container);
         state.area.enemies.push(enemy);
         enemy.startIdlePingPong();
+    }
+
+    // ── Spawn random loot ──────────────────────────────────────────
+
+    const RANDOM_LOOT_IDS = [
+        'simplesword', 'simpleshield', 'simpleshirt', 'simplepants',
+        'simplemace', 'simplehelmet', 'simplegloves', 'strappedboots',
+        'crudehelmet', 'leatherjacket', 'leggings',
+        'maraudersbracers', 'maraudersstraps', 'ornateshield',
+    ];
+
+    async function spawnRandomLoot(): Promise<void> {
+        if (!state.area) return;
+
+        const id = RANDOM_LOOT_IDS[Math.floor(Math.random() * RANDOM_LOOT_IDS.length)]!;
+        const item = createItem(id);
+
+        const spawnX = state.input.pointerScreenX - state.area.container.x;
+        const spawnY = state.input.pointerScreenY - state.area.container.y;
+
+        const loot = item.createLoot(spawnX, spawnY);
+        await loot.loadTextures();
+        state.area.container.addChild(loot.container);
+        loot.attachLabelsTo(state.area.lootLabelsContainer);
+        state.area.lootOnGround.push(loot);
     }
 
     // ── Activation message ──────────────────────────────────────────
