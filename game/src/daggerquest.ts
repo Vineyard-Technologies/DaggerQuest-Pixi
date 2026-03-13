@@ -12,6 +12,7 @@ import { NPC } from './npc';
 import { Enemy } from './enemy';
 import { waitForLogin, setLoadingProgress, hideOverlays, showLoadingOverlay } from './login';
 import { waitForCharacterSelect, hideCharacterSelect } from './characterSelect';
+import { ABILITY_KEYS, PRAYER_KEYS, type AbilityKey, type PrayerKey } from './ability';
 
 // Ensure the game is only playable when embedded in an iframe on DaggerQuest.com.
 // Block direct access (top-level browsing) and embedding on unauthorized sites.
@@ -79,6 +80,9 @@ async function init(): Promise<void> {
     await state.ui.load();
     state.app.stage.addChild(state.ui.container);
 
+    // Bind player abilities/prayers to the UI ability bar
+    await state.ui.bindPlayerAbilities(state.player!);
+
     bus.on('item-equipped',   ({ slot, item }) => state.ui!.setEquippedItem(slot, item));
     bus.on('item-unequipped', ({ slot })       => state.ui!.clearEquippedItem(slot));
     bus.on('player-died',     ()               => { endActiveNpcInteraction(); state.ui!.showDeathScreen(); });
@@ -107,12 +111,29 @@ async function init(): Promise<void> {
 
     window.addEventListener('keydown', (e: KeyboardEvent) => {
         if (!state.player) return;
-        if (state.player.isCasting) return;
         if (e.key === 'c' || e.key === 'C') {
             state.ui!.toggleEquippedMenu();
+            return;
         }
         if (e.key === 'i' || e.key === 'I') {
             state.ui!.toggleInventoryMenu();
+            return;
+        }
+
+        if (state.player.isCasting) return;
+
+        const upper = e.key.toUpperCase();
+
+        // Abilities: Q W E R T
+        if ((ABILITY_KEYS as readonly string[]).includes(upper)) {
+            state.player.useAbility(upper as AbilityKey);
+            return;
+        }
+
+        // Prayers: A S D F G
+        if ((PRAYER_KEYS as readonly string[]).includes(upper)) {
+            state.player.togglePrayer(upper as PrayerKey);
+            return;
         }
     });
 

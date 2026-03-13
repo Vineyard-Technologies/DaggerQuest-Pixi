@@ -8,11 +8,23 @@ import type { Item } from './item';
 import type { Loot } from './loot';
 import type { Character as CharacterType } from './character';
 import type { Enemy } from './enemy';
+import {
+    PlayerAbility, Prayer,
+    ABILITY_KEYS, PRAYER_KEYS, SLOT_UNLOCK_LEVELS,
+    type AbilityKey, type PrayerKey,
+} from './ability';
 
 class Player extends Character {
     equippedGear: Record<string, Gear>;
     defaultGearSlots: Record<string, string>;
     private _equipGeneration: Record<string, number>;
+
+    /** Active abilities keyed to Q/W/E/R/T. */
+    playerAbilities: Partial<Record<AbilityKey, PlayerAbility>> = {};
+    /** Prayer toggles keyed to A/S/D/F/G. */
+    prayers: Partial<Record<PrayerKey, Prayer>> = {};
+    /** Spritesheet key for ability icons (e.g. 'chevalier_ability'). */
+    abilityIconSheet: string | null = null;
 
     constructor({ x, y, spriteKey, speed = 0, animFps = {}, pickupRange = 150, ...rest }: CharacterOptions) {
         super({ x, y, spriteKey, speed, animFps, pickupRange, ...rest });
@@ -113,6 +125,38 @@ class Player extends Character {
         this.targetPosition = null;
         this.stopWalkAnimation();
         this.basicAbility.use({ caster: this, target: target as unknown as CharacterType });
+    }
+
+    /** Activate a player ability bound to the given key. */
+    useAbility(key: AbilityKey): void {
+        if (!this.isAlive || this.isCasting) return;
+        const ability = this.playerAbilities[key];
+        if (!ability) return;
+        if (this.level < (SLOT_UNLOCK_LEVELS[key] ?? 1)) return;
+        if (!ability.canUse(this)) return;
+
+        this.targetPosition = null;
+        this.stopWalkAnimation();
+
+        const fireFrame = this.frameTags[ability.animName]?.fireFrame ?? 0;
+
+        ability.use({ caster: this });
+
+        this.playAbilityAnimation(ability.animName, undefined, {
+            [fireFrame]: () => {},
+        });
+
+        bus.emit('ability-used', { key, abilityId: ability.id });
+    }
+
+    /** Toggle a prayer bound to the given key. */
+    togglePrayer(key: PrayerKey): void {
+        if (!this.isAlive) return;
+        const prayer = this.prayers[key];
+        if (!prayer) return;
+        if (this.level < (SLOT_UNLOCK_LEVELS[key] ?? 1)) return;
+        prayer.toggle(this);
+        bus.emit('prayer-toggled', { key, prayerId: prayer.id, active: prayer.active });
     }
 
     /** Award experience to this player, triggering level ups as needed. */

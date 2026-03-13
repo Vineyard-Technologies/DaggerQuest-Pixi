@@ -8,6 +8,7 @@
 
 import type { Item } from './item';
 import type { GearSlot } from './types';
+import type { AbilityKey, PrayerKey } from './ability';
 
 // ── Event payload map ─────────────────────────────────────────────────────
 
@@ -18,6 +19,8 @@ export interface GameEventMap {
     'enemy-killed':    { xpReward: number };
     'xp-gained':       { amount: number; total: number };
     'level-up':        { newLevel: number };
+    'ability-used':    { key: AbilityKey; abilityId: string };
+    'prayer-toggled':  { key: PrayerKey; prayerId: string; active: boolean };
 }
 
 export type GameEventName = keyof GameEventMap;

@@ -13,6 +13,7 @@ import { GearSlot, UISource, RARITY_COLORS } from './types';
 import type { Item } from './item';
 import type { Character } from './character';
 import type { Player } from './player';
+import { ABILITY_KEYS, PRAYER_KEYS, SLOT_UNLOCK_LEVELS, type PlayerAbility, type Prayer } from './ability';
 
 // ── Slot entry interfaces ──────────────────────────────────────────────────
 
@@ -40,6 +41,9 @@ interface AbilitySlotEntry {
     row: number;
     col: number;
     key: string;
+    iconSprite: PIXI.Sprite | null;
+    cooldownOverlay: PIXI.Graphics | null;
+    activeGlow: PIXI.Graphics | null;
 }
 
 interface DragState {
@@ -671,6 +675,7 @@ class InventoryPanel {
 class AbilityBar {
     readonly container: PIXI.Container;
     readonly slots: AbilitySlotEntry[] = [];
+    private _iconTextures: Record<string, PIXI.Texture> = {};
 
     constructor() {
         this.container = new PIXI.Container();
@@ -681,6 +686,144 @@ class AbilityBar {
         const abilityslotTex = await loadTexture('abilityslot');
         if (abilityslotTex) (abilityslotTex as { defaultAnchor: { x: number; y: number } }).defaultAnchor = { x: 0, y: 0 };
         this._buildBar(abilityslotTex);
+    }
+
+    /** Load ability icon textures from a class ability spritesheet. */
+    async loadIcons(sheetKey: string): Promise<void> {
+        const manifest = await fetchManifest();
+        const sheets = manifest[sheetKey] || [];
+        for (const sheetPath of sheets) {
+            const fullPath = assetPath(`images/spritesheets/${sheetPath.replace('./', '')}`);
+            const spritesheet: PIXI.Spritesheet = await PIXI.Assets.load(fullPath);
+            const prefix = `${sheetKey}-`;
+            for (const frameName in spritesheet.textures) {
+                if (!frameName.startsWith(prefix)) continue;
+                // Extract icon key: "chevalier_ability-groundslam-000" → "groundslam"
+                const rest = frameName.slice(prefix.length);
+                const dashIdx = rest.lastIndexOf('-');
+                const iconKey = dashIdx >= 0 ? rest.slice(0, dashIdx) : rest;
+                if (iconKey !== 'none') {
+                    this._iconTextures[iconKey] = spritesheet.textures[frameName]!;
+                }
+            }
+        }
+    }
+
+    /** Bind player abilities and prayers to the UI slots, placing icons. */
+    bindPlayer(player: Player): void {
+        const slotSize = ABILITY_SLOT_SIZE;
+        const innerSize = slotSize - ABILITY_SLOT_BORDER * 2;
+
+        for (const slot of this.slots) {
+            // Remove any previous icon/overlay
+            if (slot.iconSprite) { slot.iconSprite.destroy(); slot.iconSprite = null; }
+            if (slot.cooldownOverlay) { slot.cooldownOverlay.destroy(); slot.cooldownOverlay = null; }
+            if (slot.activeGlow) { slot.activeGlow.destroy(); slot.activeGlow = null; }
+
+            let iconKey: string | null = null;
+            const isAbilityRow = slot.row === 0;
+
+            if (isAbilityRow) {
+                const ability = player.playerAbilities[slot.key as keyof typeof player.playerAbilities];
+                if (ability) iconKey = ability.iconKey;
+            } else {
+                const prayer = player.prayers[slot.key as keyof typeof player.prayers];
+                if (prayer) iconKey = prayer.iconKey;
+            }
+
+            if (iconKey && this._iconTextures[iconKey]) {
+                const icon = new PIXI.Sprite(this._iconTextures[iconKey]);
+                icon.width = innerSize;
+                icon.height = innerSize;
+                icon.anchor.set(0);
+                icon.x = ABILITY_SLOT_BORDER;
+                icon.y = ABILITY_SLOT_BORDER;
+                // Insert icon behind the key label (last child)
+                slot.container.addChildAt(icon, slot.container.children.length - 1);
+                slot.iconSprite = icon;
+            }
+
+            // Cooldown sweep overlay for ability row
+            if (isAbilityRow) {
+                const overlay = new PIXI.Graphics();
+                overlay.x = ABILITY_SLOT_BORDER;
+                overlay.y = ABILITY_SLOT_BORDER;
+                overlay.alpha = 0.6;
+                overlay.visible = false;
+                slot.container.addChildAt(overlay, slot.container.children.length - 1);
+                slot.cooldownOverlay = overlay;
+            }
+
+            // Active glow border for prayer row
+            if (!isAbilityRow) {
+                const glow = new PIXI.Graphics();
+                glow.visible = false;
+                slot.container.addChildAt(glow, slot.container.children.length - 1);
+                slot.activeGlow = glow;
+            }
+        }
+    }
+
+    /** Update cooldown sweeps and prayer active indicators. */
+    updateSlots(player: Player): void {
+        const slotSize = ABILITY_SLOT_SIZE;
+        const innerSize = slotSize - ABILITY_SLOT_BORDER * 2;
+        const cx = innerSize / 2;
+        const cy = innerSize / 2;
+        const radius = innerSize * 0.72;
+
+        for (const slot of this.slots) {
+            const unlockLvl = SLOT_UNLOCK_LEVELS[slot.key] ?? 1;
+            const locked = player.level < unlockLvl;
+
+            // Hide icon when locked
+            if (slot.iconSprite) {
+                slot.iconSprite.visible = !locked;
+            }
+
+            if (slot.row === 0 && slot.cooldownOverlay) {
+                if (locked) {
+                    slot.cooldownOverlay.visible = false;
+                    continue;
+                }
+                const ability = player.playerAbilities[slot.key as keyof typeof player.playerAbilities];
+                if (!ability || ability.cooldown === 0) {
+                    slot.cooldownOverlay.visible = false;
+                    continue;
+                }
+                const remaining = ability.remainingCooldown();
+                if (remaining <= 0) {
+                    slot.cooldownOverlay.visible = false;
+                    continue;
+                }
+                const pct = remaining / ability.cooldown;
+                slot.cooldownOverlay.visible = true;
+                slot.cooldownOverlay.clear();
+                // Draw a pie/clock-wipe from top, clockwise
+                const startAngle = -Math.PI / 2;
+                const endAngle = startAngle + pct * Math.PI * 2;
+                slot.cooldownOverlay.moveTo(cx, cy);
+                slot.cooldownOverlay.arc(cx, cy, radius, startAngle, endAngle);
+                slot.cooldownOverlay.lineTo(cx, cy);
+                slot.cooldownOverlay.fill({ color: 0x000000 });
+            }
+
+            if (slot.row === 1 && slot.activeGlow) {
+                if (locked) {
+                    slot.activeGlow.visible = false;
+                    continue;
+                }
+                const prayer = player.prayers[slot.key as keyof typeof player.prayers];
+                if (!prayer || !prayer.active) {
+                    slot.activeGlow.visible = false;
+                    continue;
+                }
+                slot.activeGlow.visible = true;
+                slot.activeGlow.clear();
+                slot.activeGlow.rect(0, 0, slotSize, slotSize);
+                slot.activeGlow.stroke({ color: 0x44ff44, width: 3, alpha: 0.8 });
+            }
+        }
     }
 
     layout(screenW: number, screenH: number): void {
@@ -750,7 +893,13 @@ class AbilityBar {
                 slotContainer.addChild(label);
 
                 slotsContainer.addChild(slotContainer);
-                this.slots.push({ container: slotContainer, row, col, key: keys[row]![col]! });
+                this.slots.push({
+                    container: slotContainer, row, col,
+                    key: keys[row]![col]!,
+                    iconSprite: null,
+                    cooldownOverlay: null,
+                    activeGlow: null,
+                });
             }
         }
 
@@ -1453,6 +1602,9 @@ class UI {
         this.orbs.update(character);
         this.equipment.update(deltaMs);
         this.inventory.update(deltaMs);
+        if (state.player) {
+            this.abilityBar.updateSlots(state.player);
+        }
     }
 
     // ─── Delegated public API ─────────────────────────────────────────
@@ -1463,6 +1615,14 @@ class UI {
     async setEquippedItem(slot: GearSlot, item: Item): Promise<void> { return this.equipment.setItem(slot, item); }
     async clearEquippedItem(slot: GearSlot): Promise<void> { return this.equipment.clearItem(slot); }
     async setInventoryItem(item: Item): Promise<boolean> { return this.inventory.addItem(item); }
+
+    /** Load ability icons and bind abilities/prayers from the player. */
+    async bindPlayerAbilities(player: Player): Promise<void> {
+        if (player.abilityIconSheet) {
+            await this.abilityBar.loadIcons(player.abilityIconSheet);
+        }
+        this.abilityBar.bindPlayer(player);
+    }
 
     get isDragging(): boolean { return this.dragDrop.isDragging; }
 

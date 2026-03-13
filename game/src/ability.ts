@@ -83,3 +83,100 @@ export class Ability {
         return true;
     }
 }
+
+// ── Player Ability (active, keyed to Q/W/E/R/T) ──────────────────────────
+
+/** Keys that map to player abilities. */
+export const ABILITY_KEYS = ['Q', 'W', 'E', 'R', 'T'] as const;
+export type AbilityKey = typeof ABILITY_KEYS[number];
+
+/** Definition for a player-activated ability with animation and mana cost. */
+export interface PlayerAbilityDef extends AbilityDef {
+    /** Animation name to play on the caster (e.g. 'groundslam'). */
+    animName: string;
+    /** Ability icon key inside the class's ability spritesheet. */
+    iconKey: string;
+    /** Mana cost to cast the ability. */
+    manaCost: number;
+}
+
+/** Runtime instance of a player ability. Extends Ability with mana checks. */
+export class PlayerAbility extends Ability {
+    declare readonly def: PlayerAbilityDef;
+
+    constructor(def: PlayerAbilityDef) {
+        super(def);
+    }
+
+    get animName(): string { return this.def.animName; }
+    get iconKey(): string { return this.def.iconKey; }
+    get manaCost(): number { return this.def.manaCost; }
+
+    /** Check readiness including mana. */
+    canUse(caster: Character): boolean {
+        return this.isReady() && caster.currentMana >= this.manaCost;
+    }
+
+    /** Use the ability, deducting mana. */
+    override use(ctx: AbilityContext): boolean {
+        if (!this.canUse(ctx.caster)) return false;
+        ctx.caster.currentMana -= this.manaCost;
+        return super.use(ctx);
+    }
+}
+
+// ── Prayer (toggle, keyed to A/S/D/F/G) ──────────────────────────────────
+
+/** Keys that map to prayers. */
+export const PRAYER_KEYS = ['A', 'S', 'D', 'F', 'G'] as const;
+export type PrayerKey = typeof PRAYER_KEYS[number];
+
+/** Level required to unlock each ability/prayer slot. Applies to all classes. */
+export const SLOT_UNLOCK_LEVELS: Readonly<Record<string, number>> = {
+    Q: 2,
+    A: 4,
+    W: 6,
+    S: 8,
+    E: 10,
+    D: 12,
+    R: 14,
+    F: 16,
+    T: 18,
+    G: 20,
+} as const;
+
+/** Static definition of a prayer toggle. */
+export interface PrayerDef {
+    id: string;
+    name: string;
+    /** Ability icon key inside the class's ability spritesheet. */
+    iconKey: string;
+    /** Called when the prayer is activated. */
+    onActivate: (caster: Character) => void;
+    /** Called when the prayer is deactivated. */
+    onDeactivate: (caster: Character) => void;
+}
+
+/** Runtime instance of a prayer toggle. */
+export class Prayer {
+    readonly def: PrayerDef;
+    active: boolean = false;
+
+    constructor(def: PrayerDef) {
+        this.def = def;
+    }
+
+    get id(): string { return this.def.id; }
+    get name(): string { return this.def.name; }
+    get iconKey(): string { return this.def.iconKey; }
+
+    toggle(caster: Character): void {
+        if (this.active) {
+            this.active = false;
+            this.def.onDeactivate(caster);
+        } else {
+            this.active = true;
+            this.def.onActivate(caster);
+        }
+    }
+}
