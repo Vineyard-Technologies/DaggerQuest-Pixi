@@ -3,8 +3,11 @@ import { Gear } from './gear';
 import state from './state';
 import { bus } from './events';
 import { isCharacterStatKey, type GearSlot } from './types';
+import { xpForLevel, LEVEL_UP_BONUSES } from './config';
 import type { Item } from './item';
 import type { Loot } from './loot';
+import type { Character as CharacterType } from './character';
+import type { Enemy } from './enemy';
 
 class Player extends Character {
     equippedGear: Record<string, Gear>;
@@ -36,7 +39,7 @@ class Player extends Character {
     }
 
     pickupAndEquip(loot: Loot): void {
-        if (!this.isAlive) return;
+        if (!this.isAlive || this.isCasting) return;
         const item = loot.pickup();
         if (state.area?.lootOnGround) {
             const idx = state.area.lootOnGround.indexOf(loot);
@@ -46,7 +49,7 @@ class Player extends Character {
     }
 
     equipItem(item: Item): void {
-        if (!this.isAlive) return;
+        if (!this.isAlive || this.isCasting) return;
         const slot = item.slot;
         const oldGear = this.equippedGear[slot];
         if (oldGear && oldGear.item) {
@@ -69,7 +72,7 @@ class Player extends Character {
     }
 
     unequipSlot(slot: GearSlot): void {
-        if (!this.isAlive) return;
+        if (!this.isAlive || this.isCasting) return;
         const oldGear = this.equippedGear[slot] || null;
         if (oldGear && oldGear.item) {
             this._adjustItemStats(oldGear.item, -1);
@@ -98,6 +101,39 @@ class Player extends Character {
     onAnimationChanged(): void {
         for (const gear of Object.values(this.equippedGear)) {
             if (gear) gear.syncNow();
+        }
+    }
+
+    /** Execute the player's basic attack against the given enemy. */
+    performBasicAttack(target: Enemy): void {
+        if (!this.isAlive || this.isCasting) return;
+        if (!target.isAlive) return;
+        if (!this.basicAbility || !this.basicAbility.isReady()) return;
+
+        this.targetPosition = null;
+        this.stopWalkAnimation();
+        this.basicAbility.use({ caster: this, target: target as unknown as CharacterType });
+    }
+
+    /** Award experience to this player, triggering level ups as needed. */
+    gainExperience(amount: number): void {
+        this.experience += amount;
+        bus.emit('xp-gained', { amount, total: this.experience });
+
+        let needed = xpForLevel(this.level);
+        while (this.experience >= needed) {
+            this.experience -= needed;
+            this.level += 1;
+            for (const [stat, bonus] of Object.entries(LEVEL_UP_BONUSES)) {
+                if (isCharacterStatKey(stat) && typeof this[stat] === 'number') {
+                    (this[stat] as number) += bonus;
+                }
+            }
+            // Fully heal on level up
+            this.currentHealth = this.maxHealth;
+            this.currentMana = this.maxMana;
+            bus.emit('level-up', { newLevel: this.level });
+            needed = xpForLevel(this.level);
         }
     }
 }

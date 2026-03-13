@@ -40,6 +40,8 @@ export interface ProjectileOptions {
     targets: () => Character[];
     /** Called once when the projectile first overlaps a target. */
     onHit: (target: Character) => void;
+    /** If true, the projectile passes through targets instead of dying on first hit. */
+    piercing?: boolean;
 }
 
 // ── Projectile ────────────────────────────────────────────────────────────
@@ -55,6 +57,7 @@ export class Projectile {
     private readonly owner: Character;
     private readonly targets: () => Character[];
     private readonly onHit: (target: Character) => void;
+    private readonly piercing: boolean;
     private distanceTravelled: number = 0;
     private alive: boolean = true;
     /** Characters already hit — each projectile hits a character at most once. */
@@ -72,6 +75,7 @@ export class Projectile {
         this.owner = opts.owner;
         this.targets = opts.targets;
         this.onHit = opts.onHit;
+        this.piercing = opts.piercing ?? false;
 
         // Draw the rectangle centred at the origin, then position/rotate via
         // the Graphics transform.
@@ -134,9 +138,10 @@ export class Projectile {
             if (satOverlap(myPoly, targetPoly)) {
                 this.hitSet.add(target);
                 this.onHit(target);
-                // Projectile dies on first hit
-                this.alive = false;
-                return false;
+                if (!this.piercing) {
+                    this.alive = false;
+                    return false;
+                }
             }
         }
 

@@ -18,6 +18,7 @@ interface AreaOptions {
     backgroundTexture: string;
     playerStartX: number;
     playerStartY: number;
+    level?: number;
 }
 
 interface PlaceStaticSpriteOptions {
@@ -32,6 +33,7 @@ class Area {
     readonly backgroundTexture: string;
     readonly playerStartX: number;
     readonly playerStartY: number;
+    readonly level: number;
     container: PIXI.Container;
     lootOnGround: Loot[];
     enemies: Enemy[];
@@ -41,12 +43,13 @@ class Area {
     lootLabelsContainer: PIXI.Container & { sortY?: number };
     backgroundTile: PIXI.TilingSprite | null = null;
 
-    constructor({ width, height, backgroundTexture, playerStartX, playerStartY }: AreaOptions) {
+    constructor({ width, height, backgroundTexture, playerStartX, playerStartY, level = 1 }: AreaOptions) {
         this.width = width;
         this.height = height;
         this.backgroundTexture = backgroundTexture;
         this.playerStartX = playerStartX;
         this.playerStartY = playerStartY;
+        this.level = level;
         this.container = new PIXI.Container();
         this.container.sortableChildren = true;
         this.lootOnGround = [];

@@ -42,6 +42,22 @@ export const TOOLTIP_INNER_WIDTH = 220;
 /** Padding inside item tooltips. */
 export const TOOLTIP_PADDING = 12;
 
+// ── Progression ───────────────────────────────────────────────────────────
+
+/** XP required to advance from level `n` to `n+1`. */
+export function xpForLevel(n: number): number {
+    return n * 100;
+}
+
+/** Stat bonuses awarded per level gained. */
+export const LEVEL_UP_BONUSES: Readonly<Record<string, number>> = {
+    maxHealth: 5,
+    maxMana: 2,
+};
+
+/** Base XP an enemy awards = its level × this multiplier. */
+export const ENEMY_XP_MULTIPLIER = 25;
+
 // ── Collision ─────────────────────────────────────────────────────────────
 
 /** Default character collision box width in world pixels. */

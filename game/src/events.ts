@@ -15,6 +15,9 @@ export interface GameEventMap {
     'item-equipped':   { slot: GearSlot; item: Item };
     'item-unequipped': { slot: GearSlot };
     'player-died':     void;
+    'enemy-killed':    { xpReward: number };
+    'xp-gained':       { amount: number; total: number };
+    'level-up':        { newLevel: number };
 }
 
 export type GameEventName = keyof GameEventMap;

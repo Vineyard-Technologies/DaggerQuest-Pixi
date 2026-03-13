@@ -190,7 +190,7 @@ class Character extends Entity implements CharacterStats {
     }
 
     moveToward(worldX: number, worldY: number): void {
-        if (!this.isAlive) return;
+        if (!this.isAlive || this.isCasting) return;
         this.targetPosition = { x: worldX, y: worldY };
         const dx = worldX - this.x;
         const dy = worldY - this.y;

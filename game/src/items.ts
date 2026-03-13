@@ -5,7 +5,7 @@ import { ModType } from './types';
 // ── Mainhand ────────────────────────────────────────────────────────────────
 
 class SimpleSword extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'simplesword',
             name: 'Simple Sword',
@@ -14,12 +14,13 @@ class SimpleSword extends Item {
             baseStats: { slashDamage: 3 },
             allowedClasses: ['chevalier'],
             modTables: [ModType.Stat],
+            level,
         });
     }
 }
 
 class SimpleMace extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'simplemace',
             name: 'Simple Mace',
@@ -28,6 +29,7 @@ class SimpleMace extends Item {
             baseStats: { smashDamage: 4 },
             allowedClasses: ['chevalier'],
             modTables: [ModType.Stat],
+            level,
         });
     }
 }
@@ -35,7 +37,7 @@ class SimpleMace extends Item {
 // ── Offhand ─────────────────────────────────────────────────────────────────
 
 class SimpleShield extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'simpleshield',
             name: 'Simple Shield',
@@ -44,12 +46,13 @@ class SimpleShield extends Item {
             baseStats: { armor: 5 },
             allowedClasses: ['chevalier'],
             modTables: [ModType.Stat],
+            level,
         });
     }
 }
 
 class OrnateShield extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'ornateshield',
             name: 'Ornate Shield',
@@ -58,6 +61,7 @@ class OrnateShield extends Item {
             baseStats: { armor: 8 },
             allowedClasses: ['chevalier'],
             modTables: [ModType.Stat],
+            level,
         });
     }
 }
@@ -65,7 +69,7 @@ class OrnateShield extends Item {
 // ── Head ─────────────────────────────────────────────────────────────────────
 
 class SimpleHelmet extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'simplehelmet',
             name: 'Simple Helmet',
@@ -73,12 +77,13 @@ class SimpleHelmet extends Item {
             slot: GearSlot.Head,
             baseStats: { armor: 3 },
             modTables: [ModType.Stat],
+            level,
         });
     }
 }
 
 class CrudeHelmet extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'crudehelmet',
             name: 'Crude Helmet',
@@ -86,6 +91,7 @@ class CrudeHelmet extends Item {
             slot: GearSlot.Head,
             baseStats: { armor: 5 },
             modTables: [ModType.Stat],
+            level,
         });
     }
 }
@@ -93,7 +99,7 @@ class CrudeHelmet extends Item {
 // ── Chest ───────────────────────────────────────────────────────────────────
 
 class SimpleShirt extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'simpleshirt',
             name: 'Simple Shirt',
@@ -101,12 +107,13 @@ class SimpleShirt extends Item {
             slot: GearSlot.Chest,
             baseStats: { maxHealth: 2 },
             modTables: [ModType.Stat],
+            level,
         });
     }
 }
 
 class LeatherJacket extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'leatherjacket',
             name: 'Leather Jacket',
@@ -114,12 +121,13 @@ class LeatherJacket extends Item {
             slot: GearSlot.Chest,
             baseStats: { armor: 4, maxHealth: 3 },
             modTables: [ModType.Stat],
+            level,
         });
     }
 }
 
 class MaraudersStraps extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'maraudersstraps',
             name: "Marauder's Straps",
@@ -127,6 +135,7 @@ class MaraudersStraps extends Item {
             slot: GearSlot.Chest,
             baseStats: { armor: 6, maxHealth: 5 },
             modTables: [ModType.Stat, ModType.Special],
+            level,
         });
     }
 }
@@ -134,7 +143,7 @@ class MaraudersStraps extends Item {
 // ── Legs ─────────────────────────────────────────────────────────────────────
 
 class SimplePants extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'simplepants',
             name: 'Simple Pants',
@@ -142,12 +151,13 @@ class SimplePants extends Item {
             slot: GearSlot.Legs,
             baseStats: { manaRegen: 1 },
             modTables: [ModType.Stat],
+            level,
         });
     }
 }
 
 class Leggings extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'leggings',
             name: 'Leggings',
@@ -155,6 +165,7 @@ class Leggings extends Item {
             slot: GearSlot.Legs,
             baseStats: { armor: 2, manaRegen: 1 },
             modTables: [ModType.Stat],
+            level,
         });
     }
 }
@@ -162,7 +173,7 @@ class Leggings extends Item {
 // ── Hands ────────────────────────────────────────────────────────────────────
 
 class SimpleGloves extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'simplegloves',
             name: 'Simple Gloves',
@@ -170,12 +181,13 @@ class SimpleGloves extends Item {
             slot: GearSlot.Hands,
             baseStats: { armor: 1 },
             modTables: [ModType.Stat],
+            level,
         });
     }
 }
 
 class MaraudersBracers extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'maraudersbracers',
             name: "Marauder's Bracers",
@@ -183,6 +195,7 @@ class MaraudersBracers extends Item {
             slot: GearSlot.Hands,
             baseStats: { armor: 3, slashDamage: 1 },
             modTables: [ModType.Stat, ModType.Special],
+            level,
         });
     }
 }
@@ -190,7 +203,7 @@ class MaraudersBracers extends Item {
 // ── Feet ─────────────────────────────────────────────────────────────────────
 
 class StrappedBoots extends Item {
-    constructor() {
+    constructor({ level = 1 }: { level?: number } = {}) {
         super({
             id: 'strappedboots',
             name: 'Strapped Boots',
@@ -198,13 +211,14 @@ class StrappedBoots extends Item {
             slot: GearSlot.Feet,
             baseStats: { speed: 10 },
             modTables: [ModType.Stat],
+            level,
         });
     }
 }
 
 // ── Factory ─────────────────────────────────────────────────────────────────
 
-const ITEM_CLASSES: Record<string, new () => Item> = {
+const ITEM_CLASSES: Record<string, new (opts?: { level?: number }) => Item> = {
     simplesword: SimpleSword,
     simplemace: SimpleMace,
     simpleshield: SimpleShield,
@@ -221,10 +235,10 @@ const ITEM_CLASSES: Record<string, new () => Item> = {
     strappedboots: StrappedBoots,
 };
 
-function createItem(id: string): Item {
+function createItem(id: string, level: number = 1): Item {
     const ItemClass = ITEM_CLASSES[id];
     if (!ItemClass) throw new Error(`Unknown item type: "${id}"`);
-    return new ItemClass();
+    return new ItemClass({ level });
 }
 
 export {

@@ -4,7 +4,8 @@
     "height": 4096,
     "backgroundTexture": "./images/spritesheets/dirt/dirt-0.webp",
     "playerStartX": 3100,
-    "playerStartY": 3800
+    "playerStartY": 3800,
+    "level": 1
   },
   "boundaries": [
     { "x": 43,   "y": 2309, "width": 50,  "height": 3570 },

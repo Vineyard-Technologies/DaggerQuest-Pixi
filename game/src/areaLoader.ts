@@ -76,13 +76,13 @@ export async function loadArea(def: AreaDefinition): Promise<Area> {
             area.npcs.push(npc);
         }),
         ...(def.enemies ?? []).map(async enemyDef => {
-            const enemy = createEnemy(enemyDef.spriteKey!, enemyDef.x, enemyDef.y);
+            const enemy = createEnemy(enemyDef.spriteKey!, enemyDef.x, enemyDef.y, area.level);
             await enemy.loadTextures();
             area.container.addChild(enemy.container);
             area.enemies.push(enemy);
         }),
         ...(def.loot ?? []).map(async ({ x, y, sortY, id }) => {
-            const item = createItem(id);
+            const item = createItem(id, area.level);
             const loot = item.createLoot(x, y);
             await loot.loadTextures();
             if (sortY != null) loot.container.sortY = sortY;

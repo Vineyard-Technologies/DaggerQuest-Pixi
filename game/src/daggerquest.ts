@@ -9,6 +9,7 @@ import { HOVER_OUTLINE } from './outlineFilter';
 import { Entity } from './entity';
 import type { Loot } from './loot';
 import { NPC } from './npc';
+import { Enemy } from './enemy';
 import { waitForLogin, setLoadingProgress, hideOverlays, showLoadingOverlay } from './login';
 import { waitForCharacterSelect, hideCharacterSelect } from './characterSelect';
 
@@ -81,6 +82,7 @@ async function init(): Promise<void> {
     bus.on('item-equipped',   ({ slot, item }) => state.ui!.setEquippedItem(slot, item));
     bus.on('item-unequipped', ({ slot })       => state.ui!.clearEquippedItem(slot));
     bus.on('player-died',     ()               => { endActiveNpcInteraction(); state.ui!.showDeathScreen(); });
+    bus.on('enemy-killed',    ({ xpReward })   => { if (state.player?.isAlive) state.player.gainExperience(xpReward); });
 
     state.app.stage.eventMode = 'static';
     state.app.stage.hitArea = state.app.screen;
@@ -105,6 +107,7 @@ async function init(): Promise<void> {
 
     window.addEventListener('keydown', (e: KeyboardEvent) => {
         if (!state.player) return;
+        if (state.player.isCasting) return;
         if (e.key === 'c' || e.key === 'C') {
             state.ui!.toggleEquippedMenu();
         }
@@ -231,6 +234,19 @@ function findHoverableAtPosition(screenX: number, screenY: number): Entity | nul
     return null;
 }
 
+function findEnemyAtPosition(screenX: number, screenY: number): Enemy | null {
+    if (!state.area?.enemies) return null;
+    for (const enemy of state.area.enemies) {
+        if (!enemy.sprite || !enemy.isAlive) continue;
+        const b = enemy.sprite.getBounds();
+        if (screenX >= b.x && screenX <= b.x + b.width &&
+            screenY >= b.y && screenY <= b.y + b.height) {
+            return enemy;
+        }
+    }
+    return null;
+}
+
 function updateHoverOutline(): void {
     const overUI = state.ui && state.ui.hitTest(state.input.pointerScreenX, state.input.pointerScreenY);
     const target = overUI ? null : findHoverableAtPosition(state.input.pointerScreenX, state.input.pointerScreenY);
@@ -263,13 +279,37 @@ function onPointerDown(event: PIXI.FederatedPointerEvent): void {
 
     if (!state.player || !state.player.isAlive) return;
 
+    // Block all input while the player is executing a basic attack
+    if (state.player.isCasting) return;
+
     const pos = event.data.global;
     state.input.pointerScreenX = pos.x;
     state.input.pointerScreenY = pos.y;
 
+    // Check for enemy click — initiate basic attack
+    const clickedEnemy = findEnemyAtPosition(state.input.pointerScreenX, state.input.pointerScreenY);
+    if (clickedEnemy) {
+        state.input.pendingLootPickup = null;
+        state.input.pendingNpcInteraction = null;
+        endActiveNpcInteraction();
+
+        const dist = state.player!.distanceTo(clickedEnemy);
+        const range = state.player!.basicAbility?.range ?? state.player!.attackRange;
+        if (dist <= range) {
+            state.input.pendingAttackTarget = null;
+            state.player!.performBasicAttack(clickedEnemy);
+            return;
+        }
+
+        state.input.pendingAttackTarget = clickedEnemy;
+        state.player!.moveToward(clickedEnemy.x, clickedEnemy.y);
+        return;
+    }
+
     const loot = findLootAtPosition(state.input.pointerScreenX, state.input.pointerScreenY);
     if (loot) {
         endActiveNpcInteraction();
+        state.input.pendingAttackTarget = null;
         const dx = loot.x - state.player!.x;
         const dy = loot.y - state.player!.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -288,6 +328,7 @@ function onPointerDown(event: PIXI.FederatedPointerEvent): void {
     const clickedNpc = findNpcAtPosition(state.input.pointerScreenX, state.input.pointerScreenY);
     if (clickedNpc) {
         state.input.pendingLootPickup = null;
+        state.input.pendingAttackTarget = null;
 
         if (clickedNpc.isInteracting) {
             const next = clickedNpc.advanceDialog();
@@ -311,6 +352,7 @@ function onPointerDown(event: PIXI.FederatedPointerEvent): void {
     }
 
     state.input.pendingLootPickup = null;
+    state.input.pendingAttackTarget = null;
     endActiveNpcInteraction();
 
     state.input.pointerHeld = true;
@@ -382,10 +424,13 @@ function gameLoop(ticker: PIXI.Ticker): void {
 
     updateHoverOutline();
 
-    if (state.input.pointerHeld && state.player.isAlive) {
+    const casting = state.player.isCasting;
+
+    if (!casting && state.input.pointerHeld && state.player.isAlive) {
         movePlayerToPointer();
         state.input.pendingLootPickup = null;
         state.input.pendingNpcInteraction = null;
+        state.input.pendingAttackTarget = null;
     }
 
     const delta = ticker.deltaTime;
@@ -393,7 +438,23 @@ function gameLoop(ticker: PIXI.Ticker): void {
     state.player.update(delta);
     state.player.container.zIndex = state.player.y;
 
-    if (state.input.pendingLootPickup) {
+    if (!casting && state.input.pendingAttackTarget) {
+        const target = state.input.pendingAttackTarget;
+        if (!target.isAlive) {
+            state.input.pendingAttackTarget = null;
+        } else {
+            const dist = state.player.distanceTo(target);
+            const range = state.player.basicAbility?.range ?? state.player.attackRange;
+            if (dist <= range) {
+                state.input.pendingAttackTarget = null;
+                state.player.performBasicAttack(target);
+            } else if (!state.player.targetPosition) {
+                state.input.pendingAttackTarget = null;
+            }
+        }
+    }
+
+    if (!casting && state.input.pendingLootPickup) {
         if (!state.input.pendingLootPickup.sprite || !state.area!.lootOnGround.includes(state.input.pendingLootPickup)) {
             state.input.pendingLootPickup = null;
         } else {
@@ -416,7 +477,7 @@ function gameLoop(ticker: PIXI.Ticker): void {
         }
     }
 
-    if (state.input.pendingNpcInteraction) {
+    if (!casting && state.input.pendingNpcInteraction) {
         const npc = state.input.pendingNpcInteraction;
         const dist = state.player.distanceTo(npc);
         if (dist <= npc.interactRange) {

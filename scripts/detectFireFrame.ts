@@ -14,9 +14,12 @@
  *   ollama pull llama3.2-vision
  *
  * Usage:
- *   npx tsx scripts/detectFireFrame.ts [spriteKey ...]
+ *   npx tsx scripts/detectFireFrame.ts [--anim <animName>] [spriteKey ...]
  *
- * If no spriteKeys are given it processes every key that has attack frames.
+ * Options:
+ *   --anim <name>  Animation name to analyse (default: "attack")
+ *
+ * If no spriteKeys are given it processes every key that has matching frames.
  *
  * Environment variables:
  *   AI_BASE_URL – base URL of the local OpenAI-compatible server
@@ -39,7 +42,7 @@ sharp.cache(false);
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(scriptDir, '..');
 const spritesheetsDir = join(rootDir, 'images', 'spritesheets');
-const frameTagsDir = join(rootDir, 'src', 'data', 'frameTags');
+const frameTagsDir = join(rootDir, 'game', 'src', 'data', 'frameTags');
 
 // ── Caches (avoid redundant disk I/O) ───────────────────────────────────────
 
@@ -397,7 +400,7 @@ async function writeFrameTags(spriteKey: string, tags: FrameTagsFile): Promise<v
 
 // ── Main ────────────────────────────────────────────────────────────────────
 
-async function discoverSpriteKeysWithAttack(): Promise<string[]> {
+async function discoverSpriteKeysWithAnim(animName: string): Promise<string[]> {
     const manifestPath = join(spritesheetsDir, 'manifest.json');
     const raw = await readFile(manifestPath, 'utf-8');
     const manifest: Record<string, string[]> = JSON.parse(raw);
@@ -406,7 +409,7 @@ async function discoverSpriteKeysWithAttack(): Promise<string[]> {
     for (const key of Object.keys(manifest)) {
         if (key.endsWith('_shadow')) continue;
         try {
-            const frames = await collectAnimFrames(key, 'attack');
+            const frames = await collectAnimFrames(key, animName);
             if (frames.length > 0) keys.push(key);
         } catch {
             // skip
@@ -416,16 +419,27 @@ async function discoverSpriteKeysWithAttack(): Promise<string[]> {
 }
 
 async function main(): Promise<void> {
-    const args = process.argv.slice(2);
+    const rawArgs = process.argv.slice(2);
+
+    // Parse --anim flag
+    let animName = 'attack';
+    const filteredArgs: string[] = [];
+    for (let i = 0; i < rawArgs.length; i++) {
+        if (rawArgs[i] === '--anim' && i + 1 < rawArgs.length) {
+            animName = rawArgs[++i]!;
+        } else {
+            filteredArgs.push(rawArgs[i]!);
+        }
+    }
 
     let spriteKeys: string[];
-    if (args.length > 0) {
-        spriteKeys = args;
+    if (filteredArgs.length > 0) {
+        spriteKeys = filteredArgs;
     } else {
-        console.log('No sprite keys specified — scanning for all sprites with attack animations…');
-        spriteKeys = await discoverSpriteKeysWithAttack();
+        console.log(`No sprite keys specified — scanning for all sprites with "${animName}" animations…`);
+        spriteKeys = await discoverSpriteKeysWithAnim(animName);
         if (spriteKeys.length === 0) {
-            console.log('No attack animations found.');
+            console.log(`No ${animName} animations found.`);
             return;
         }
         console.log(`Found: ${spriteKeys.join(', ')}\n`);
@@ -439,13 +453,13 @@ async function main(): Promise<void> {
         console.log(`── ${key} ──`);
 
         try {
-            // 1. Collect attack frames (direction 0 = facing right)
-            const frames = await collectAnimFrames(key, 'attack', '0');
+            // 1. Collect animation frames (direction 0 = facing right)
+            const frames = await collectAnimFrames(key, animName, '0');
             if (frames.length === 0) {
-                console.log('  No attack_0 frames found, skipping.\n');
+                console.log(`  No ${animName}_0 frames found, skipping.\n`);
                 continue;
             }
-            console.log(`  ${frames.length} attack frames (${frames[0]!.frameNum}–${frames[frames.length - 1]!.frameNum})`);
+            console.log(`  ${frames.length} ${animName} frames (${frames[0]!.frameNum}–${frames[frames.length - 1]!.frameNum})`);
 
             // 2. Build a numbered strip (in memory only)
             console.log('  Building strip…');
@@ -463,8 +477,8 @@ async function main(): Promise<void> {
 
                 // 4. Merge into frame-tags JSON
                 const tags = await readFrameTags(key);
-                if (!tags['attack']) tags['attack'] = {};
-                tags['attack']!.fireFrame = parsed.fireFrame;
+                if (!tags[animName]) tags[animName] = {};
+                tags[animName]!.fireFrame = parsed.fireFrame;
                 await writeFrameTags(key, tags);
 
                 console.log(`  ✓ fireFrame = ${parsed.fireFrame} — ${parsed.reason}`);

@@ -3,6 +3,7 @@ import type { Area } from './area';
 import type { Player } from './player';
 import type { UI } from './ui';
 import type { Entity } from './entity';
+import type { Enemy } from './enemy';
 import type { Loot } from './loot';
 import type { NPC } from './npc';
 import type { Projectile } from './projectile';
@@ -15,6 +16,7 @@ interface InputState {
     hoveredEntity: Entity | null;
     pendingLootPickup: Loot | null;
     pendingNpcInteraction: NPC | null;
+    pendingAttackTarget: Enemy | null;
 }
 
 interface GameState {
@@ -42,6 +44,7 @@ const state: GameState = {
         hoveredEntity: null,
         pendingLootPickup: null,
         pendingNpcInteraction: null,
+        pendingAttackTarget: null,
     },
     sessionUptimeMs: 0,
 } satisfies GameState;

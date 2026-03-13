@@ -4,6 +4,8 @@ import { CombatResolver, type DamageType } from './combat';
 import { EnemyState } from './types';
 import { Ability, type AbilityDef } from './ability';
 import { Projectile } from './projectile';
+import { bus } from './events';
+import { ENEMY_XP_MULTIPLIER } from './config';
 
 interface EnemyOptions {
     x: number;
@@ -16,6 +18,7 @@ interface EnemyOptions {
     attackDamage?: number;
     attackDamageType?: DamageType;
     attackSpeed?: number;
+    level?: number;
     projectile?: Partial<BasicAttackProjectileOpts>;
 }
 
@@ -134,18 +137,20 @@ function createBasicAttackDef(opts: {
 
 class Enemy extends Character {
     state: EnemyState;
+    readonly xpReward: number;
 
     constructor({
         x, y, spriteKey = 'enemy', speed = 100, animFps = {},
         health = 50, attackRange = 60,
         attackDamage = 5, attackDamageType = 'slash', attackSpeed = 1,
-        projectile,
+        level = 1, projectile,
     }: EnemyOptions) {
-        super({ x, y, spriteKey, speed, animFps, attackRange, attackSpeed });
+        super({ x, y, spriteKey, speed, animFps, attackRange, attackSpeed, level });
         this.currentHealth = health;
         this.maxHealth = health;
         this.isAlive = true;
         this.state = EnemyState.Idle;
+        this.xpReward = level * ENEMY_XP_MULTIPLIER;
 
         this.basicAbility = new Ability(createBasicAttackDef({
             damage: attackDamage,
@@ -158,11 +163,16 @@ class Enemy extends Character {
     }
 
     die(): void {
-        this.isAlive = false;
         this.state = EnemyState.Idle;
-        this.targetPosition = null;
-        this.stopWalkAnimation();
-        this.destroy();
+        super.die();
+        bus.emit('enemy-killed', { xpReward: this.xpReward });
+
+        const dieFrames = this.getAnimationFrames('die', this.direction);
+        if (dieFrames.length > 0 && this.sprite) {
+            this.sprite.onComplete = () => this.destroy();
+        } else {
+            this.destroy();
+        }
     }
 
     private isOnScreen(): boolean {
@@ -208,48 +218,52 @@ class Enemy extends Character {
 interface EnemySpawnOptions {
     x: number;
     y: number;
+    level?: number;
 }
 
 class GoblinUnderling extends Enemy {
-    constructor({ x, y }: EnemySpawnOptions) {
+    constructor({ x, y, level = 1 }: EnemySpawnOptions) {
         super({
             x, y,
             spriteKey: 'goblinunderling',
             speed: 200,
-            health: 10,
+            health: 15,
             attackRange: 150,
             attackDamage: 7,
             attackSpeed: 1,
+            level,
             projectile: { width: 80, height: 14, speed: 1200, maxDistance: 120, color: 0xaaaaaa, alpha: 0.7 },
         });
     }
 }
 
 class GoblinArcher extends Enemy {
-    constructor({ x, y }: EnemySpawnOptions) {
+    constructor({ x, y, level = 1 }: EnemySpawnOptions) {
         super({
             x, y,
             spriteKey: 'goblinarcher',
             speed: 200,
-            health: 10,
+            health: 15,
             attackRange: 400,
             attackDamage: 10,
             attackSpeed: 1,
+            level,
             projectile: { width: 8, height: 30, speed: 600, maxDistance: 500, color: 0x8b4513, alpha: 0.9 },
         });
     }
 }
 
 class GoblinWarlock extends Enemy {
-    constructor({ x, y }: EnemySpawnOptions) {
+    constructor({ x, y, level = 1 }: EnemySpawnOptions) {
         super({
             x, y,
             spriteKey: 'goblinwarlock',
             speed: 200,
-            health: 10,
+            health: 25,
             attackRange: 450,
             attackDamage: 11,
             attackSpeed: 0.6,
+            level,
             projectile: { width: 16, height: 16, speed: 400, maxDistance: 500, color: 0x6700ff, alpha: 0.8 },
         });
     }
@@ -263,10 +277,10 @@ const ENEMY_CLASSES: Record<string, new (opts: EnemySpawnOptions) => Enemy> = {
     goblinwarlock: GoblinWarlock,
 };
 
-function createEnemy(spriteKey: string, x: number, y: number): Enemy {
+function createEnemy(spriteKey: string, x: number, y: number, level: number = 1): Enemy {
     const EnemyClass = ENEMY_CLASSES[spriteKey];
     if (!EnemyClass) throw new Error(`Unknown enemy type: "${spriteKey}"`);
-    return new EnemyClass({ x, y });
+    return new EnemyClass({ x, y, level });
 }
 
 export { Enemy, GoblinUnderling, GoblinArcher, GoblinWarlock, createEnemy, createBasicAttackDef };
