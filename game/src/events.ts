@@ -47,6 +47,15 @@ class EventBus {
     emit<K extends GameEventName>(event: K, payload: GameEventMap[K]): void {
         (this._listeners[event] as Set<GameEventHandler<K>> | undefined)?.forEach(h => h(payload));
     }
+
+    /** Remove all listeners, optionally only for a specific event. */
+    removeAll<K extends GameEventName>(event?: K): void {
+        if (event) {
+            delete this._listeners[event];
+        } else {
+            this._listeners = {};
+        }
+    }
 }
 
 /** Singleton event bus shared across the whole game. */

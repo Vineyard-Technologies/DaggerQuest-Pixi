@@ -6,7 +6,6 @@ import { isCharacterStatKey, type GearSlot } from './types';
 import { xpForLevel, LEVEL_UP_BONUSES } from './config';
 import type { Item } from './item';
 import type { Loot } from './loot';
-import type { Character as CharacterType } from './character';
 import type { Enemy } from './enemy';
 import {
     PlayerAbility, Prayer,
@@ -124,7 +123,7 @@ class Player extends Character {
 
         this.targetPosition = null;
         this.stopWalkAnimation();
-        this.basicAbility.use({ caster: this, target: target as unknown as CharacterType });
+        this.basicAbility.use({ caster: this, target });
     }
 
     /** Activate a player ability bound to the given key. */

@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Entity } from './entity';
-import { SHADOW_BLUR } from './assets';
+import { createShadowSprite } from './assets';
 import { safeDestroy } from './safeDestroy';
 import { RARITY_COLORS } from './types';
 import type { Item } from './item';
@@ -48,14 +48,7 @@ class Loot extends Entity {
         if (this.shadowTextures) {
             const shadowFrames = this.getShadowFrames(animName, randomDir);
             if (shadowFrames.length > 0) {
-                this.shadowSprite = new PIXI.AnimatedSprite({
-                    textures: shadowFrames,
-                    updateAnchor: true,
-                });
-                this.shadowSprite.alpha = 0.5;
-                this.shadowSprite.filters = [SHADOW_BLUR];
-                this.container.addChild(this.shadowSprite);
-                this.shadowSprite.gotoAndStop(0);
+                this.shadowSprite = createShadowSprite(shadowFrames, this.container) as PIXI.AnimatedSprite;
             }
         }
 

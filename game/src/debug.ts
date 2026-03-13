@@ -51,6 +51,10 @@ interface DebugState {
     collisionGraphics: PIXI.Graphics | null;
     tickerCallback: (() => void) | null;
     frameStartCallback: (() => void) | null;
+    keydownHandler: ((e: KeyboardEvent) => void) | null;
+    teleportHandler: ((e: PIXI.FederatedPointerEvent) => void) | null;
+    origCharUpdate: ((delta: number) => void) | null;
+    origTakeDamage: ((amount: number) => void) | null;
 }
 
 function formatUptime(ms: number): string {
@@ -100,6 +104,28 @@ function exitDebug(): void {
         window.DEBUG.collisionGraphics = null;
     }
 
+    // Remove keydown handler
+    if (window.DEBUG.keydownHandler) {
+        window.removeEventListener('keydown', window.DEBUG.keydownHandler);
+        window.DEBUG.keydownHandler = null;
+    }
+
+    // Remove teleport handler
+    if (window.DEBUG.teleportHandler) {
+        app.stage.off('pointerdown', window.DEBUG.teleportHandler);
+        window.DEBUG.teleportHandler = null;
+    }
+
+    // Restore original prototype methods
+    if (window.DEBUG.origCharUpdate) {
+        Character.prototype.update = window.DEBUG.origCharUpdate;
+        window.DEBUG.origCharUpdate = null;
+    }
+    if (window.DEBUG.origTakeDamage) {
+        Character.prototype.takeDamage = window.DEBUG.origTakeDamage;
+        window.DEBUG.origTakeDamage = null;
+    }
+
     // Reset all debug flags
     window.DEBUG.active = false;
     window.DEBUG.showCollision = false;
@@ -136,6 +162,10 @@ function initDebug(): void {
         collisionGraphics: null,
         tickerCallback: null,
         frameStartCallback: null,
+        keydownHandler: null,
+        teleportHandler: null,
+        origCharUpdate: null,
+        origTakeDamage: null,
     };
     const app = state.app!;
     const area = state.area!;
@@ -250,12 +280,14 @@ function initDebug(): void {
     // ── Invincibility – monkey-patch Character.prototype.takeDamage ──
 
     const _origTakeDamage = Character.prototype.takeDamage;
+    window.DEBUG.origTakeDamage = _origTakeDamage;
     Character.prototype.takeDamage = function (this: Character, amount: number) {
         if (window.DEBUG?.invincible && this === state.player) return;
         _origTakeDamage.call(this, amount);
     };
 
     const _origCharUpdate = Character.prototype.update;
+    window.DEBUG.origCharUpdate = _origCharUpdate;
     Character.prototype.update = function (this: Character, delta: number) {
         if (window.DEBUG?.noclip && this === state.player) {
             const savedColliders = state.area!.colliders;
@@ -402,7 +434,7 @@ function initDebug(): void {
 
     // ── Keyboard shortcuts ──────────────────────────────────────────
 
-    window.addEventListener('keydown', (e: KeyboardEvent) => {
+    const debugKeydownHandler = (e: KeyboardEvent) => {
         if (!window.DEBUG.active) return;
 
         switch (e.key) {
@@ -474,13 +506,17 @@ function initDebug(): void {
                 if (state.player) state.player.currentMana = Math.max(0, state.player.currentMana - 10);
                 break;
         }
-    });
+    };
+
+    window.addEventListener('keydown', debugKeydownHandler);
+    window.DEBUG.keydownHandler = debugKeydownHandler;
 
     // ── Teleport (Shift+Click when teleport mode is on) ─────────────
 
-    app.stage.on('pointerdown', (event: PIXI.FederatedPointerEvent) => {
+    const teleportHandler = (event: PIXI.FederatedPointerEvent) => {
         if (!window.DEBUG.active || !window.DEBUG.teleportMode || !state.player) return;
-        if (!(event.data?.originalEvent as unknown as MouseEvent)?.shiftKey) return;
+        const nativeEvent = event.nativeEvent;
+        if (!(nativeEvent instanceof MouseEvent) || !nativeEvent.shiftKey) return;
 
         event.stopPropagation();
 
@@ -494,7 +530,10 @@ function initDebug(): void {
         state.player.container.y = worldY;
         state.player.targetPosition = null;
         state.player.stopWalkAnimation();
-    });
+    };
+
+    app.stage.on('pointerdown', teleportHandler);
+    window.DEBUG.teleportHandler = teleportHandler;
 
     // ── Spawn random enemy ────────────────────────────────────────
 

@@ -62,6 +62,9 @@ export class Projectile {
     private alive: boolean = true;
     /** Characters already hit — each projectile hits a character at most once. */
     private readonly hitSet: Set<Character> = new Set();
+    private _cachedPoly: WorldPoint[] | null = null;
+    private _cachedPolyX: number = NaN;
+    private _cachedPolyY: number = NaN;
     readonly graphics: PIXI.Graphics;
 
     constructor(opts: ProjectileOptions) {
@@ -92,18 +95,23 @@ export class Projectile {
 
     /** Build the oriented-bounding-box polygon in world space. */
     getWorldPoly(): WorldPoint[] {
+        if (this._cachedPoly && this.x === this._cachedPolyX && this.y === this._cachedPolyY) {
+            return this._cachedPoly;
+        }
         const cos = Math.cos(this.angle);
         const sin = Math.sin(this.angle);
         const hw = this.rectW / 2;
         const hh = this.rectH / 2;
-        // Corners relative to centre, then rotated.
         const corners: [number, number][] = [
             [-hw, -hh], [hw, -hh], [hw, hh], [-hw, hh],
         ];
-        return corners.map(([lx, ly]) => ({
+        this._cachedPoly = corners.map(([lx, ly]) => ({
             x: this.x + lx * cos - ly * sin,
             y: this.y + lx * sin + ly * cos,
         }));
+        this._cachedPolyX = this.x;
+        this._cachedPolyY = this.y;
+        return this._cachedPoly;
     }
 
     /**
@@ -151,6 +159,7 @@ export class Projectile {
     /** Remove graphics from parent and mark dead. */
     destroy(): void {
         this.alive = false;
+        this.hitSet.clear();
         if (this.graphics.parent) {
             this.graphics.parent.removeChild(this.graphics);
         }

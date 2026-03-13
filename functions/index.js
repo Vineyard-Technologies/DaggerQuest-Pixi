@@ -36,6 +36,7 @@ exports.limitSignups = beforeUserCreated(
         const count = doc.exists ? doc.data().count : 0;
 
         if (count >= MAX_SIGNUPS_PER_IP_PER_DAY) {
+            console.warn(`Signup blocked: IP ${ip} exceeded ${MAX_SIGNUPS_PER_IP_PER_DAY} signups on ${today} (count: ${count})`);
             throw new HttpsError(
                 "resource-exhausted",
                 "Too many accounts created from this network today. Please try again tomorrow."
@@ -59,6 +60,29 @@ const PROJECT_NAME = `projects/${PROJECT_ID}`;
 const billing = new CloudBillingClient();
 
 // ── Custom Email Sending ──────────────────────────────────────────────────
+
+const MAX_EMAILS_PER_USER_PER_DAY = 5;
+
+/**
+ * Rate-limit email sends per user per day.
+ * @param {string} uid - Firebase user UID.
+ * @param {string} emailType - 'verification' or 'reset'.
+ * @returns {Promise<void>} Rejects with HttpsError if limit exceeded.
+ */
+async function enforceEmailRateLimit(uid, emailType) {
+    const today = new Date().toISOString().slice(0, 10);
+    const docRef = db.collection("emailLimits").doc(`${uid}_${emailType}_${today}`);
+    const doc = await docRef.get();
+    const count = doc.exists ? doc.data().count : 0;
+
+    if (count >= MAX_EMAILS_PER_USER_PER_DAY) {
+        console.warn(`Email rate limit hit: uid=${uid} type=${emailType} count=${count}`);
+        throw new HttpsError("resource-exhausted", "Too many email requests today. Please try again tomorrow.");
+    }
+
+    const expireAt = Timestamp.fromDate(new Date(Date.now() + 48 * 60 * 60 * 1000));
+    await docRef.set({ count: FieldValue.increment(1), uid, emailType, date: today, expireAt }, { merge: true });
+}
 
 const ACTION_URL = "https://daggerquest.com/auth/action";
 
@@ -127,6 +151,8 @@ exports.sendVerificationEmail = onCall(
         const user = await getAuth().getUser(uid);
         if (user.emailVerified) return { sent: false, reason: "already-verified" };
 
+        await enforceEmailRateLimit(uid, "verification");
+
         let link;
         try {
             link = await getAuth().generateEmailVerificationLink(user.email, {
@@ -179,13 +205,18 @@ exports.sendResetEmail = onCall(
             throw new HttpsError("invalid-argument", "Email is required.");
         }
 
+        // Rate-limit by hashing the email to avoid storing PII in the key
+        const emailHash = Buffer.from(email.toLowerCase()).toString("base64url");
+        await enforceEmailRateLimit(emailHash, "reset");
+
         let link;
         try {
             link = await getAuth().generatePasswordResetLink(email, {
                 url: ACTION_URL,
             });
-        } catch {
+        } catch (err) {
             // Don't reveal whether the account exists.
+            console.warn("Password reset link generation skipped (user may not exist):", err?.code || err);
             return { sent: true };
         }
 
@@ -196,12 +227,17 @@ exports.sendResetEmail = onCall(
              <p style="font-size:13px;color:#6a5e3e;margin-top:16px;">If you didn't request this, you can safely ignore this email. Your password will remain unchanged.</p>`
         );
 
-        await getResend().emails.send({
-            from: "DaggerQuest <noreply@daggerquest.com>",
-            to: email,
-            subject: "Reset your DaggerQuest password",
-            html,
-        });
+        try {
+            await getResend().emails.send({
+                from: "DaggerQuest <noreply@daggerquest.com>",
+                to: email,
+                subject: "Reset your DaggerQuest password",
+                html,
+            });
+        } catch (err) {
+            console.error("Resend API error (password reset):", err);
+            throw new HttpsError("internal", "Failed to send password reset email.");
+        }
 
         return { sent: true };
     }

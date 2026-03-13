@@ -12,6 +12,29 @@ import * as PIXI from 'pixi.js';
 /** Reusable blur filter applied to every shadow sprite. */
 export const SHADOW_BLUR = new PIXI.BlurFilter({ strength: 4, legacy: true });
 
+/**
+ * Create a shadow sprite with the standard appearance (alpha 0.5, blur filter).
+ * Handles both static (single texture) and animated (frame array) shadows.
+ */
+export function createShadowSprite(
+    textures: PIXI.Texture | PIXI.Texture[],
+    container: PIXI.Container,
+    insertIndex?: number,
+): PIXI.Sprite | PIXI.AnimatedSprite {
+    const sprite = Array.isArray(textures)
+        ? new PIXI.AnimatedSprite({ textures, updateAnchor: true })
+        : new PIXI.Sprite(textures);
+    sprite.alpha = 0.5;
+    sprite.filters = [SHADOW_BLUR];
+    if (insertIndex !== undefined) {
+        container.addChildAt(sprite, insertIndex);
+    } else {
+        container.addChild(sprite);
+    }
+    if (sprite instanceof PIXI.AnimatedSprite) sprite.gotoAndStop(0);
+    return sprite;
+}
+
 // ── CPU memory management ─────────────────────────────────────────────────
 
 const _trackedSources = new Set<PIXI.TextureSource>();

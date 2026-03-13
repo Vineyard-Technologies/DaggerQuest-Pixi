@@ -84,6 +84,11 @@ class NPC extends Character {
         this.hideDialog();
     }
 
+    override destroy(): void {
+        this.hideDialog();
+        super.destroy();
+    }
+
     isPlayerInRange(): boolean {
         if (!state.player) return false;
         return this.distanceTo(state.player) <= this.interactRange;

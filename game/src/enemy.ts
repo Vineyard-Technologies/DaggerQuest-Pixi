@@ -6,6 +6,7 @@ import { Ability, type AbilityDef } from './ability';
 import { Projectile } from './projectile';
 import { bus } from './events';
 import { ENEMY_XP_MULTIPLIER } from './config';
+import { angleRad } from './mathUtils';
 
 interface EnemyOptions {
     x: number;
@@ -77,9 +78,7 @@ function createBasicAttackDef(opts: {
             const attackTarget = target;
 
             // Face target
-            const dx = target.x - caster.x;
-            const dy = target.y - caster.y;
-            const angle = Math.atan2(dy, dx);
+            const angle = angleRad(caster.x, caster.y, target.x, target.y);
             caster.direction = caster.findClosestDirection(angle * (180 / Math.PI));
 
             // Resolve fire frame: explicit projectile opt > frameTags > 0
@@ -98,9 +97,7 @@ function createBasicAttackDef(opts: {
                 );
 
                 // Re-compute angle from caster's current position
-                const fdx = attackTarget.x - caster.x;
-                const fdy = attackTarget.y - caster.y;
-                const fireAngle = Math.atan2(fdy, fdx);
+                const fireAngle = angleRad(caster.x, caster.y, attackTarget.x, attackTarget.y);
 
                 const projectile = new Projectile({
                     x: caster.x,
@@ -115,7 +112,7 @@ function createBasicAttackDef(opts: {
                     owner: caster,
                     targets: () => {
                         const t: Character[] = [];
-                        if (state.player && state.player.isAlive) t.push(state.player as unknown as Character);
+                        if (state.player && state.player.isAlive) t.push(state.player);
                         return t;
                     },
                     onHit(hit) {

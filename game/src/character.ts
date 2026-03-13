@@ -6,6 +6,7 @@ import { bus } from './events';
 import { CHARACTER_COLLISION_WIDTH, CHARACTER_COLLISION_HEIGHT } from './config';
 import { DEFAULT_CHARACTER_STATS, type CharacterStats, type CharacterStatKey } from './types';
 import { Ability } from './ability';
+import { angleDeg, distance } from './mathUtils';
 
 export interface CharacterOptions extends Partial<CharacterStats> {
     x: number;
@@ -27,6 +28,9 @@ class Character extends Entity implements CharacterStats {
     abilities: Ability[];
     basicAbility: Ability | null;
     private idlePingPongForward: boolean;
+    private _cachedCollisionPoly: WorldPoint[] | null = null;
+    private _cachedCollisionX: number = NaN;
+    private _cachedCollisionY: number = NaN;
 
     level!: number;
     experience!: number;
@@ -192,9 +196,7 @@ class Character extends Entity implements CharacterStats {
     moveToward(worldX: number, worldY: number): void {
         if (!this.isAlive || this.isCasting) return;
         this.targetPosition = { x: worldX, y: worldY };
-        const dx = worldX - this.x;
-        const dy = worldY - this.y;
-        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+        const angle = angleDeg(this.x, this.y, worldX, worldY);
         const newDirection = this.findClosestDirection(angle);
         if (!this.isWalking || newDirection !== this.direction) {
             this.direction = newDirection;
@@ -203,9 +205,7 @@ class Character extends Entity implements CharacterStats {
     }
 
     faceEntity(entity: Entity): void {
-        const dx = entity.x - this.x;
-        const dy = entity.y - this.y;
-        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+        const angle = angleDeg(this.x, this.y, entity.x, entity.y);
         this.direction = this.findClosestDirection(angle);
 
         if (!this.isWalking) {
@@ -218,20 +218,25 @@ class Character extends Entity implements CharacterStats {
     }
 
     distanceTo(entity: Entity): number {
-        const dx = entity.x - this.x;
-        const dy = entity.y - this.y;
-        return Math.sqrt(dx * dx + dy * dy);
+        return distance(this.x, this.y, entity.x, entity.y);
     }
 
     getWorldCollisionPoly(): WorldPoint[] | null {
         if (!this.sprite) return null;
+        if (this._cachedCollisionPoly && this.x === this._cachedCollisionX && this.y === this._cachedCollisionY) {
+            return this._cachedCollisionPoly;
+        }
         const hw = this.collisionWidth / 2;
-        return [
+        const poly: WorldPoint[] = [
             { x: this.x - hw, y: this.y - this.collisionHeight },
             { x: this.x + hw, y: this.y - this.collisionHeight },
             { x: this.x + hw, y: this.y },
             { x: this.x - hw, y: this.y },
         ];
+        this._cachedCollisionPoly = poly;
+        this._cachedCollisionX = this.x;
+        this._cachedCollisionY = this.y;
+        return poly;
     }
 
     startDieAnimation(): void {
@@ -320,11 +325,11 @@ class Character extends Entity implements CharacterStats {
                 const others: Character[] = [];
                 if (state.area.enemies) {
                     for (const e of state.area.enemies) {
-                        if (e !== (this as Character) && (e as Character).isAlive) others.push(e as Character);
+                        if (e !== this && e.isAlive) others.push(e);
                     }
                 }
-                if (state.player && state.player !== (this as unknown)) {
-                    others.push(state.player as unknown as Character);
+                if (state.player && state.player !== (this as Character)) {
+                    others.push(state.player);
                 }
                 for (const other of others) {
                     const otherPoly = other.getWorldCollisionPoly();

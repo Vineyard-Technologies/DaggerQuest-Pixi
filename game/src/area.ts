@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { COLLISION_POLYS, DEFAULT_BOX, polyToWorld, WorldPoint, NormPoint, Boundary } from './collision';
-import { SHADOW_BLUR, fetchManifest, assetPath, trackSpritesheet, trackTexture } from './assets';
+import { fetchManifest, assetPath, trackSpritesheet, trackTexture, createShadowSprite } from './assets';
 import type { Enemy } from './enemy';
 import type { NPC } from './npc';
 import type { Loot } from './loot';
@@ -99,10 +99,7 @@ class Area {
                 trackSpritesheet(shadowSheet);
                 const shadowTexName = Object.keys(shadowSheet.textures)[0];
                 if (shadowTexName) {
-                    const shadowSprite = new PIXI.Sprite(shadowSheet.textures[shadowTexName]);
-                    shadowSprite.alpha = 0.5;
-                    shadowSprite.filters = [SHADOW_BLUR];
-                    container.addChild(shadowSprite);
+                    createShadowSprite(shadowSheet.textures[shadowTexName], container);
                 }
             }
         }
@@ -135,15 +132,34 @@ class Area {
     update(delta: number): void {
         for (const enemy of this.enemies) {
             enemy.update(delta);
-            enemy.container.zIndex = enemy.y;
+            const z = Math.round(enemy.y);
+            if (enemy.container.zIndex !== z) enemy.container.zIndex = z;
         }
         for (const npc of this.npcs) {
             npc.update(delta);
-            npc.container.zIndex = npc.y;
+            const z = Math.round(npc.y);
+            if (npc.container.zIndex !== z) npc.container.zIndex = z;
         }
         for (const loot of this.lootOnGround) {
-            loot.container.zIndex = loot.container.sortY ?? loot.y;
+            const z = loot.container.sortY ?? loot.y;
+            if (loot.container.zIndex !== z) loot.container.zIndex = z;
         }
+    }
+
+    destroy(): void {
+        for (const enemy of this.enemies) enemy.destroy();
+        for (const npc of this.npcs) npc.destroy();
+        for (const loot of this.lootOnGround) loot.destroy();
+        this.enemies.length = 0;
+        this.npcs.length = 0;
+        this.lootOnGround.length = 0;
+        this.boundaries.length = 0;
+        this.colliders.length = 0;
+        if (this.backgroundTile) {
+            this.backgroundTile.destroy();
+            this.backgroundTile = null;
+        }
+        this.container.destroy({ children: true });
     }
 }
 

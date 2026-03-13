@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { SHADOW_BLUR, fetchManifest } from './assets';
+import { fetchManifest, createShadowSprite } from './assets';
 import { safeDestroy } from './safeDestroy';
 import { loadSheetTextures } from './textureLoader';
 import type { Character } from './character';
@@ -150,14 +150,7 @@ class Gear {
         if (Object.keys(this._shadowTextures).length > 0) {
             const shadowFrames = this._getFrames(this._shadowTextures, animName, direction);
             if (shadowFrames.length > 0) {
-                this.shadowSprite = new PIXI.AnimatedSprite({
-                    textures: shadowFrames,
-                    updateAnchor: true,
-                });
-                this.shadowSprite.alpha = 0.5;
-                this.shadowSprite.filters = [SHADOW_BLUR];
-                this._character.container.addChildAt(this.shadowSprite, insertIdx);
-                this.shadowSprite.gotoAndStop(0);
+                this.shadowSprite = createShadowSprite(shadowFrames, this._character.container, insertIdx) as PIXI.AnimatedSprite;
             }
         }
 

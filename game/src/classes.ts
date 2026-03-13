@@ -3,9 +3,31 @@ import { GearSlot } from './types';
 import type { CharacterOptions } from './character';
 import { Ability, PlayerAbility, Prayer, type AbilityDef, type PlayerAbilityDef, type PrayerDef } from './ability';
 import { Projectile } from './projectile';
-import { CombatResolver } from './combat';
+import { CombatResolver, type DamageType } from './combat';
 import type { Character } from './character';
 import state from './state';
+import { angleRad } from './mathUtils';
+
+/**
+ * Resolve an area-of-effect attack around the caster.
+ * Iterates all alive enemies within `radius`, resolves damage, and applies it.
+ */
+function resolveAoE(
+    caster: Character,
+    radius: number,
+    damageType: DamageType,
+    baseDamage: number,
+): void {
+    if (!state.area) return;
+    for (const enemy of state.area.enemies) {
+        if (!enemy.isAlive) continue;
+        const dist = caster.distanceTo(enemy);
+        if (dist <= radius) {
+            const dmg = CombatResolver.resolve(caster, enemy, damageType, baseDamage);
+            enemy.takeDamage(dmg);
+        }
+    }
+}
 
 interface ClassOptions {
     x: number;
@@ -29,9 +51,7 @@ function createChevalierBasicAttack(): AbilityDef {
             const attackTarget = target;
 
             // Face target
-            const dx = target.x - caster.x;
-            const dy = target.y - caster.y;
-            const angle = Math.atan2(dy, dx);
+            const angle = angleRad(caster.x, caster.y, target.x, target.y);
             caster.direction = caster.findClosestDirection(angle * (180 / Math.PI));
 
             // Resolve fire frame from frameTags if available
@@ -41,9 +61,7 @@ function createChevalierBasicAttack(): AbilityDef {
                 if (!state.area) return;
 
                 // Re-compute angle from caster's current position to target
-                const fdx = attackTarget.x - caster.x;
-                const fdy = attackTarget.y - caster.y;
-                const fireAngle = Math.atan2(fdy, fdx);
+                const fireAngle = angleRad(caster.x, caster.y, attackTarget.x, attackTarget.y);
 
                 const projectile = new Projectile({
                     x: caster.x,
@@ -61,7 +79,7 @@ function createChevalierBasicAttack(): AbilityDef {
                         const t: Character[] = [];
                         if (state.area?.enemies) {
                             for (const e of state.area.enemies) {
-                                if (e.isAlive) t.push(e as unknown as Character);
+                                if (e.isAlive) t.push(e);
                             }
                         }
                         return t;
@@ -96,16 +114,7 @@ function chevalierGroundSlam(): PlayerAbilityDef {
         animName: 'groundslam',
         iconKey: 'groundslam',
         execute({ caster }) {
-            if (!state.area) return;
-            const radius = 200;
-            for (const enemy of state.area.enemies) {
-                if (!enemy.isAlive) continue;
-                const dist = caster.distanceTo(enemy as unknown as Character);
-                if (dist <= radius) {
-                    const dmg = CombatResolver.resolve(caster, enemy as unknown as Character, 'smash', baseDamage);
-                    (enemy as unknown as Character).takeDamage(dmg);
-                }
-            }
+            resolveAoE(caster, 200, 'smash', baseDamage);
         },
     };
 }
@@ -121,16 +130,7 @@ function chevalierKick(): PlayerAbilityDef {
         animName: 'kick',
         iconKey: 'kick',
         execute({ caster }) {
-            if (!state.area) return;
-            const radius = 120;
-            for (const enemy of state.area.enemies) {
-                if (!enemy.isAlive) continue;
-                const dist = caster.distanceTo(enemy as unknown as Character);
-                if (dist <= radius) {
-                    const dmg = CombatResolver.resolve(caster, enemy as unknown as Character, 'smash', baseDamage);
-                    (enemy as unknown as Character).takeDamage(dmg);
-                }
-            }
+            resolveAoE(caster, 120, 'smash', baseDamage);
         },
     };
 }
@@ -169,16 +169,7 @@ function chevalierHeroicStrike(): PlayerAbilityDef {
         animName: 'upwardslash',
         iconKey: 'heroicstrike',
         execute({ caster }) {
-            if (!state.area) return;
-            const radius = 150;
-            for (const enemy of state.area.enemies) {
-                if (!enemy.isAlive) continue;
-                const dist = caster.distanceTo(enemy as unknown as Character);
-                if (dist <= radius) {
-                    const dmg = CombatResolver.resolve(caster, enemy as unknown as Character, 'slash', baseDamage);
-                    (enemy as unknown as Character).takeDamage(dmg);
-                }
-            }
+            resolveAoE(caster, 150, 'slash', baseDamage);
         },
     };
 }
@@ -194,16 +185,7 @@ function chevalierCriticalStrike(): PlayerAbilityDef {
         animName: 'downwardslash',
         iconKey: 'criticalstrike',
         execute({ caster }) {
-            if (!state.area) return;
-            const radius = 130;
-            for (const enemy of state.area.enemies) {
-                if (!enemy.isAlive) continue;
-                const dist = caster.distanceTo(enemy as unknown as Character);
-                if (dist <= radius) {
-                    const dmg = CombatResolver.resolve(caster, enemy as unknown as Character, 'slash', baseDamage);
-                    (enemy as unknown as Character).takeDamage(dmg);
-                }
-            }
+            resolveAoE(caster, 130, 'slash', baseDamage);
         },
     };
 }

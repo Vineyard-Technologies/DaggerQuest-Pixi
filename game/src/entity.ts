@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { SHADOW_BLUR, fetchManifest, fetchFrameTags } from './assets';
+import { fetchManifest, fetchFrameTags, createShadowSprite } from './assets';
 import type { FrameTags } from './assets';
 import { polyToWorld, NormPoint, WorldPoint } from './collision';
 import { loadSheetTextures } from './textureLoader';
@@ -102,12 +102,7 @@ class Entity {
             if (this.shadowTextures) {
                 const shadowFrames = this.getShadowFrames(firstAnim, parseFloat(firstDirection));
                 if (shadowFrames.length > 0) {
-                    this.shadowSprite = new PIXI.AnimatedSprite({ textures: shadowFrames, updateAnchor: true });
-                    this.shadowSprite.x = 0;
-                    this.shadowSprite.y = 0;
-                    this.shadowSprite.alpha = 0.5;
-                    this.shadowSprite.filters = [SHADOW_BLUR];
-                    this.container.addChild(this.shadowSprite);
+                    this.shadowSprite = createShadowSprite(shadowFrames, this.container) as PIXI.AnimatedSprite;
                 }
             }
 
@@ -161,6 +156,11 @@ class Entity {
         if (this.container.parent) {
             this.container.parent.removeChild(this.container);
         }
+        this.sprite = null;
+        this.shadowSprite = null;
+        this.shadowTextures = null;
+        this._textureMap = null;
+        this._lastSpriteTextures = null;
     }
 
     getAnimFps(animName: string): number {
