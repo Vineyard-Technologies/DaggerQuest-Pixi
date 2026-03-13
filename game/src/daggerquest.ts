@@ -99,7 +99,7 @@ async function init(): Promise<void> {
     // After the first render uploads textures to GPU, free CPU-side image data.
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-            releaseTrackedCPUData(state.app.renderer);
+            releaseTrackedCPUData(state.app!.renderer);
         });
     });
 

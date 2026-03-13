@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import { Entity } from './entity';
 import { SHADOW_BLUR } from './assets';
 import { safeDestroy } from './safeDestroy';
+import { RARITY_COLORS } from './types';
 import type { Item } from './item';
 
 class Loot extends Entity {
@@ -91,12 +92,15 @@ class Loot extends Entity {
         this._labelWrapper.addChild(this._nameLabelBg);
         this._labelWrapper.addChild(this.nameLabel);
 
+        const rarityColor = RARITY_COLORS[this.item.rarity];
+
         this._updateLabelBg = () => {
             const lblW = this.nameLabel!.width;
             const lblH = this.nameLabel!.height;
             this._nameLabelBg!.clear();
             this._nameLabelBg!.roundRect(-lblW / 2 - padX, -lblH - padY, lblW + padX * 2, lblH + padY * 2, 4);
             this._nameLabelBg!.fill({ color: 0x000000, alpha: 0.7 });
+            this._nameLabelBg!.stroke({ color: rarityColor, width: 2 });
         };
         this._updateLabelBg();
         requestAnimationFrame(() => {

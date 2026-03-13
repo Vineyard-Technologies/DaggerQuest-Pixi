@@ -27,6 +27,33 @@ export const enum EnemyState {
     Attack = 'attack',
 }
 
+// ── Item Rarity ───────────────────────────────────────────────────────────
+
+/** Possible item rarity tiers. */
+export const enum Rarity {
+    Common    = 'common',
+    Rare      = 'rare',
+    Epic      = 'epic',
+    Legendary = 'legendary',
+}
+
+/** Display colour for each rarity tier. */
+export const RARITY_COLORS: Record<Rarity, number> = {
+    [Rarity.Common]:    0xFFFFFF,
+    [Rarity.Rare]:      0x87CEEB,
+    [Rarity.Epic]:      0xA020F0,
+    [Rarity.Legendary]: 0xFFD700,
+} as const;
+
+/** Roll a random rarity: Common 50%, Rare 30%, Epic 15%, Legendary 5%. */
+export function rollRarity(): Rarity {
+    const r = Math.random();
+    if (r < 0.50) return Rarity.Common;
+    if (r < 0.80) return Rarity.Rare;
+    if (r < 0.95) return Rarity.Epic;
+    return Rarity.Legendary;
+}
+
 // ── Mod Type Enum ─────────────────────────────────────────────────────────
 
 /** Categories of item modifiers. */

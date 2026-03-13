@@ -1,9 +1,10 @@
 import * as PIXI from 'pixi.js';
 import { fetchManifest, assetPath } from './assets';
-import { MOD_POOL, rollMods, aggregateModStats, formatMod } from './mods';
+import { rollMods, aggregateModStats, formatMod } from './mods';
 import { Loot } from './loot';
 import { Gear } from './gear';
-import type { ModDefinition, RolledMod } from './mods';
+import type { RolledMod } from './mods';
+import { rollRarity, Rarity } from './types';
 import type { GearSlot } from './types';
 
 interface ItemOptions {
@@ -28,6 +29,7 @@ class Item {
     readonly allowedClasses: readonly string[];
     /** Mod-type tags this item can roll on (empty = full pool). */
     readonly modTables: readonly string[];
+    readonly rarity: Rarity;
     private _iconTexture: PIXI.Texture | null;
     private _iconAssetPaths: string[];
 
@@ -39,16 +41,21 @@ class Item {
         this.allowedClasses = allowedClasses;
         this.modTables = modTables;
         this.baseStats = Object.keys(baseStats).length > 0 ? baseStats : stats;
-        this.mods = rollMods({ pool: this.modPool });
+        this.rarity = rollRarity();
+        this.mods = rollMods({ count: this._modCountForRarity(), modTables: this.modTables });
         this._iconTexture = null;
         this._iconAssetPaths = [];
     }
 
-    /** Filtered mod pool based on this item's modTables. */
-    get modPool(): readonly ModDefinition[] {
-        if (this.modTables.length === 0) return MOD_POOL;
-        const allowed = new Set(this.modTables);
-        return MOD_POOL.filter(m => allowed.has(m.type));
+    /** Mod count based on rarity: Common 0, Rare 1-2, Epic 3-4, Legendary 5-6. */
+    private _modCountForRarity(): number {
+        const high = Math.random() < 0.4;
+        switch (this.rarity) {
+            case Rarity.Common:    return 0;
+            case Rarity.Rare:      return high ? 2 : 1;
+            case Rarity.Epic:      return high ? 4 : 3;
+            case Rarity.Legendary: return high ? 6 : 5;
+        }
     }
 
     /** Whether the given player class spriteKey is allowed to equip this item. */

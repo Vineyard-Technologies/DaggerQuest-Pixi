@@ -9,7 +9,7 @@ import {
     TOOLTIP_NAME_FONT_SIZE, TOOLTIP_STAT_FONT_SIZE, TOOLTIP_DESC_FONT_SIZE,
     TOOLTIP_INNER_WIDTH, TOOLTIP_PADDING,
 } from './config';
-import { GearSlot, UISource } from './types';
+import { GearSlot, UISource, RARITY_COLORS } from './types';
 import type { Item } from './item';
 import type { Character } from './character';
 import type { Player } from './player';
@@ -817,6 +817,23 @@ class TooltipManager {
         this._container.addChild(nameText);
         yOffset += nameText.height + 4;
 
+        const rarityColor = RARITY_COLORS[item.rarity];
+        const rarityLabel = item.rarity.charAt(0).toUpperCase() + item.rarity.slice(1);
+        const rarityText = new PIXI.Text({
+            text: rarityLabel,
+            style: {
+                fontFamily: 'Grenze, serif',
+                fontSize: TOOLTIP_DESC_FONT_SIZE,
+                fontWeight: '600',
+                fill: rarityColor,
+                stroke: { color: 0x000000, width: 1 },
+            },
+        });
+        rarityText.x = pad;
+        rarityText.y = yOffset;
+        this._container.addChild(rarityText);
+        yOffset += rarityText.height + 4;
+
         const slotLabel = item.slot.charAt(0).toUpperCase() + item.slot.slice(1);
         const slotText = new PIXI.Text({
             text: slotLabel,
@@ -939,7 +956,7 @@ class TooltipManager {
         bg.roundRect(0, 0, totalWidth, totalHeight, 6);
         bg.fill({ color: 0x111122, alpha: 0.92 });
         bg.roundRect(0, 0, totalWidth, totalHeight, 6);
-        bg.stroke({ width: 1.5, color: 0x4455AA, alpha: 0.7 });
+        bg.stroke({ width: 1.5, color: rarityColor, alpha: 0.7 });
 
         this._container.addChildAt(bg, 0);
 

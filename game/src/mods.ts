@@ -69,16 +69,32 @@ function rollModValue(min: number, max: number, exponent = 2): number {
     return Math.round(min + t * (max - min));
 }
 
-function rollMods({ maxMods = 6, valueExponent = 2, pool }: { maxMods?: number; valueExponent?: number; pool?: readonly ModDefinition[] } = {}): RolledMod[] {
-    const countWeights = MOD_COUNT_WEIGHTS.slice(0, maxMods + 1);
-    const count = weightedRandomIndex(countWeights);
-    if (count === 0) return [];
-    const available = [...(pool ?? MOD_POOL)];
+function rollMods({ maxMods = 6, valueExponent = 2, pool, count, modTables }: { maxMods?: number; valueExponent?: number; pool?: readonly ModDefinition[]; count?: number; modTables?: readonly string[] } = {}): RolledMod[] {
+    let modCount: number;
+    if (count !== undefined) {
+        modCount = count;
+    } else {
+        const countWeights = MOD_COUNT_WEIGHTS.slice(0, maxMods + 1);
+        modCount = weightedRandomIndex(countWeights);
+    }
+    if (modCount === 0) return [];
+    const fullPool = pool ?? MOD_POOL;
     const chosen: RolledMod[] = [];
-    for (let i = 0; i < count && available.length > 0; i++) {
-        const weights = available.map(m => m.weight);
+    const usedModIds = new Set<string>();
+    for (let i = 0; i < modCount; i++) {
+        // Pick a random table for this mod slot, then filter the pool to that table
+        let slotPool: readonly ModDefinition[];
+        if (modTables && modTables.length > 0) {
+            const table = modTables[Math.floor(Math.random() * modTables.length)]!;
+            slotPool = fullPool.filter(m => m.type === table && !usedModIds.has(m.id));
+        } else {
+            slotPool = fullPool.filter(m => !usedModIds.has(m.id));
+        }
+        if (slotPool.length === 0) break;
+        const weights = slotPool.map(m => m.weight);
         const idx = weightedRandomIndex(weights);
-        const modDef = available.splice(idx, 1)[0]!;
+        const modDef = slotPool[idx]!;
+        usedModIds.add(modDef.id);
         const value = rollModValue(modDef.min, modDef.max, valueExponent);
         chosen.push({ modId: modDef.id, value });
     }
