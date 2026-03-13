@@ -6,8 +6,8 @@ import { getPageSEO } from '../config/pageMetadata'
 function Guide() {
   const guideMeta = getPageSEO('guide')
   const [searchTerm, setSearchTerm] = useState('')
-  const titleRef = useScrollAnimation()
-  const columnsRef = useScrollAnimation()
+  const titleRef = useScrollAnimation<HTMLHeadingElement>()
+  const columnsRef = useScrollAnimation<HTMLDivElement>()
   const introBoxRef = useScrollAnimation()
   const featuredBoxRef = useScrollAnimation()
 

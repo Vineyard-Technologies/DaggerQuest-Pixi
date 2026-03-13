@@ -13,7 +13,7 @@ function News() {
   const [visiblePosts, setVisiblePosts] = useState(postsPerPage)
   const [isLoading, setIsLoading] = useState(false)
   const [newsPosts, setNewsPosts] = useState<NewsPostType[]>([])
-  const titleRef = useScrollAnimation()
+  const titleRef = useScrollAnimation<HTMLHeadingElement>()
   const newsReelRef = useScrollAnimation()
   const newPostsRef = useRef<HTMLAnchorElement>(null)
   

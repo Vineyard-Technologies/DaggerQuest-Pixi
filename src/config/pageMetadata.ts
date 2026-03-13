@@ -95,7 +95,6 @@ export const getPageSEO = (pageKey: string): PageMetadata => {
 export const getAllPages = (): (PageMetadata & { key: string })[] => {
   return Object.entries(pageMetadata).map(([key, data]) => ({
     key,
-    title: data.title, // Now this is already the clean title
     ...data
   }))
 }

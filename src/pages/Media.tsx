@@ -33,7 +33,7 @@ const wallpapers: Wallpaper[] = [
 ];
 
 function Media() {
-  const titleRef = useScrollAnimation()
+  const titleRef = useScrollAnimation<HTMLHeadingElement>()
   const mediaReelRef = useScrollAnimation()
 
   return (

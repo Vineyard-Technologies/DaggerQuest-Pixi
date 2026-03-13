@@ -58,7 +58,7 @@ function ContactForm() {
 }
 
 function Support() {
-  const contentRef = useScrollAnimation()
+  const contentRef = useScrollAnimation<HTMLDivElement>()
 
   return (
     <>

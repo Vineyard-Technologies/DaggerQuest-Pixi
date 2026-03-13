@@ -28,6 +28,7 @@ function parseFrontmatter(content: string): { data: FrontmatterData; content: st
   }
   
   const [, frontmatterText, markdownContent] = match
+  if (!frontmatterText) return { data: {}, content }
   const data: FrontmatterData = {}
   
   // Parse YAML-like frontmatter
@@ -48,7 +49,7 @@ function parseFrontmatter(content: string): { data: FrontmatterData; content: st
     }
   }
   
-  return { data, content: markdownContent }
+  return { data, content: markdownContent ?? content }
 }
 
 function NewsPost() {

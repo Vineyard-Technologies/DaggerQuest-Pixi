@@ -16,7 +16,7 @@ interface ItemOptions {
     stats?: Record<string, number>;
     allowedClasses?: readonly string[];
     modTables?: readonly string[];
-    level?: number;
+        level?: number;
 }
 
 class Item {

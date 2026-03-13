@@ -5,8 +5,8 @@ import { useScrollAnimation } from '../hooks/useScrollAnimation'
 import { getAllPages, getPageSEO } from '../config/pageMetadata'
 
 function Sitemap() {
-  const titleRef = useScrollAnimation()
-  const gridRef = useScrollAnimation()
+  const titleRef = useScrollAnimation<HTMLHeadingElement>()
+  const gridRef = useScrollAnimation<HTMLDivElement>()
   const sitemapMeta = getPageSEO('sitemap')
   const pages = getAllPages()
 

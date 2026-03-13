@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
-export const useScrollAnimation = (): React.RefObject<HTMLElement | null> => {
-  const elementRef = useRef<HTMLElement>(null)
+export const useScrollAnimation = <T extends HTMLElement = HTMLElement>(): React.RefObject<T | null> => {
+  const elementRef = useRef<T>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
 
   useEffect(() => {
@@ -10,7 +10,7 @@ export const useScrollAnimation = (): React.RefObject<HTMLElement | null> => {
 
     observerRef.current = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry?.isIntersecting) {
           element.classList.add('visible')
           // Disconnect after animating to save resources
           observerRef.current?.disconnect()

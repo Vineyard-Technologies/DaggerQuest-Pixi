@@ -46,6 +46,7 @@ function parseFrontmatter(content: string): { data: FrontmatterData; content: st
   }
   
   const [, frontmatterText] = match
+  if (!frontmatterText) return { data: {}, content }
   const data: FrontmatterData = {}
   
   // Parse YAML-like frontmatter
@@ -66,7 +67,7 @@ function parseFrontmatter(content: string): { data: FrontmatterData; content: st
     }
   }
   
-  return { data, content: match[2] }
+  return { data, content: match[2] ?? content }
 }
 
 // Cache for loaded descriptions
