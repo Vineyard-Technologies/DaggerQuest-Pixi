@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "spritesheets": "tsx scripts/makeSpritesheets.ts",
+    "manifest": "tsx scripts/makeManifest.ts",
     "upload-assets": "tsx scripts/uploadAssets.ts",
     "anchors": "tsx scripts/patchAnchors.ts",
     "detect-fireframe": "tsx scripts/detectFireFrame.ts",
