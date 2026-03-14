@@ -288,6 +288,16 @@ function updateHoverOutline(): void {
             state.input.hoveredEntity.sprite.filters = [HOVER_OUTLINE];
         }
     }
+
+    // Show / hide hover health bar
+    if (state.ui) {
+        const hovered = state.input.hoveredEntity;
+        if (hovered && (hovered instanceof Enemy || hovered instanceof NPC)) {
+            state.ui.showHoverHealth(hovered.name, hovered.currentHealth, hovered.maxHealth);
+        } else {
+            state.ui.hideHoverHealth();
+        }
+    }
 }
 
 function onPointerDown(event: PIXI.FederatedPointerEvent): void {
@@ -513,6 +523,12 @@ function gameLoop(ticker: PIXI.Ticker): void {
     if (state.ui) {
         state.ui.layout(state.app!.screen.width, state.app!.screen.height);
         state.ui.update(state.player, ticker.elapsedMS);
+
+        // Keep hover health bar current (health may change mid-hover)
+        const hovered = state.input.hoveredEntity;
+        if (hovered && (hovered instanceof Enemy || hovered instanceof NPC)) {
+            state.ui.showHoverHealth(hovered.name, hovered.currentHealth, hovered.maxHealth);
+        }
     }
 }
 

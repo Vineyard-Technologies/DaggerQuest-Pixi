@@ -31,6 +31,7 @@ class NPC extends Character {
     }: NPCOptions) {
         super({ x, y, spriteKey, speed, animFps });
         this.name = name;
+        this._showWorldHealthBar = true;
         this.interactRange = interactRange;
         this.dialog = dialog;
         this.dialogIndex = 0;

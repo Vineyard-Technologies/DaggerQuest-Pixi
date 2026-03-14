@@ -7,6 +7,7 @@
  */
 
 import * as PIXI from 'pixi.js';
+import { safeDestroy } from './safeDestroy';
 import type { Character } from './character';
 import { aabbOverlap, satOverlap, type WorldPoint } from './collision';
 
@@ -160,9 +161,6 @@ export class Projectile {
     destroy(): void {
         this.alive = false;
         this.hitSet.clear();
-        if (this.graphics.parent) {
-            this.graphics.parent.removeChild(this.graphics);
-        }
-        this.graphics.destroy();
+        safeDestroy(this.graphics);
     }
 }

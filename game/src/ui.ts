@@ -1492,6 +1492,79 @@ class DragDropController {
     }
 }
 
+// ── Hover Health Bar ───────────────────────────────────────────────────────
+
+const HOVER_BAR_WIDTH  = 260;
+const HOVER_BAR_HEIGHT = 28;
+const HOVER_BAR_Y      = 12;
+const HOVER_BAR_BG     = 0x111111;
+const HOVER_BAR_FILL   = 0xcc2222;
+const HOVER_BAR_BORDER = 0x444444;
+
+class HoverHealthBar {
+    readonly container: PIXI.Container;
+    private readonly _bg: PIXI.Graphics;
+    private readonly _fill: PIXI.Graphics;
+    private readonly _label: PIXI.Text;
+
+    constructor() {
+        this.container = new PIXI.Container();
+        this.container.label = 'hoverHealthBar';
+        this.container.visible = false;
+
+        this._bg = new PIXI.Graphics();
+        this._fill = new PIXI.Graphics();
+        this._label = new PIXI.Text({
+            text: '',
+            style: {
+                fontFamily: 'Cinzel, serif',
+                fontSize: 14,
+                fontWeight: '600',
+                fill: 0xffffff,
+                align: 'center',
+            },
+        });
+        this._label.anchor.set(0.5);
+
+        this.container.addChild(this._bg, this._fill, this._label);
+    }
+
+    show(name: string, currentHealth: number, maxHealth: number): void {
+        const pct = maxHealth > 0 ? Math.max(0, Math.min(1, currentHealth / maxHealth)) : 0;
+
+        // Background + border
+        this._bg.clear();
+        this._bg.roundRect(0, 0, HOVER_BAR_WIDTH, HOVER_BAR_HEIGHT, 4);
+        this._bg.fill({ color: HOVER_BAR_BG, alpha: 0.85 });
+        this._bg.roundRect(0, 0, HOVER_BAR_WIDTH, HOVER_BAR_HEIGHT, 4);
+        this._bg.stroke({ color: HOVER_BAR_BORDER, width: 1.5 });
+
+        // Health fill
+        const fillW = Math.round((HOVER_BAR_WIDTH - 4) * pct);
+        this._fill.clear();
+        if (fillW > 0) {
+            this._fill.roundRect(2, 2, fillW, HOVER_BAR_HEIGHT - 4, 3);
+            this._fill.fill({ color: HOVER_BAR_FILL, alpha: 0.9 });
+        }
+
+        // Name label
+        this._label.text = name;
+        this._label.x = HOVER_BAR_WIDTH / 2;
+        this._label.y = HOVER_BAR_HEIGHT / 2;
+
+        this.container.visible = true;
+    }
+
+    hide(): void {
+        this.container.visible = false;
+    }
+
+    layout(screenW: number): void {
+        this.container.x = Math.round((screenW - HOVER_BAR_WIDTH) / 2);
+        this.container.y = HOVER_BAR_Y;
+    }
+}
+
 // ── UI (coordinator) ───────────────────────────────────────────────────────
 
 /**
@@ -1510,6 +1583,7 @@ class UI {
     readonly abilityBar: AbilityBar;
     readonly tooltip: TooltipManager;
     readonly dragDrop: DragDropController;
+    readonly hoverHealth: HoverHealthBar;
 
     // Backward-compatible accessors (used by external files)
     get healthOrbContainer(): PIXI.Container { return this.orbs.healthContainer; }
@@ -1533,6 +1607,7 @@ class UI {
         this.inventory = new InventoryPanel();
         this.abilityBar = new AbilityBar();
         this.tooltip = new TooltipManager();
+        this.hoverHealth = new HoverHealthBar();
         this.dragDrop = new DragDropController(this.equipment, this.inventory, this.tooltip, this.container);
 
         this.container.addChild(this.orbs.healthContainer);
@@ -1540,6 +1615,7 @@ class UI {
         this.container.addChild(this.equipment.container);
         this.container.addChild(this.inventory.container);
         this.container.addChild(this.abilityBar.container);
+        this.container.addChild(this.hoverHealth.container);
     }
 
     // ------------------------------------------------------------------ Load
@@ -1592,6 +1668,7 @@ class UI {
         this.equipment.layout(screenW, screenH);
         this.inventory.layout(screenW, screenH);
         this.abilityBar.layout(screenW, screenH);
+        this.hoverHealth.layout(screenW);
         this._layoutDeathOverlay(screenW, screenH);
     }
 
@@ -1611,6 +1688,14 @@ class UI {
 
     toggleEquippedMenu(): void { this.equipment.toggle(); }
     toggleInventoryMenu(): void { this.inventory.toggle(); }
+
+    showHoverHealth(name: string, currentHealth: number, maxHealth: number): void {
+        this.hoverHealth.show(name, currentHealth, maxHealth);
+    }
+
+    hideHoverHealth(): void {
+        this.hoverHealth.hide();
+    }
 
     async setEquippedItem(slot: GearSlot, item: Item): Promise<void> { return this.equipment.setItem(slot, item); }
     async clearEquippedItem(slot: GearSlot): Promise<void> { return this.equipment.clearItem(slot); }

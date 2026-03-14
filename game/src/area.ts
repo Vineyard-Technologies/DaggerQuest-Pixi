@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { COLLISION_POLYS, DEFAULT_BOX, polyToWorld, WorldPoint, NormPoint, Boundary } from './collision';
 import { fetchManifest, assetPath, trackSpritesheet, trackTexture, createShadowSprite } from './assets';
+import { safeDestroy } from './safeDestroy';
 import type { Enemy } from './enemy';
 import type { NPC } from './npc';
 import type { Loot } from './loot';
@@ -156,10 +157,10 @@ class Area {
         this.boundaries.length = 0;
         this.colliders.length = 0;
         if (this.backgroundTile) {
-            this.backgroundTile.destroy();
+            safeDestroy(this.backgroundTile);
             this.backgroundTile = null;
         }
-        this.container.destroy({ children: true });
+        safeDestroy(this.container, { children: true });
     }
 }
 

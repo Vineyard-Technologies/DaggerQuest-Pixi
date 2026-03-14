@@ -32,6 +32,10 @@ class Character extends Entity implements CharacterStats {
     private _cachedCollisionX: number = NaN;
     private _cachedCollisionY: number = NaN;
 
+    protected _showWorldHealthBar: boolean = false;
+    private _worldHealthBar: PIXI.Graphics | null = null;
+    private _worldHealthBarY: number | null = null;
+
     level!: number;
     experience!: number;
     actionSpeed!: number;
@@ -257,6 +261,7 @@ class Character extends Entity implements CharacterStats {
         this.isAlive = false;
         this.targetPosition = null;
         this.stopWalkAnimation();
+        this._hideWorldHealthBar();
         this.startDieAnimation();
         if ((this as Character) === (state.player as Character | null)) {
             bus.emit('player-died', undefined as never);
@@ -266,8 +271,58 @@ class Character extends Entity implements CharacterStats {
     takeDamage(amount: number): void {
         if (!this.isAlive) return;
         this.currentHealth = Math.max(0, this.currentHealth - amount);
+        this._updateWorldHealthBar();
         if (this.currentHealth <= 0) {
             this.die();
+        }
+    }
+
+    private _updateWorldHealthBar(): void {
+        if (!this._showWorldHealthBar || !this.sprite) return;
+
+        const damaged = this.currentHealth < this.maxHealth && this.isAlive;
+
+        if (!damaged) {
+            this._hideWorldHealthBar();
+            return;
+        }
+
+        if (!this._worldHealthBar) {
+            this._worldHealthBar = new PIXI.Graphics();
+            this.container.addChild(this._worldHealthBar);
+        }
+
+        const barW = 40;
+        const barH = 4;
+        const pct = Math.max(0, this.currentHealth / this.maxHealth);
+
+        // Compute a fixed Y from the first idle frame, cached for the lifetime
+        if (this._worldHealthBarY === null) {
+            const tex = this.sprite.texture;
+            this._worldHealthBarY = -(tex.height * (this.sprite.anchor?.y ?? 0.5)) - 8;
+        }
+        const topY = this._worldHealthBarY;
+
+        this._worldHealthBar.clear();
+        // Background
+        this._worldHealthBar.rect(-barW / 2, topY, barW, barH);
+        this._worldHealthBar.fill({ color: 0x111111, alpha: 0.7 });
+        // Fill
+        const fillW = Math.round(barW * pct);
+        if (fillW > 0) {
+            this._worldHealthBar.rect(-barW / 2, topY, fillW, barH);
+            this._worldHealthBar.fill({ color: 0xcc2222, alpha: 0.9 });
+        }
+        // Border
+        this._worldHealthBar.rect(-barW / 2, topY, barW, barH);
+        this._worldHealthBar.stroke({ color: 0x333333, width: 0.5 });
+
+        this._worldHealthBar.visible = true;
+    }
+
+    private _hideWorldHealthBar(): void {
+        if (this._worldHealthBar) {
+            this._worldHealthBar.visible = false;
         }
     }
 
@@ -281,6 +336,8 @@ class Character extends Entity implements CharacterStats {
         if (this.manaRegen > 0 && this.currentMana < this.maxMana) {
             this.currentMana = Math.min(this.maxMana, this.currentMana + this.manaRegen * dt);
         }
+
+        this._updateWorldHealthBar();
 
         if (!this.targetPosition) return;
 
@@ -325,7 +382,7 @@ class Character extends Entity implements CharacterStats {
                 const others: Character[] = [];
                 if (state.area.enemies) {
                     for (const e of state.area.enemies) {
-                        if (e !== this && e.isAlive) others.push(e);
+                        if (e !== (this as Character) && e.isAlive) others.push(e);
                     }
                 }
                 if (state.player && state.player !== (this as Character)) {

@@ -12,6 +12,7 @@ interface EnemyOptions {
     x: number;
     y: number;
     spriteKey?: string;
+    name?: string;
     speed?: number;
     animFps?: Record<string, number>;
     health?: number;
@@ -135,14 +136,17 @@ function createBasicAttackDef(opts: {
 class Enemy extends Character {
     state: EnemyState;
     readonly xpReward: number;
+    readonly name: string;
 
     constructor({
-        x, y, spriteKey = 'enemy', speed = 100, animFps = {},
+        x, y, spriteKey = 'enemy', name = 'Enemy', speed = 100, animFps = {},
         health = 50, attackRange = 60,
         attackDamage = 5, attackDamageType = 'slash', attackSpeed = 1,
         level = 1, projectile,
     }: EnemyOptions) {
         super({ x, y, spriteKey, speed, animFps, attackRange, attackSpeed, level });
+        this.name = name;
+        this._showWorldHealthBar = true;
         this.currentHealth = health;
         this.maxHealth = health;
         this.isAlive = true;
@@ -223,6 +227,7 @@ class GoblinUnderling extends Enemy {
         super({
             x, y,
             spriteKey: 'goblinunderling',
+            name: 'Goblin Underling',
             speed: 200,
             health: 15,
             attackRange: 150,
@@ -239,6 +244,7 @@ class GoblinArcher extends Enemy {
         super({
             x, y,
             spriteKey: 'goblinarcher',
+            name: 'Goblin Archer',
             speed: 200,
             health: 15,
             attackRange: 400,
@@ -255,6 +261,7 @@ class GoblinWarlock extends Enemy {
         super({
             x, y,
             spriteKey: 'goblinwarlock',
+            name: 'Goblin Warlock',
             speed: 200,
             health: 25,
             attackRange: 450,

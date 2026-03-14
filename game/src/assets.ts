@@ -63,6 +63,12 @@ export function releaseTrackedCPUData(renderer: PIXI.Renderer): void {
         const res = source.resource;
         if (res && typeof (res as ImageBitmap).close === 'function') {
             (res as ImageBitmap).close();
+            // Clear the reference so future re-upload attempts are harmless
+            // no-ops instead of crashing on the detached ImageBitmap.
+            (source as any).resource = null;
+            // Prevent the GPU texture GC from evicting this texture, since
+            // we can no longer re-upload from CPU data.
+            source.autoGarbageCollect = false;
         }
     }
     _trackedSources.clear();

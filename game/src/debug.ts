@@ -16,8 +16,11 @@
  *   F5  – Toggle collision polygon visualization
  *   F2  – Toggle noclip (walk through everything)
  *   F3  – Toggle teleport mode (Shift+Click to teleport)
- *   +/- – Increase / decrease game speed
  *   F4  – Reset game speed to 1×
+ *   F9  – Level down
+ *   F10 – Level up
+ *   F11 – Slow down game speed
+ *   F12 – Speed up game speed
  *   F1  – Toggle debug mode on/off
  *   H   – Reduce player health by 10
  *   M   – Reduce player mana by 10
@@ -178,12 +181,12 @@ function initDebug(): void {
             fontFamily: 'monospace',
             fontSize: 13,
             fill: 0x00ff00,
-            stroke: { color: 0x000000, width: 4 },
             lineHeight: 18,
         },
     });
+    debugText.anchor.set(0, 1);
     debugText.x = 8;
-    debugText.y = 8;
+    debugText.y = app.screen.height - 8;
     app.stage.addChild(debugText);
     window.DEBUG.overlay = debugText;
 
@@ -353,11 +356,14 @@ function initDebug(): void {
         lines.push('');
         lines.push('F1 toggle debug | F2 noclip');
         lines.push('F3 teleport     | F4 reset speed');
-        lines.push('F5 collision    | F6 invincible');
-        lines.push('F7 spawn enemy  | F8 spawn loot');
-        lines.push('+/- speed | H health | M mana');
+        lines.push('F5 show hitboxes | F6 invincible');
+        lines.push('F7 spawn enemy   | F8 spawn loot');
+        lines.push('F9 level down    | F10 level up');
+        lines.push('F11 slow down    | F12 speed up');
+        lines.push('H health | M mana');
 
         debugText.text = lines.join('\n');
+        debugText.y = app.screen.height - 8;
 
         // Keep overlay above everything
         const stageChildren = app.stage.children;
@@ -462,17 +468,31 @@ function initDebug(): void {
                 PIXI.Ticker.shared.speed = 1;
                 break;
 
-            case '+':
-            case '=':
-                window.DEBUG.speedIndex = Math.min(window.DEBUG.speedIndex + 1, window.DEBUG.speedOptions.length - 1);
+            case 'F9':
+                e.preventDefault();
+                if (state.player && state.player.level > 1) {
+                    state.player.level -= 1;
+                }
+                break;
+
+            case 'F10':
+                e.preventDefault();
+                if (state.player) {
+                    state.player.level += 1;
+                }
+                break;
+
+            case 'F11':
+                e.preventDefault();
+                window.DEBUG.speedIndex = Math.max(window.DEBUG.speedIndex - 1, 0);
                 window.DEBUG.gameSpeed = window.DEBUG.speedOptions[window.DEBUG.speedIndex]!;
                 app.ticker.speed = window.DEBUG.gameSpeed;
                 PIXI.Ticker.shared.speed = window.DEBUG.gameSpeed;
                 break;
 
-            case '-':
-            case '_':
-                window.DEBUG.speedIndex = Math.max(window.DEBUG.speedIndex - 1, 0);
+            case 'F12':
+                e.preventDefault();
+                window.DEBUG.speedIndex = Math.min(window.DEBUG.speedIndex + 1, window.DEBUG.speedOptions.length - 1);
                 window.DEBUG.gameSpeed = window.DEBUG.speedOptions[window.DEBUG.speedIndex]!;
                 app.ticker.speed = window.DEBUG.gameSpeed;
                 PIXI.Ticker.shared.speed = window.DEBUG.gameSpeed;
