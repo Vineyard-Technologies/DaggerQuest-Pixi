@@ -34,6 +34,22 @@ class SimpleMace extends Item {
     }
 }
 
+class Greatsword extends Item {
+    constructor({ level = 1 }: { level?: number } = {}) {
+        super({
+            id: 'greatsword',
+            name: 'Greatsword',
+            description: 'A massive blade demanding two hands',
+            slot: GearSlot.MainHand,
+            baseStats: { slashDamage: 6 },
+            allowedClasses: ['vanguard'],
+            modTables: [ModType.Stat],
+            twoHanded: true,
+            level,
+        });
+    }
+}
+
 // ── Offhand ─────────────────────────────────────────────────────────────────
 
 class SimpleShield extends Item {
@@ -221,6 +237,7 @@ class StrappedBoots extends Item {
 const ITEM_CLASSES: Record<string, new (opts?: { level?: number }) => Item> = {
     simplesword: SimpleSword,
     simplemace: SimpleMace,
+    greatsword: Greatsword,
     simpleshield: SimpleShield,
     ornateshield: OrnateShield,
     simplehelmet: SimpleHelmet,
@@ -242,7 +259,7 @@ function createItem(id: string, level: number = 1): Item {
 }
 
 export {
-    SimpleSword, SimpleMace,
+    SimpleSword, SimpleMace, Greatsword,
     SimpleShield, OrnateShield,
     SimpleHelmet, CrudeHelmet,
     SimpleShirt, LeatherJacket, MaraudersStraps,

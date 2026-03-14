@@ -582,6 +582,7 @@ function initDebug(): void {
         'simplemace', 'simplehelmet', 'simplegloves', 'strappedboots',
         'crudehelmet', 'leatherjacket', 'leggings',
         'maraudersbracers', 'maraudersstraps', 'ornateshield',
+        'greatsword',
     ];
 
     async function spawnRandomLoot(): Promise<void> {

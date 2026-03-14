@@ -1,0 +1,400 @@
+{
+	"frames": {
+		"greatsword_loot-static_-22.5-000": {
+			"frame": {
+				"x": 687,
+				"y": 32,
+				"w": 119,
+				"h": 31
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 119,
+				"h": 31
+			},
+			"sourceSize": {
+				"w": 119,
+				"h": 31
+			},
+			"anchor": {
+				"x": 0.5294117647058824,
+				"y": 0.45161290322580644
+			}
+		},
+		"greatsword_loot-static_-45-000": {
+			"frame": {
+				"x": 246,
+				"y": 0,
+				"w": 92,
+				"h": 52
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 92,
+				"h": 52
+			},
+			"sourceSize": {
+				"w": 92,
+				"h": 52
+			},
+			"anchor": {
+				"x": 0.5217391304347826,
+				"y": 0.4423076923076923
+			}
+		},
+		"greatsword_loot-static_-67.5-000": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 53,
+				"h": 64
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 53,
+				"h": 64
+			},
+			"sourceSize": {
+				"w": 53,
+				"h": 64
+			},
+			"anchor": {
+				"x": 0.5094339622641509,
+				"y": 0.453125
+			}
+		},
+		"greatsword_loot-static_-90-000": {
+			"frame": {
+				"x": 615,
+				"y": 0,
+				"w": 34,
+				"h": 69
+			},
+			"rotated": true,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 34,
+				"h": 69
+			},
+			"sourceSize": {
+				"w": 34,
+				"h": 69
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.4492753623188406
+			}
+		},
+		"greatsword_loot-static_-112.5-000": {
+			"frame": {
+				"x": 53,
+				"y": 0,
+				"w": 53,
+				"h": 64
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 53,
+				"h": 64
+			},
+			"sourceSize": {
+				"w": 53,
+				"h": 64
+			},
+			"anchor": {
+				"x": 0.49056603773584906,
+				"y": 0.453125
+			}
+		},
+		"greatsword_loot-static_-135-000": {
+			"frame": {
+				"x": 338,
+				"y": 0,
+				"w": 93,
+				"h": 51
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 93,
+				"h": 51
+			},
+			"sourceSize": {
+				"w": 93,
+				"h": 51
+			},
+			"anchor": {
+				"x": 0.4731182795698925,
+				"y": 0.45098039215686275
+			}
+		},
+		"greatsword_loot-static_-157.5-000": {
+			"frame": {
+				"x": 684,
+				"y": 0,
+				"w": 119,
+				"h": 32
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 119,
+				"h": 32
+			},
+			"sourceSize": {
+				"w": 119,
+				"h": 32
+			},
+			"anchor": {
+				"x": 0.47058823529411764,
+				"y": 0.46875
+			}
+		},
+		"greatsword_loot-static_0-000": {
+			"frame": {
+				"x": 431,
+				"y": 44,
+				"w": 128,
+				"h": 19
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 128,
+				"h": 19
+			},
+			"sourceSize": {
+				"w": 128,
+				"h": 19
+			},
+			"anchor": {
+				"x": 0.53125,
+				"y": 0.47368421052631576
+			}
+		},
+		"greatsword_loot-static_22.5-000": {
+			"frame": {
+				"x": 803,
+				"y": 0,
+				"w": 119,
+				"h": 25
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 119,
+				"h": 25
+			},
+			"sourceSize": {
+				"w": 119,
+				"h": 25
+			},
+			"anchor": {
+				"x": 0.5294117647058824,
+				"y": 0.4
+			}
+		},
+		"greatsword_loot-static_45-000": {
+			"frame": {
+				"x": 431,
+				"y": 0,
+				"w": 92,
+				"h": 44
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 92,
+				"h": 44
+			},
+			"sourceSize": {
+				"w": 92,
+				"h": 44
+			},
+			"anchor": {
+				"x": 0.5217391304347826,
+				"y": 0.4772727272727273
+			}
+		},
+		"greatsword_loot-static_67.5-000": {
+			"frame": {
+				"x": 140,
+				"y": 0,
+				"w": 53,
+				"h": 57
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 53,
+				"h": 57
+			},
+			"sourceSize": {
+				"w": 53,
+				"h": 57
+			},
+			"anchor": {
+				"x": 0.5094339622641509,
+				"y": 0.49122807017543857
+			}
+		},
+		"greatsword_loot-static_90-000": {
+			"frame": {
+				"x": 106,
+				"y": 0,
+				"w": 34,
+				"h": 62
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 34,
+				"h": 62
+			},
+			"sourceSize": {
+				"w": 34,
+				"h": 62
+			},
+			"anchor": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"greatsword_loot-static_112.5-000": {
+			"frame": {
+				"x": 193,
+				"y": 0,
+				"w": 53,
+				"h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 53,
+				"h": 56
+			},
+			"sourceSize": {
+				"w": 53,
+				"h": 56
+			},
+			"anchor": {
+				"x": 0.49056603773584906,
+				"y": 0.5
+			}
+		},
+		"greatsword_loot-static_135-000": {
+			"frame": {
+				"x": 523,
+				"y": 0,
+				"w": 92,
+				"h": 43
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 92,
+				"h": 43
+			},
+			"sourceSize": {
+				"w": 92,
+				"h": 43
+			},
+			"anchor": {
+				"x": 0.4782608695652174,
+				"y": 0.4883720930232558
+			}
+		},
+		"greatsword_loot-static_157.5-000": {
+			"frame": {
+				"x": 806,
+				"y": 25,
+				"w": 119,
+				"h": 25
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 119,
+				"h": 25
+			},
+			"sourceSize": {
+				"w": 119,
+				"h": 25
+			},
+			"anchor": {
+				"x": 0.47058823529411764,
+				"y": 0.4
+			}
+		},
+		"greatsword_loot-static_180-000": {
+			"frame": {
+				"x": 559,
+				"y": 43,
+				"w": 128,
+				"h": 19
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 128,
+				"h": 19
+			},
+			"sourceSize": {
+				"w": 128,
+				"h": 19
+			},
+			"anchor": {
+				"x": 0.46875,
+				"y": 0.47368421052631576
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "greatsword_loot-0.webp",
+		"format": "RGBA8888",
+		"size": {
+			"w": 925,
+			"h": 64
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:2b56616324aa279a64f59e2ca4c0d236:711043e411a70d20f1831480853b9b88:9b3656d6669749cf92676d7f2dc1703b$"
+	}
+}

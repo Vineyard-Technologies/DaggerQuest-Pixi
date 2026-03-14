@@ -16,7 +16,8 @@ interface ItemOptions {
     stats?: Record<string, number>;
     allowedClasses?: readonly string[];
     modTables?: readonly string[];
-        level?: number;
+    twoHanded?: boolean;
+    level?: number;
 }
 
 class Item {
@@ -31,18 +32,21 @@ class Item {
     /** Mod-type tags this item can roll on (empty = full pool). */
     readonly modTables: readonly string[];
     readonly rarity: Rarity;
+    /** Whether this item occupies both MainHand and OffHand slots. */
+    readonly twoHanded: boolean;
     /** Minimum player level required to use this item. */
     readonly level: number;
     private _iconTexture: PIXI.Texture | null;
     private _iconAssetPaths: string[];
 
-    constructor({ id, name, description = '', slot, baseStats = {}, stats = {}, allowedClasses = [], modTables = [], level = 1 }: ItemOptions) {
+    constructor({ id, name, description = '', slot, baseStats = {}, stats = {}, allowedClasses = [], modTables = [], twoHanded = false, level = 1 }: ItemOptions) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.slot = slot;
         this.allowedClasses = allowedClasses;
         this.modTables = modTables;
+        this.twoHanded = twoHanded;
         this.level = level;
         this.baseStats = Object.keys(baseStats).length > 0 ? baseStats : stats;
         this.rarity = rollRarity();

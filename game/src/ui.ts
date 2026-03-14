@@ -25,6 +25,8 @@ interface EquippedSlotEntry {
     item: Item | null;
     bgSprite: PIXI.NineSliceSprite | null;
     borderMask: PIXI.Graphics | null;
+    /** True when this slot shows a greyed-out ghost of a two-handed weapon. */
+    twoHandedGhost: boolean;
 }
 
 interface InventorySlotEntry {
@@ -348,17 +350,79 @@ class EquipmentPanel {
         entry.container.addChild(icon);
         entry.iconSprite = icon;
         entry.item = item;
+        entry.twoHandedGhost = false;
 
         if (entry.bgSprite) entry.bgSprite.mask = null;
 
         if (entry.placeholder) {
             entry.placeholder.visible = false;
         }
+
+        // Two-handed weapon: show greyed-out ghost in OffHand
+        if (slot === GearSlot.MainHand) {
+            if (item.twoHanded) {
+                await this._setTwoHandedGhost(item);
+            } else {
+                this.clearTwoHandedGhost();
+            }
+        }
+    }
+
+    private async _setTwoHandedGhost(item: Item): Promise<void> {
+        const offEntry = this.slots.find(s => s.slotType === GearSlot.OffHand);
+        if (!offEntry) return;
+
+        if (offEntry.iconSprite) {
+            safeDestroy(offEntry.iconSprite);
+            offEntry.iconSprite = null;
+        }
+        if (offEntry.item) {
+            await offEntry.item.unloadIcon();
+        }
+
+        const ghost = item.createIcon();
+        if (!ghost) return;
+
+        const scale = Math.min(SLOT_ICON_MAX / ghost.texture.width, SLOT_ICON_MAX / ghost.texture.height);
+        ghost.anchor.set(0.5);
+        ghost.scale.set(scale);
+        ghost.x = SLOT_SIZE / 2;
+        ghost.y = SLOT_SIZE / 2;
+        ghost.alpha = 0.35;
+        ghost.tint = 0x888888;
+
+        offEntry.container.addChild(ghost);
+        offEntry.iconSprite = ghost;
+        offEntry.item = null;
+        offEntry.twoHandedGhost = true;
+
+        if (offEntry.bgSprite) offEntry.bgSprite.mask = null;
+        if (offEntry.placeholder) offEntry.placeholder.visible = false;
+    }
+
+    clearTwoHandedGhost(): void {
+        const offEntry = this.slots.find(s => s.slotType === GearSlot.OffHand);
+        if (!offEntry || !offEntry.twoHandedGhost) return;
+
+        if (offEntry.iconSprite) {
+            safeDestroy(offEntry.iconSprite);
+            offEntry.iconSprite = null;
+        }
+        offEntry.item = null;
+        offEntry.twoHandedGhost = false;
+
+        if (offEntry.bgSprite && offEntry.borderMask) offEntry.bgSprite.mask = offEntry.borderMask;
+        if (offEntry.placeholder) offEntry.placeholder.visible = true;
     }
 
     async clearItem(slot: GearSlot): Promise<void> {
         const entry = this.slots.find(s => s.slotType === slot);
         if (!entry) return;
+
+        // If clearing MainHand, also clear any two-handed ghost in OffHand
+        if (slot === GearSlot.MainHand) {
+            this.clearTwoHandedGhost();
+        }
 
         if (entry.iconSprite) {
             safeDestroy(entry.iconSprite);
@@ -480,7 +544,7 @@ class EquipmentPanel {
             });
 
             slotsContainer.addChild(slotContainer);
-            this.slots.push({ container: slotContainer, placeholder: placeholderSprite, slotType: ph.type, iconSprite: null, item: null, bgSprite, borderMask });
+            this.slots.push({ container: slotContainer, placeholder: placeholderSprite, slotType: ph.type, iconSprite: null, item: null, bgSprite, borderMask, twoHandedGhost: false });
         }
 
         this.container.addChild(slotsContainer);
@@ -1131,6 +1195,7 @@ class TooltipManager {
             return;
         }
         if (isDragging()) return;
+        if ('twoHandedGhost' in entry && entry.twoHandedGhost) return;
 
         this.show(entry.item, e.global.x, e.global.y);
     }
@@ -1193,7 +1258,7 @@ class DragDropController {
         if (this._rightClickBusy) return;
         if (state.player && !state.player.isAlive) return;
         const entry = this._equipment.slots.find(s => s.slotType === slotType);
-        if (!entry || !entry.item) return;
+        if (!entry || !entry.item || entry.twoHandedGhost) return;
 
         const freeInvSlot = this._inventory.slots.find(s => !s.item);
         if (!freeInvSlot) {
@@ -1214,6 +1279,11 @@ class DragDropController {
             entry.item = null;
             if (entry.bgSprite && entry.borderMask) entry.bgSprite.mask = entry.borderMask;
             if (entry.placeholder) entry.placeholder.visible = true;
+
+            // Clear the two-handed ghost in OffHand when unequipping from MainHand
+            if (item.twoHanded && slotType === GearSlot.MainHand) {
+                this._equipment.clearTwoHandedGhost();
+            }
 
             if (state.player) {
                 await state.player.unequipSlot(slotType);
@@ -1261,6 +1331,7 @@ class DragDropController {
         let item: Item | null | undefined;
         if (source === UISource.Equipped) {
             entry = this._equipment.slots.find(s => s.slotType === key);
+            if (entry && (entry as EquippedSlotEntry).twoHandedGhost) return;
             item = entry?.item;
         } else {
             entry = this._inventory.slots[key as number];
@@ -1385,6 +1456,7 @@ class DragDropController {
         // ── Drag from EQUIPPED → INVENTORY ──
         if (drag.source === UISource.Equipped && target.type === UISource.Inventory) {
             const src = srcEntry as EquippedSlotEntry;
+            if (src.twoHandedGhost) return false;
             const dst = target.entry;
             const dstItem = dst.item;
 
@@ -1413,6 +1485,7 @@ class DragDropController {
         if (drag.source === UISource.Inventory && target.type === UISource.Equipped) {
             const src = srcEntry as InventorySlotEntry;
             const dst = target.entry;
+            if ((dst as EquippedSlotEntry).twoHandedGhost) return false;
             if (srcItem.slot !== dst.slotType) return false;
 
             const dstItem = dst.item;
@@ -1447,6 +1520,7 @@ class DragDropController {
         if (drag.source === UISource.Equipped && target.type === UISource.Equipped) {
             const src = srcEntry as EquippedSlotEntry;
             const dst = target.entry;
+            if (src.twoHandedGhost || (dst as EquippedSlotEntry).twoHandedGhost) return false;
             const dstItem = dst.item;
             if (src.slotType !== dst.slotType) return false;
 
